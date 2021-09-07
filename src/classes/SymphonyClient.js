@@ -16,11 +16,10 @@ function sendRequest() {
     </soap:Body>
   </soap:Envelope>`;
 
-  log.info(xmlBody);
 
   axios({
     method: "get",
-    url: "https://private-anon-0074a846ea-simphonytsapi.apiary-mock.com/16/EGateway/SimphonyPosApiWeb.asmx",
+    url: "http://localhost:8080/EGateway/SimphonyPosAPIWeb.asmx",
     responseType: "stream",
   })
     .then(function (response) {
