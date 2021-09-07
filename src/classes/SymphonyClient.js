@@ -42,4 +42,4 @@ function sendRequest() {
     });
 }
 
-module.exports = sendRequest();
+module.exports = { sendRequest };
