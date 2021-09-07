@@ -2,6 +2,7 @@ const { app, Menu, Tray } = require("electron");
 const AutoLaunch = require("auto-launch");
 const unhandled = require("electron-unhandled");
 const path = require("path");
+const { sendRequest } = require("./classes/SymphonyClient");
 
 unhandled();
 
@@ -26,9 +27,9 @@ app.whenReady().then(() => {
   tray = new Tray(path.join(__dirname, "assets/avatar.png"));
   const contextMenu = Menu.buildFromTemplate([
     {
-      label: "Item1",
+      label: "Request",
       click: function () {
-        console.log("Clicked on settings");
+        sendRequest();
       },
     },
     {
