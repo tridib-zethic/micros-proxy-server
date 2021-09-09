@@ -3,6 +3,7 @@ const AutoLaunch = require("auto-launch");
 const unhandled = require("electron-unhandled");
 const path = require("path");
 const { sendRequest } = require("./classes/SymphonyClient");
+const { deepStreamPing } = require("./classes/DeepstreamClient");
 
 unhandled();
 
@@ -33,9 +34,9 @@ app.whenReady().then(() => {
       },
     },
     {
-      label: "Item2",
+      label: "DeepStream",
       click: function () {
-        console.log("Clicked on settings");
+        deepStreamPing();
       },
     },
     {
