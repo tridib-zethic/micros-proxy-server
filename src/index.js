@@ -1,15 +1,25 @@
-const { app, Menu, Tray } = require("electron");
+const { app, Menu, Tray, BrowserWindow } = require("electron");
 const AutoLaunch = require("auto-launch");
 const unhandled = require("electron-unhandled");
 const path = require("path");
 const { sendRequest } = require("./classes/SymphonyClient");
-const { deepStreamPing } = require("./classes/DeepstreamClient");
+const { login } = require("./classes/SabaApiClient");
+const { ipcMain } = require("electron");
+const log = require("electron-log");
+const keytar = require("keytar");
+const { pusher } = require("./classes/PusherClient");
 
 unhandled();
 
 const autoLauncher = new AutoLaunch({
   name: "Saba Proxy",
 });
+
+// pusherClient = pusher()
+//   .subscribe(`post`)
+//   .bind("dashboard", () => {
+//     loadConversations();
+//   });
 
 autoLauncher
   .isEnabled()
@@ -34,15 +44,30 @@ app.whenReady().then(() => {
       },
     },
     {
-      label: "DeepStream",
+      label: "Saba Login Api",
       click: function () {
-        deepStreamPing();
+        // login();
+        const win = new BrowserWindow({
+          webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+          },
+        });
+
+        win.loadFile(path.join(__dirname, "pages/login.html"));
       },
     },
     {
-      label: "Item3",
+      label: "Pusher Test",
       click: function () {
-        console.log("Clicked on settings");
+        pusher();
+      },
+    },
+    {
+      label: "Test",
+      click: async function () {
+        const pass = await keytar.getPassword("login", "access_token");
+        log.error(pass);
       },
     },
     {
@@ -54,4 +79,10 @@ app.whenReady().then(() => {
   ]);
   tray.setToolTip("This is my application.");
   tray.setContextMenu(contextMenu);
+});
+
+ipcMain.on("login_submit", (event, arg) => {
+  login(arg);
+
+  event.returnValue = true;
 });
