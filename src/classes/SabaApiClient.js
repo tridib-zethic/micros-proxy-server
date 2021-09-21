@@ -3,7 +3,7 @@ const log = require("electron-log");
 const https = require("https");
 const keytar = require("keytar");
 
-function login(data) {
+const login = (data) => {
   const instance = axios.create({
     httpsAgent: new https.Agent({
       rejectUnauthorized: false,
@@ -15,13 +15,8 @@ function login(data) {
   data["client_id"] = "1";
   data["client_secret"] = "MBr4dqsss0Qn4UcXLW3tTWYA5qk2IkevqhEwvDDj";
 
-  log.error(data);
   instance
-    .post("https://app.local.com/api/login", data, {
-      headers: {
-        Accept: "application/json",
-      },
-    })
+    .post("https://app.local.com/api/login", data)
     .then(async function (response) {
       await keytar.setPassword(
         "login",
@@ -33,8 +28,11 @@ function login(data) {
         "refresh_token",
         response.data.refresh_token
       );
-      await keytar.setPassword("login", "expires_in", response.data.expires_in);
-      log.info(response.data);
+      await keytar.setPassword(
+        "login",
+        "expires_in",
+        response.data.expires_in.toString()
+      );
     })
     .catch(function (error) {
       if (error.response) {
@@ -45,9 +43,9 @@ function login(data) {
         log.error(error.request);
       } else {
         // Something happened in setting up the request that triggered an Error
-        log.error("Error", error.message);
+        log.error("Error", error);
       }
     });
-}
+};
 
 module.exports = { login };
