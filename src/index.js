@@ -15,11 +15,23 @@ const autoLauncher = new AutoLaunch({
   name: "Saba Proxy",
 });
 
-// pusherClient = pusher()
-//   .subscribe(`post`)
-//   .bind("dashboard", () => {
-//     loadConversations();
-//   });
+pusher().then((push) => {
+  const channel = push.subscribe("private-saba.dashboard.conversation.init");
+  // log.error(push);
+  channel.bind("pusher:subscription_succeeded", function (status) {
+    // Yipee!!
+    log.info("Hello");
+  });
+
+  channel.bind("pusher:subscription_error", function (status) {
+    log.error(status);
+    // Oh nooooos!
+  });
+});
+// push.connection.bind("error", function (err) {
+//   log.error(err.error);
+// });
+// log.info(pusher);
 
 autoLauncher
   .isEnabled()

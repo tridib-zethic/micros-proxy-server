@@ -16,7 +16,7 @@ const login = (data) => {
   data["client_secret"] = "MBr4dqsss0Qn4UcXLW3tTWYA5qk2IkevqhEwvDDj";
 
   instance
-    .post("https://app.local.com/api/login", data)
+    .post("https://app.chatbothotels.com/api/login", data)
     .then(async function (response) {
       await keytar.setPassword(
         "login",
