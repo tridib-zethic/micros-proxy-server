@@ -53,7 +53,7 @@ const login = (data) => {
     });
 };
 
-const postMenuItems = (menuItems) => {
+const postMenuItems = async (menuItems) => {
   axios
     .post(
       url + "/simphony/menu_item",
@@ -62,7 +62,9 @@ const postMenuItems = (menuItems) => {
         items: menuItems,
       },
       {
-        headers: { Authorization: authHeader() },
+        headers: {
+          Authorization: await authHeader(),
+        },
       }
     )
     .then((response) => {
@@ -74,9 +76,6 @@ const postMenuItems = (menuItems) => {
         log.error(error.response.data);
         log.error(error.response.status);
         log.error(error.response.headers);
-      } else if (error.request) {
-        // The request was made but no response was received
-        log.error(error.request);
       } else {
         // Something happened in setting up the request that triggered an Error
         log.error("Error", error.message);
