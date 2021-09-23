@@ -2,6 +2,11 @@ const { default: axios } = require("axios");
 const log = require("electron-log");
 const https = require("https");
 const keytar = require("keytar");
+const { authHeader } = require("../utils/auth");
+
+const url = "https://app.chatbothotels.com/api";
+const clientId = "1";
+const clientSecret = "MBr4dqsss0Qn4UcXLW3tTWYA5qk2IkevqhEwvDDj";
 
 const login = (data) => {
   const instance = axios.create({
@@ -12,11 +17,11 @@ const login = (data) => {
 
   data["grant_type"] = "password";
   data["scope"] = "*";
-  data["client_id"] = "1";
-  data["client_secret"] = "MBr4dqsss0Qn4UcXLW3tTWYA5qk2IkevqhEwvDDj";
+  data["client_id"] = clientId;
+  data["client_secret"] = clientSecret;
 
   instance
-    .post("https://app.chatbothotels.com/api/login", data)
+    .post(url + "/login", data)
     .then(async function (response) {
       await keytar.setPassword(
         "login",
@@ -48,4 +53,35 @@ const login = (data) => {
     });
 };
 
-module.exports = { login };
+const postMenuItems = (menuItems) => {
+  axios
+    .post(
+      url + "/simphony/menu_item",
+      {
+        hotel_id: 2,
+        items: menuItems,
+      },
+      {
+        headers: { Authorization: authHeader() },
+      }
+    )
+    .then((response) => {
+      log.info(response.data);
+    })
+    .catch((error) => {
+      if (error.response) {
+        // Request made and server responded
+        log.error(error.response.data);
+        log.error(error.response.status);
+        log.error(error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        log.error(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        log.error("Error", error.message);
+      }
+    });
+};
+
+module.exports = { login, postMenuItems };

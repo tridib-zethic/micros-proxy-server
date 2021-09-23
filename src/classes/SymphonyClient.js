@@ -1,6 +1,7 @@
 const { default: axios } = require("axios");
 const log = require("electron-log");
 const { parseXml, menuItemsArray } = require("../utils/xml");
+const { postMenuItems } = require("./SabaApiClient");
 
 const sendRequest = () => {
   const soapRequestBody = `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
@@ -34,7 +35,8 @@ const sendRequest = () => {
 
           const array = menuItemsArray(menuItems);
 
-          log.info(array);
+          // post menu items to saba api
+          postMenuItems(array);
         })
         .catch((err) => log.error(err));
     })

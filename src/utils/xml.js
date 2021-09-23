@@ -62,7 +62,7 @@ const checkNestedParameter = (obj, level, ...rest) => {
 const menuItemsArray = (data) => {
   return data.map((menu) => {
     return {
-      id: menu.MenuItemMasterID[0],
+      menu_id: menu.MenuItemMasterID[0],
       name: menu.Name1[0].StringText[0],
     };
   });

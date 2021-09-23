@@ -1,4 +1,3 @@
-const log = require("electron-log");
 const keytar = require("keytar");
 
 const authHeader = async () => {
