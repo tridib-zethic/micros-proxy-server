@@ -2,7 +2,7 @@ const { app, Menu, Tray, BrowserWindow } = require("electron");
 const AutoLaunch = require("auto-launch");
 const unhandled = require("electron-unhandled");
 const path = require("path");
-const { sendRequest } = require("./classes/SymphonyClient");
+const { sendRequest, parseXml } = require("./classes/SymphonyClient");
 const { login } = require("./classes/SabaApiClient");
 const { ipcMain } = require("electron");
 const log = require("electron-log");
@@ -73,6 +73,12 @@ app.whenReady().then(() => {
       label: "Pusher Test",
       click: function () {
         pusher();
+      },
+    },
+    {
+      label: "Parse Xml",
+      click: function () {
+        parseXml();
       },
     },
     {

@@ -1,31 +1,44 @@
 const { default: axios } = require("axios");
 const log = require("electron-log");
+const { parseXml, menuItemsArray } = require("../utils/xml");
 
-function sendRequest() {
-  const xmlBody = `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-    <soap:Body>
-      <GetConfigurationInfo xmlns="http://micros-hosting.com/EGateway/">
-        <vendorCode />
-        <employeeObjectNum>900000092</employeeObjectNum>
-        <configurationInfoType>
-          <int>1</int>
-        </configurationInfoType>
-        <revenueCenter>11</revenueCenter>
-        <configInfoResponse />
-      </GetConfigurationInfo>
-    </soap:Body>
-  </soap:Envelope>`;
+const sendRequest = () => {
+  const soapRequestBody = `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <GetConfigurationInfo xmlns="http://localhost:8080/EGateway/">
+      <vendorCode />
+      <employeeObjectNum>900000092</employeeObjectNum>
+      <configurationInfoType>
+        <int>13</int>
+      </configurationInfoType>
+      <configInfoResponse />
+    </GetConfigurationInfo>
+  </soap:Body>
+</soap:Envelope>
+`;
 
+  axios
+    .post(
+      "https://private-anon-5b1f3b7495-simphonytsapi.apiary-mock.com/16/EGateway/SimphonyPosApiWeb.asmx",
+      soapRequestBody,
+      {
+        headers: { "Content-Type": "text/xml" },
+      }
+    )
+    .then((response) => {
+      // parse xml response
+      parseXml(response.data)
+        .then((res) => {
+          const menuItems =
+            res.ArrayOfDbMenuItemDefinition.DbMenuItemDefinition;
 
-  axios({
-    method: "get",
-    url: "http://localhost:8080/EGateway/SimphonyPosAPIWeb.asmx",
-    responseType: "stream",
-  })
-    .then(function (response) {
-      log.info(response);
+          const array = menuItemsArray(menuItems);
+
+          log.info(array);
+        })
+        .catch((err) => log.error(err));
     })
-    .catch(function (error) {
+    .catch((error) => {
       if (error.response) {
         // Request made and server responded
         log.error(error.response.data);
@@ -39,6 +52,6 @@ function sendRequest() {
         log.error("Error", error.message);
       }
     });
-}
+};
 
 module.exports = { sendRequest };
