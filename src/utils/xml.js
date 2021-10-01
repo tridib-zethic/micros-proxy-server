@@ -64,6 +64,7 @@ const menuItemsArray = (data) => {
     return {
       menu_id: menu.MenuItemMasterID[0],
       name: menu.Name1[0].StringText[0],
+      revenue_center: 10,
     };
   });
 };

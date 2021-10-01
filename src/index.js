@@ -71,8 +71,10 @@ app.whenReady().then(() => {
     },
     {
       label: "Pusher Test",
-      click: function () {
-        pusher();
+      click: async function () {
+        const test = await pusher();
+
+        test.subscribe("pos");
       },
     },
     {
