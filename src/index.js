@@ -2,7 +2,7 @@ const { app, Menu, Tray, BrowserWindow } = require("electron");
 const AutoLaunch = require("auto-launch");
 const unhandled = require("electron-unhandled");
 const path = require("path");
-const { sendRequest, parseXml } = require("./classes/SymphonyClient");
+const { parseXml, openCheque } = require("./classes/SymphonyClient");
 const { login } = require("./classes/SabaApiClient");
 const { ipcMain } = require("electron");
 const log = require("electron-log");
@@ -52,7 +52,8 @@ app.whenReady().then(() => {
     {
       label: "Request",
       click: function () {
-        sendRequest();
+        // sendRequest();
+        openCheque();
       },
     },
     {

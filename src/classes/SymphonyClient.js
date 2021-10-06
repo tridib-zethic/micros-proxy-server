@@ -1,5 +1,6 @@
 const { default: axios } = require("axios");
 const log = require("electron-log");
+const { createNewCheckRequestBody } = require("../utils/soapRequest");
 const { parseXml, menuItemsArray } = require("../utils/xml");
 const { postMenuItems } = require("./SabaApiClient");
 
@@ -57,19 +58,11 @@ const sendRequest = () => {
 };
 
 const openCheque = () => {
-  const soapRequestBody = `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Body>
-    <GetConfigurationInfo xmlns="http://localhost:8080/EGateway/">
-      <vendorCode />
-      <employeeObjectNum>900000092</employeeObjectNum>
-      <configurationInfoType>
-        <int>13</int>
-      </configurationInfoType>
-      <configInfoResponse />
-    </GetConfigurationInfo>
-  </soap:Body>
-</soap:Envelope>
-`;
+  const soapRequestBody = createNewCheckRequestBody([
+    "900010003",
+    "111120001",
+    "900060004",
+  ]);
 
   axios
     .post(
@@ -80,18 +73,7 @@ const openCheque = () => {
       }
     )
     .then((response) => {
-      // parse xml response
-      parseXml(response.data)
-        .then((res) => {
-          const menuItems =
-            res.ArrayOfDbMenuItemDefinition.DbMenuItemDefinition;
-
-          const array = menuItemsArray(menuItems);
-
-          // post menu items to saba api
-          postMenuItems(array);
-        })
-        .catch((err) => log.error(err));
+      log.info(response.data);
     })
     .catch((error) => {
       if (error.response) {
@@ -109,4 +91,4 @@ const openCheque = () => {
     });
 };
 
-module.exports = { sendRequest };
+module.exports = { sendRequest, openCheque };

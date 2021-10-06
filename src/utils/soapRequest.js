@@ -73,3 +73,5 @@ const createItemBody = (items) => {
 
   return xml;
 };
+
+module.exports = { createNewCheckRequestBody };
