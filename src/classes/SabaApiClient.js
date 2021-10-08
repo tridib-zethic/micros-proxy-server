@@ -23,6 +23,7 @@ const login = (data) => {
   instance
     .post(url + "/login", data)
     .then(async function (response) {
+      log.info(response.data.access_token);
       await keytar.setPassword(
         "login",
         "access_token",

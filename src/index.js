@@ -15,19 +15,6 @@ const autoLauncher = new AutoLaunch({
   name: "Saba Proxy",
 });
 
-pusher().then((push) => {
-  const channel = push.subscribe("private-saba.dashboard.conversation.init");
-  // log.error(push);
-  channel.bind("pusher:subscription_succeeded", function (status) {
-    // Yipee!!
-    log.info("Hello");
-  });
-
-  channel.bind("pusher:subscription_error", function (status) {
-    log.error(status);
-    // Oh nooooos!
-  });
-});
 // push.connection.bind("error", function (err) {
 //   log.error(err.error);
 // });
@@ -44,6 +31,8 @@ autoLauncher
   .catch((err) => {
     throw err;
   });
+
+pusher();
 
 let tray = null;
 app.whenReady().then(() => {
@@ -73,9 +62,22 @@ app.whenReady().then(() => {
     {
       label: "Pusher Test",
       click: async function () {
-        const test = await pusher();
+        pusher().then((push) => {
+          const channel = push.subscribe("pos");
+          // log.error(push);
+          channel.bind("pusher:subscription_succeeded", function (status) {
+            // Yipee!!
+            log.info("Hello");
+          });
 
-        test.subscribe("pos");
+          channel.bind("pusher:subscription_error", function (status) {
+            log.error(status);
+          });
+
+          channel.bind("request_created", (data) => {
+            log.info(data);
+          });
+        });
       },
     },
     {

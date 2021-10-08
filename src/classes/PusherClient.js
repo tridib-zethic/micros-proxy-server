@@ -4,15 +4,32 @@ const Pusher = require("pusher-js");
 
 const pusher = async () => {
   const token = await authHeader();
-  return new Pusher("8ff0572d6882103f1606", {
-    cluster: "ap1",
-    authEndpoint: "https://app.chatbothotels.com/api/auth/private-channel",
+  log.info(token);
+  const pusherClient = new Pusher("3d5685fdc9cec5b517dd", {
+    cluster: "ap2",
+    authEndpoint:
+      "https://app.chatbothotels.com/api/auth/private-channel",
     auth: {
       headers: {
         "X-Requested-With": "XMLHttpRequest",
         Authorization: token,
       },
     },
+  });
+
+  const channel = pusherClient.subscribe("private-pos");
+
+  channel.bind("pusher:subscription_succeeded", function (status) {
+    // Yipee!!
+    log.info("Hello");
+  });
+
+  channel.bind("pusher:subscription_error", function (status) {
+    log.error(status);
+  });
+
+  channel.bind("request_created", (data) => {
+    log.info(data);
   });
 };
 
