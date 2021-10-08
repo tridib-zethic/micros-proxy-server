@@ -57,13 +57,8 @@ const sendRequest = () => {
     });
 };
 
-const openCheque = () => {
-  const soapRequestBody = createNewCheckRequestBody([
-    "900010003",
-    "111120001",
-    "900060004",
-  ]);
-
+const openCheque = (items) => {
+  const soapRequestBody = createNewCheckRequestBody(items);
   axios
     .post(
       "https://private-anon-5b1f3b7495-simphonytsapi.apiary-mock.com/16/EGateway/SimphonyPosApiWeb.asmx",

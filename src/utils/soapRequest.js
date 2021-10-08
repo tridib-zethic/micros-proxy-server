@@ -57,18 +57,20 @@ const createNewCheckRequestBody = (items) => {
 
 const createItemBody = (items) => {
   let xml = ``;
-  items.forEach((itemObjNo) => {
-    const itemXml = `<MenuItem>
-    <ItemDiscount>
-        <DiscObjectNum>0</DiscObjectNum>
-    </ItemDiscount>
-    <MiObjectNum>${itemObjNo}/MiObjectNum>
-    <MiOverridePrice />
-    <MiReference />
-    <MiWeight />
-</MenuItem>`;
+  items.forEach((item) => {
+    if (item["revenue_center"] == 10) {
+      const itemXml = `<MenuItem>
+        <ItemDiscount>
+            <DiscObjectNum>0</DiscObjectNum>
+        </ItemDiscount>
+        <MiObjectNum>${item["item_object_number"]}/MiObjectNum>
+        <MiOverridePrice />
+        <MiReference />
+        <MiWeight />
+    </MenuItem>`;
 
-    xml = xml + itemXml;
+      xml = xml + itemXml;
+    }
   });
 
   return xml;

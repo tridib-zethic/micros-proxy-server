@@ -2,7 +2,11 @@ const { app, Menu, Tray, BrowserWindow } = require("electron");
 const AutoLaunch = require("auto-launch");
 const unhandled = require("electron-unhandled");
 const path = require("path");
-const { parseXml, openCheque } = require("./classes/SymphonyClient");
+const {
+  parseXml,
+  openCheque,
+  sendRequest,
+} = require("./classes/SymphonyClient");
 const { login } = require("./classes/SabaApiClient");
 const { ipcMain } = require("electron");
 const log = require("electron-log");
@@ -14,11 +18,6 @@ unhandled();
 const autoLauncher = new AutoLaunch({
   name: "Saba Proxy",
 });
-
-// push.connection.bind("error", function (err) {
-//   log.error(err.error);
-// });
-// log.info(pusher);
 
 autoLauncher
   .isEnabled()
@@ -39,16 +38,24 @@ app.whenReady().then(() => {
   tray = new Tray(path.join(__dirname, "assets/avatar.png"));
   const contextMenu = Menu.buildFromTemplate([
     {
-      label: "Request",
+      label: "Item Store Request",
       click: function () {
-        // sendRequest();
-        openCheque();
+        sendRequest();
+      },
+    },
+    {
+      label: "Open Cheque Request",
+      click: function () {
+        openCheque([
+          { item_object_number: 900010003, revenue_center: 10 },
+          { item_object_number: 111120001, revenue_center: 10 },
+          { item_object_number: 900060004, revenue_center: 10 },
+        ]);
       },
     },
     {
       label: "Saba Login Api",
       click: function () {
-        // login();
         const win = new BrowserWindow({
           webPreferences: {
             nodeIntegration: true,

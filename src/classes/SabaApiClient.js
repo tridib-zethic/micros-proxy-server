@@ -55,7 +55,12 @@ const login = (data) => {
 };
 
 const postMenuItems = async (menuItems) => {
-  axios
+  const instance = axios.create({
+    httpsAgent: new https.Agent({
+      rejectUnauthorized: false,
+    }),
+  });
+  instance
     .post(
       url + "/simphony/menu_item",
       {
