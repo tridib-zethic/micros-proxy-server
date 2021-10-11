@@ -4,7 +4,7 @@ const unhandled = require("electron-unhandled");
 const path = require("path");
 const {
   parseXml,
-  openCheque,
+  openCheck,
   sendRequest,
 } = require("./classes/SymphonyClient");
 const { login } = require("./classes/SabaApiClient");
@@ -46,7 +46,7 @@ app.whenReady().then(() => {
     {
       label: "Open Cheque Request",
       click: function () {
-        openCheque([
+        openCheck([
           { item_object_number: 101000001, revenue_center: 10 },
           { item_object_number: 101000002, revenue_center: 10 },
           { item_object_number: 101000003, revenue_center: 10 },

@@ -1,7 +1,17 @@
-const createNewCheckRequestBody = (items) => {
-  const employeeObjectNum = `4`;
-  const revenueCenter = `11`;
-  const date = `2021-10-08T17:03:25`;
+// Create soap request strings for simphony post, return array of strings
+const createNewCheckRequestBody = (revenueCenterItems) => {
+  let checks = [];
+
+  revenueCenterItems.forEach((items) => {
+    checks.push(createSoapRequestBody(items));
+  });
+
+  return checks;
+};
+
+const createSoapRequestBody = (items) => {
+  const employeeObjectNum = `2130`;
+  const date = new Date();
 
   const requestBodyPart1 = `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -10,13 +20,15 @@ const createNewCheckRequestBody = (items) => {
         <PostTransactionEx xmlns="http://micros-hosting.com/EGateway/">
             <vendorCode />
             <pGuestCheck>
-                <CheckDateToFire>${date}</CheckDateToFire>
+                <CheckDateToFire>${date.toISOString()}</CheckDateToFire>
                 <CheckEmployeeObjectNum>${employeeObjectNum}</CheckEmployeeObjectNum>
                 <CheckGuestCount>0</CheckGuestCount>
                 <CheckID />
                 <CheckNum>0</CheckNum>
                 <CheckOrderType>1</CheckOrderType>
-                <CheckRevenueCenterID>${revenueCenter}</CheckRevenueCenterID>
+                <CheckRevenueCenterID>${
+                  items[0]["revenue_center"]
+                }</CheckRevenueCenterID>
                 <CheckSeq>0</CheckSeq>
                 <CheckStatusBits>0</CheckStatusBits>
                 <CheckTableObjectNum>1</CheckTableObjectNum>
@@ -30,7 +42,7 @@ const createNewCheckRequestBody = (items) => {
                 <SimphonyPosApi_MenuItem>
     `;
 
-  const requestBodyPart2 = createItemBody(items);
+  let requestBodyPart2 = "";
 
   const requestBodyPart3 = `</SimphonyPosApi_MenuItem>
             </ppMenuItems>
@@ -65,11 +77,6 @@ const createNewCheckRequestBody = (items) => {
     </soap:Body>
 </soap:Envelope>`;
 
-  return requestBodyPart1 + requestBodyPart2 + requestBodyPart3;
-};
-
-const createItemBody = (items) => {
-  let xml = ``;
   items.forEach((item) => {
     if (item["revenue_center"] == 10) {
       const itemXml = `<MenuItem>
@@ -82,11 +89,11 @@ const createItemBody = (items) => {
         <MiWeight />
     </MenuItem>`;
 
-      xml = xml + itemXml;
+      requestBodyPart2 = requestBodyPart2 + itemXml;
     }
   });
 
-  return xml;
+  return requestBodyPart1 + requestBodyPart2 + requestBodyPart3;
 };
 
 module.exports = { createNewCheckRequestBody };

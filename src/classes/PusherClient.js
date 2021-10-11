@@ -1,14 +1,15 @@
 const log = require("electron-log");
 const { authHeader } = require("../utils/auth");
 const Pusher = require("pusher-js");
-const { openCheque } = require("./SymphonyClient");
+const { openCheck } = require("./SymphonyClient");
 
 const pusher = async () => {
   const token = await authHeader();
   log.info(token);
   const pusherClient = new Pusher("3d5685fdc9cec5b517dd", {
     cluster: "ap2",
-    authEndpoint: "https://demo.dashboard.chatbothotels.com/api/auth/private-channel",
+    authEndpoint:
+      "https://demo.dashboard.chatbothotels.com/api/auth/private-channel",
     auth: {
       headers: {
         "X-Requested-With": "XMLHttpRequest",
@@ -30,13 +31,13 @@ const pusher = async () => {
 
   // channel.bind_global(function (eventName, data )  {
   //   log.info(eventName);
-  //   openCheque(data);
-   
+  //   openCheck(data);
+
   // });
 
-  channel.bind("request.created", function (data)  {
+  channel.bind("request.created", function (data) {
     log.info(data);
-    openCheque(data);
+    openCheck(data);
   });
 };
 
