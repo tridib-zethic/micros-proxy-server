@@ -47,9 +47,9 @@ app.whenReady().then(() => {
       label: "Open Cheque Request",
       click: function () {
         openCheque([
-          { item_object_number: 900010003, revenue_center: 10 },
-          { item_object_number: 111120001, revenue_center: 10 },
-          { item_object_number: 900060004, revenue_center: 10 },
+          { item_object_number: 101000001, revenue_center: 10 },
+          { item_object_number: 101000002, revenue_center: 10 },
+          { item_object_number: 101000003, revenue_center: 10 },
         ]);
       },
     },

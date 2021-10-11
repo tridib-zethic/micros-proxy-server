@@ -8,7 +8,7 @@ const pusher = async () => {
   log.info(token);
   const pusherClient = new Pusher("3d5685fdc9cec5b517dd", {
     cluster: "ap2",
-    authEndpoint: "https://app.chatbothotels.com/api/auth/private-channel",
+    authEndpoint: "https://demo.dashboard.chatbothotels.com/api/auth/private-channel",
     auth: {
       headers: {
         "X-Requested-With": "XMLHttpRequest",
@@ -29,6 +29,7 @@ const pusher = async () => {
   });
 
   channel.bind("request_created", (data) => {
+    log.info(data);
     openCheque(data);
   });
 };

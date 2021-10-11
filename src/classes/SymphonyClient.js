@@ -21,10 +21,13 @@ const sendRequest = () => {
 
   axios
     .post(
-      "https://private-anon-5b1f3b7495-simphonytsapi.apiary-mock.com/16/EGateway/SimphonyPosApiWeb.asmx",
+      "http://127.0.0.1:8080/EGateway/SimphonyPosAPIWeb.asmx",
       soapRequestBody,
       {
-        headers: { "Content-Type": "text/xml" },
+        headers: {
+          "Content-Type": "text/xml;charset=UTF-8",
+          "SOAPAction": "http://localhost:8080/EGateway/PostTransactionEx"
+        },
       }
     )
     .then((response) => {
@@ -59,16 +62,21 @@ const sendRequest = () => {
 
 const openCheque = (items) => {
   const soapRequestBody = createNewCheckRequestBody(items);
+  log.info('openCheque', soapRequestBody);
+
   axios
     .post(
-      "https://private-anon-5b1f3b7495-simphonytsapi.apiary-mock.com/16/EGateway/SimphonyPosApiWeb.asmx",
+      "http://127.0.0.1:8080/EGateway/SimphonyPosAPIWeb.asmx",
       soapRequestBody,
       {
-        headers: { "Content-Type": "text/xml" },
+        headers: {
+          "Content-Type": "text/xml;charset=UTF-8",
+          "SOAPAction": "http://localhost:8080/EGateway/PostTransactionEx"
+        },
       }
     )
     .then((response) => {
-      log.info(response.data);
+      log.info('success', response.data);
     })
     .catch((error) => {
       if (error.response) {
