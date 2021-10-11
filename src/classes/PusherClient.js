@@ -28,16 +28,16 @@ const pusher = async () => {
     log.error(status);
   });
 
-  channel.bind_global(function (eventName, data )  {
-    log.info(eventName);
-    openCheque(data);
-   
-  });
-
-  // channel.bind("App\Events\SimphonyPosEvent", function (data)  {
-  //   log.info(data);
+  // channel.bind_global(function (eventName, data )  {
+  //   log.info(eventName);
   //   openCheque(data);
+   
   // });
+
+  channel.bind("request.created", function (data)  {
+    log.info(data);
+    openCheque(data);
+  });
 };
 
 module.exports = { pusher };
