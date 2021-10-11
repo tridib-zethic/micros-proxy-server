@@ -78,8 +78,7 @@ const createSoapRequestBody = (items) => {
 </soap:Envelope>`;
 
   items.forEach((item) => {
-    if (item["revenue_center"] == 10) {
-      const itemXml = `<MenuItem>
+    const itemXml = `<MenuItem>
         <ItemDiscount>
             <DiscObjectNum>0</DiscObjectNum>
         </ItemDiscount>
@@ -89,8 +88,7 @@ const createSoapRequestBody = (items) => {
         <MiWeight />
     </MenuItem>`;
 
-      requestBodyPart2 = requestBodyPart2 + itemXml;
-    }
+    requestBodyPart2 = requestBodyPart2 + itemXml;
   });
 
   return requestBodyPart1 + requestBodyPart2 + requestBodyPart3;
