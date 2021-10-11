@@ -66,7 +66,7 @@ const openCheck = (items) => {
   const checks = createNewCheckRequestBody(items);
   log.info("openCheck", checks);
 
-  foreach.checks((checkRequestBody) => {
+  checks.forEach((checkRequestBody) => {
     // send post request to open check
     axios
       .post(simphonyEndpoint, checkRequestBody, {
