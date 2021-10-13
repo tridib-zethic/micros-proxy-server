@@ -27,8 +27,7 @@ const getRevenueCentersRequest = () => {
       headers,
     })
     .then((response) => {
-      // parse x
-          log.info("parsed xml: ", reveueCenters);ml response
+      // parse xml response
       parseRevenueCentersXmlResponse(response.data)
         .then((res) => {
           // Extract Revenue centers from response data
@@ -54,13 +53,13 @@ const getRevenueCentersRequest = () => {
 
 // Send request to get menu items from array of revenue center
 const getAllMenuItems = (reveueCenters) => {
-  reveueCenters.forEach(reveueCenter => {
-    getMenuItemRequest(reveueCenter)
-  })
-}
+  reveueCenters.forEach((reveueCenter) => {
+    getMenuItemRequest(reveueCenter);
+  });
+};
 
 // Send request to get menu item from revenue center no, then save it to backend server
-const getMenuItemRequest = reveueCenter => {
+const getMenuItemRequest = (reveueCenter) => {
   const soapRequestBody = createGetMenuItemsRequestBody(reveueCenter);
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
