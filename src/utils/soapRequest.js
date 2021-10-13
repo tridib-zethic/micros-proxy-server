@@ -1,3 +1,5 @@
+const employeeObjectNum = `2130`;
+
 // Create soap request strings for simphony post, return array of strings
 const createNewCheckRequestBody = (revenueCenterItems) => {
   let checks = [];
@@ -10,7 +12,6 @@ const createNewCheckRequestBody = (revenueCenterItems) => {
 };
 
 const createSoapRequestBody = (items) => {
-  const employeeObjectNum = `2130`;
   const date = new Date();
 
   const requestBodyPart1 = `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -94,4 +95,22 @@ const createSoapRequestBody = (items) => {
   return requestBodyPart1 + requestBodyPart2 + requestBodyPart3;
 };
 
-module.exports = { createNewCheckRequestBody };
+const createGetRevenueCenterRequestBody = () => {
+  return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <GetConfigurationInfo xmlns="http://localhost:8080/EGateway/">
+      <vendorCode />
+      <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
+      <configurationInfoType>
+        <int>13</int>
+      </configurationInfoType>
+      <configInfoResponse />
+    </GetConfigurationInfo>
+  </soap:Body>
+</soap:Envelope>`;
+};
+
+module.exports = {
+  createNewCheckRequestBody,
+  createGetRevenueCenterRequestBody,
+};

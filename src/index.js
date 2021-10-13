@@ -6,6 +6,7 @@ const {
   parseXml,
   openCheck,
   sendRequest,
+  getRevenueCentersRequest,
 } = require("./classes/SymphonyClient");
 const { login } = require("./classes/SabaApiClient");
 const { ipcMain } = require("electron");
@@ -40,7 +41,7 @@ app.whenReady().then(() => {
     {
       label: "Item Store Request",
       click: function () {
-        sendRequest();
+        getRevenueCentersRequest();
       },
     },
     {

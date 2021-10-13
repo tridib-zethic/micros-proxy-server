@@ -1,30 +1,51 @@
 const { default: axios } = require("axios");
 const log = require("electron-log");
-const { createNewCheckRequestBody } = require("../utils/soapRequest");
+const {
+  createNewCheckRequestBody,
+  createGetRevenueCenterRequestBody,
+} = require("../utils/soapRequest");
 const { parseXml, menuItemsArray } = require("../utils/xml");
 const { postMenuItems } = require("./SabaApiClient");
 
 const simphonyEndpoint =
   "http://127.0.0.1:8080/EGateway/SimphonyPosAPIWeb.asmx";
-const headers = {
-  "Content-Type": "text/xml;charset=UTF-8",
-  SOAPAction: "http://localhost:8080/EGateway/PostTransactionEx",
+
+// Send request to pos to get list of revenue centers
+const getRevenueCentersRequest = () => {
+  const soapRequestBody = createGetRevenueCenterRequestBody();
+  const headers = {
+    "Content-Type": "text/xml;charset=UTF-8",
+    SOAPAction: "http://localhost:8080/EGateway/GetConfigurationInfo",
+  };
+  axios
+    .post(simphonyEndpoint, soapRequestBody, {
+      headers,
+    })
+    .then((response) => {
+      // parse xml response
+      parseXml(response.data)
+        .then((res) => {
+          log.info("parsed xml: ", res);
+        })
+        .catch((err) => log.error("XML Parse Error: ", err));
+    })
+    .catch((error) => {
+      if (error.response) {
+        log.error(error.response.data);
+        log.error(error.response.status);
+        log.error(error.response.headers);
+      } else {
+        log.error("Error", error.message);
+      }
+    });
 };
 
 const sendRequest = () => {
-  const soapRequestBody = `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Body>
-    <GetConfigurationInfo xmlns="http://localhost:8080/EGateway/">
-      <vendorCode />
-      <employeeObjectNum>900000092</employeeObjectNum>
-      <configurationInfoType>
-        <int>13</int>
-      </configurationInfoType>
-      <configInfoResponse />
-    </GetConfigurationInfo>
-  </soap:Body>
-</soap:Envelope>
-`;
+  const soapRequestBody = createGetRevenueCenterRequestBody();
+  const headers = {
+    "Content-Type": "text/xml;charset=UTF-8",
+    SOAPAction: "http://localhost:8080/EGateway/GetConfigurationInfo",
+  };
 
   axios
     .post(simphonyEndpoint, soapRequestBody, {
@@ -64,6 +85,10 @@ const sendRequest = () => {
 const openCheck = (items) => {
   // array of check request body strings
   const checks = createNewCheckRequestBody(items);
+  const headers = {
+    "Content-Type": "text/xml;charset=UTF-8",
+    SOAPAction: "http://localhost:8080/EGateway/PostTransactionEx",
+  };
   log.info("openCheck", checks);
 
   checks.forEach((checkRequestBody) => {
@@ -92,4 +117,4 @@ const openCheck = (items) => {
   });
 };
 
-module.exports = { sendRequest, openCheck };
+module.exports = { sendRequest, openCheck, getRevenueCentersRequest };
