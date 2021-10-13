@@ -3,10 +3,11 @@ const log = require("electron-log");
 const {
   createNewCheckRequestBody,
   createGetRevenueCenterRequestBody,
+  createGetMenuItemsRequestBody,
 } = require("../utils/soapRequest");
 const {
   parseXml,
-  menuItemsArray,
+  formatMenuItemsArray,
   parseRevenueCentersXmlResponse,
   formatRevenueCenterArray,
 } = require("../utils/xml");
@@ -75,7 +76,7 @@ const getMenuItemRequest = (reveueCenter) => {
       parseXml(response.data)
         .then((res) => {
           const menuItems =
-            res.ArrayOfDbMenuItemDefinition.DbMenuItemDefinition;
+            res.ArrayOfDbMenuItemMaster.DbMenuItemMaster;
 
           const menuItemsArray = formatMenuItemsArray(menuItems);
 
@@ -136,4 +137,4 @@ const openCheck = (items) => {
   });
 };
 
-module.exports = { sendRequest, openCheck, getRevenueCentersRequest };
+module.exports = { openCheck, getRevenueCentersRequest };

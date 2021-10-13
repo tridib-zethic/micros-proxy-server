@@ -120,7 +120,7 @@ const createGetMenuItemsRequestBody = (reveueCenter) => {
       <vendorCode />
       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
       <configurationInfoType>
-        <int>11</int>
+        <int>13</int>
       </configurationInfoType>
       <revenueCenter>${reveueCenter}</revenueCenter>
       <configInfoResponse />

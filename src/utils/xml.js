@@ -105,8 +105,8 @@ const checkNestedParameter = (obj, level, ...rest) => {
 const formatMenuItemsArray = (data, reveueCenter) => {
   return data.map((menu) => {
     return {
-      menu_id: menu.MiMasterObjNum[0],
-      name: menu.Name1[0].StringText[0],
+      menu_id: menu.ObjectNumber[0],
+      name: menu.Name[0].StringText[0],
       revenue_center: reveueCenter,
     };
   });

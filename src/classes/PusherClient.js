@@ -1,7 +1,7 @@
 const log = require("electron-log");
 const { authHeader } = require("../utils/auth");
 const Pusher = require("pusher-js");
-const { openCheck } = require("./SymphonyClient");
+const { openCheck, getRevenueCentersRequest } = require("./SymphonyClient");
 
 const pusher = async () => {
   const token = await authHeader();
@@ -36,8 +36,11 @@ const pusher = async () => {
   // });
 
   channel.bind("request.created", function (data) {
-    log.info(data);
     openCheck(data);
+  });
+
+  channel.bind("update.menu", function (data) {
+    getRevenueCentersRequest(data);
   });
 };
 

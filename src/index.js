@@ -3,9 +3,6 @@ const AutoLaunch = require("auto-launch");
 const unhandled = require("electron-unhandled");
 const path = require("path");
 const {
-  parseXml,
-  openCheck,
-  sendRequest,
   getRevenueCentersRequest,
 } = require("./classes/SymphonyClient");
 const { login } = require("./classes/SabaApiClient");
@@ -86,12 +83,6 @@ app.whenReady().then(() => {
             log.info(data);
           });
         });
-      },
-    },
-    {
-      label: "Parse Xml",
-      click: function () {
-        parseXml();
       },
     },
     {
