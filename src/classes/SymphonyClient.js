@@ -4,7 +4,12 @@ const {
   createNewCheckRequestBody,
   createGetRevenueCenterRequestBody,
 } = require("../utils/soapRequest");
-const { parseXml, menuItemsArray, parseRevenueCentersXmlResponse, formatRevenueCenterArray } = require("../utils/xml");
+const {
+  parseXml,
+  menuItemsArray,
+  parseRevenueCentersXmlResponse,
+  formatRevenueCenterArray,
+} = require("../utils/xml");
 const { postMenuItems } = require("./SabaApiClient");
 
 const simphonyEndpoint =
@@ -22,11 +27,17 @@ const getRevenueCentersRequest = () => {
       headers,
     })
     .then((response) => {
-      // parse xml response
+      // parse x
+          log.info("parsed xml: ", reveueCenters);ml response
       parseRevenueCentersXmlResponse(response.data)
         .then((res) => {
-          const reveueCenters = formatRevenueCenterArray(res.ArrayOfDbRvcConfiguration.DbRvcConfiguration);
-          log.info("parsed xml: ", reveueCenters);
+          // Extract Revenue centers from response data
+          const reveueCenters = formatRevenueCenterArray(
+            res.ArrayOfDbRvcConfiguration.DbRvcConfiguration
+          );
+
+          // fetch and save menu items from all revenue center to api server
+          getAllMenuItems(reveueCenters);
         })
         .catch((err) => log.error("XML Parse Error: ", err));
     })
@@ -41,8 +52,16 @@ const getRevenueCentersRequest = () => {
     });
 };
 
-const sendRequest = () => {
-  const soapRequestBody = createGetRevenueCenterRequestBody();
+// Send request to get menu items from array of revenue center
+const getAllMenuItems = (reveueCenters) => {
+  reveueCenters.forEach(reveueCenter => {
+    getMenuItemRequest(reveueCenter)
+  })
+}
+
+// Send request to get menu item from revenue center no, then save it to backend server
+const getMenuItemRequest = reveueCenter => {
+  const soapRequestBody = createGetMenuItemsRequestBody(reveueCenter);
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
     SOAPAction: "http://localhost:8080/EGateway/GetConfigurationInfo",
@@ -59,10 +78,10 @@ const sendRequest = () => {
           const menuItems =
             res.ArrayOfDbMenuItemDefinition.DbMenuItemDefinition;
 
-          const array = menuItemsArray(menuItems);
+          const menuItemsArray = formatMenuItemsArray(menuItems);
 
           // post menu items to saba api
-          postMenuItems(array);
+          postMenuItems(menuItemsArray, reveueCenter);
         })
         .catch((err) => log.error(err));
     })

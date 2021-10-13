@@ -101,25 +101,27 @@ const checkNestedParameter = (obj, level, ...rest) => {
   return checkNestedParameter(obj[level], ...rest);
 };
 
-const menuItemsArray = (data) => {
+// Extract Menu Items from response data
+const formatMenuItemsArray = (data, reveueCenter) => {
   return data.map((menu) => {
     return {
       menu_id: menu.MiMasterObjNum[0],
       name: menu.Name1[0].StringText[0],
-      revenue_center: 10,
+      revenue_center: reveueCenter,
     };
   });
 };
 
+// Extract Revenue centers from response data
 const formatRevenueCenterArray = (data) => {
   return data.map((menu) => {
-    return menu.ObjectNumber[0]
+    return menu.ObjectNumber[0];
   });
-}
+};
 
 module.exports = {
   parseXml,
-  menuItemsArray,
+  formatMenuItemsArray,
   parseRevenueCentersXmlResponse,
-  formatRevenueCenterArray
+  formatRevenueCenterArray,
 };

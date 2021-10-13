@@ -95,6 +95,7 @@ const createSoapRequestBody = (items) => {
   return requestBodyPart1 + requestBodyPart2 + requestBodyPart3;
 };
 
+// Create XML Soap request for retrieving list of revenue centers
 const createGetRevenueCenterRequestBody = () => {
   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
@@ -111,7 +112,25 @@ const createGetRevenueCenterRequestBody = () => {
 </soap:Envelope>`;
 };
 
+// Create XML Soap request for retrieving list of menu items
+const createGetMenuItemsRequestBody = (reveueCenter) => {
+  return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <GetConfigurationInfo xmlns="http://localhost:8080/EGateway/">
+      <vendorCode />
+      <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
+      <configurationInfoType>
+        <int>11</int>
+      </configurationInfoType>
+      <revenueCenter>${reveueCenter}</revenueCenter>
+      <configInfoResponse />
+    </GetConfigurationInfo>
+  </soap:Body>
+</soap:Envelope>`;
+};
+
 module.exports = {
   createNewCheckRequestBody,
   createGetRevenueCenterRequestBody,
+  createGetMenuItemsRequestBody,
 };
