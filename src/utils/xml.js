@@ -1,4 +1,46 @@
 const xml2js = require("xml2js");
+const log = require("electron-log");
+
+const parseRevenueCentersXmlResponse = (xmlRes) => {
+  // pass options to remove soap prefixes
+  var options = {
+    explicitArray: false,
+    tagNameProcessors: [xml2js.processors.stripPrefix],
+  };
+
+  let resp = new Promise((resolve, reject) => {
+    xml2js.parseString(xmlRes, options, (err, result) => {
+      // catch error
+      if (err) {
+        reject(err);
+      }
+
+      // check if keys exists
+      if (
+        !checkNestedParameter(
+          result,
+          "Envelope",
+          "Body",
+          "GetConfigurationInfoResponse",
+          "configInfoResponse",
+          "RevenueCenters"
+        )
+      ) {
+        reject("Unexpected Response");
+      }
+
+      // parse again to retrieve menu items
+      xml2js
+        .parseStringPromise(
+          result.Envelope.Body.GetConfigurationInfoResponse.configInfoResponse
+            .RevenueCenters
+        )
+        .then((res) => resolve(res))
+        .catch((err) => reject(err));
+    });
+  });
+  return resp;
+};
 
 /**
  * Parse XML response
@@ -26,7 +68,7 @@ const parseXml = (xmlData) => {
           "Body",
           "GetConfigurationInfoResponse",
           "configInfoResponse",
-          "MenuItemDefinitions"
+          "MenuItemMasters"
         )
       ) {
         reject("Unexpected Response");
@@ -36,7 +78,7 @@ const parseXml = (xmlData) => {
       xml2js
         .parseStringPromise(
           result.Envelope.Body.GetConfigurationInfoResponse.configInfoResponse
-            .MenuItemDefinitions
+            .MenuItemMasters
         )
         .then((res) => resolve(res))
         .catch((err) => reject(err));
@@ -69,4 +111,15 @@ const menuItemsArray = (data) => {
   });
 };
 
-module.exports = { parseXml, menuItemsArray };
+const formatRevenueCenterArray = (data) => {
+  return data.map((menu) => {
+    return menu.ObjectNumber[0]
+  });
+}
+
+module.exports = {
+  parseXml,
+  menuItemsArray,
+  parseRevenueCentersXmlResponse,
+  formatRevenueCenterArray
+};

@@ -102,8 +102,9 @@ const createGetRevenueCenterRequestBody = () => {
       <vendorCode />
       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
       <configurationInfoType>
-        <int>13</int>
+        <int>11</int>
       </configurationInfoType>
+      <revenueCenter>11</revenueCenter>
       <configInfoResponse />
     </GetConfigurationInfo>
   </soap:Body>

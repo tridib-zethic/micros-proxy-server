@@ -4,7 +4,7 @@ const {
   createNewCheckRequestBody,
   createGetRevenueCenterRequestBody,
 } = require("../utils/soapRequest");
-const { parseXml, menuItemsArray } = require("../utils/xml");
+const { parseXml, menuItemsArray, parseRevenueCentersXmlResponse, formatRevenueCenterArray } = require("../utils/xml");
 const { postMenuItems } = require("./SabaApiClient");
 
 const simphonyEndpoint =
@@ -23,9 +23,10 @@ const getRevenueCentersRequest = () => {
     })
     .then((response) => {
       // parse xml response
-      parseXml(response.data)
+      parseRevenueCentersXmlResponse(response.data)
         .then((res) => {
-          log.info("parsed xml: ", res);
+          const reveueCenters = formatRevenueCenterArray(res.ArrayOfDbRvcConfiguration.DbRvcConfiguration);
+          log.info("parsed xml: ", reveueCenters);
         })
         .catch((err) => log.error("XML Parse Error: ", err));
     })
