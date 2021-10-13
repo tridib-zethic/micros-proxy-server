@@ -102,12 +102,12 @@ const checkNestedParameter = (obj, level, ...rest) => {
 };
 
 // Extract Menu Items from response data
-const formatMenuItemsArray = (data, reveueCenter) => {
+const formatMenuItemsArray = (data, revenueCenter) => {
   return data.map((menu) => {
     return {
       menu_id: menu.ObjectNumber[0],
       name: menu.Name[0].StringText[0],
-      revenue_center: reveueCenter,
+      revenue_center: revenueCenter,
     };
   });
 };

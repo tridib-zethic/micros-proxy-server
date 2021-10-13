@@ -60,8 +60,8 @@ const getAllMenuItems = (reveueCenters) => {
 };
 
 // Send request to get menu item from revenue center no, then save it to backend server
-const getMenuItemRequest = (reveueCenter) => {
-  const soapRequestBody = createGetMenuItemsRequestBody(reveueCenter);
+const getMenuItemRequest = (revenueCenter) => {
+  const soapRequestBody = createGetMenuItemsRequestBody(revenueCenter);
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
     SOAPAction: "http://localhost:8080/EGateway/GetConfigurationInfo",
@@ -78,10 +78,10 @@ const getMenuItemRequest = (reveueCenter) => {
           const menuItems =
             res.ArrayOfDbMenuItemMaster.DbMenuItemMaster;
 
-          const menuItemsArray = formatMenuItemsArray(menuItems);
+          const menuItemsArray = formatMenuItemsArray(menuItems, revenueCenter);
 
           // post menu items to saba api
-          postMenuItems(menuItemsArray, reveueCenter);
+          postMenuItems(menuItemsArray, revenueCenter);
         })
         .catch((err) => log.error(err));
     })
