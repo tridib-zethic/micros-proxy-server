@@ -54,6 +54,41 @@ const login = (data) => {
     });
 };
 
+const postRevenueCenters = async (revenueCenters) => {
+  const instance = axios.create({
+    httpsAgent: new https.Agent({
+      rejectUnauthorized: false,
+    }),
+  });
+  instance
+    .post(
+      url + "/simphony/revenue_centers",
+      {
+        hotel_id: 2,
+        items: revenueCenters,
+      },
+      {
+        headers: {
+          Authorization: await authHeader(),
+        },
+      }
+    )
+    .then((response) => {
+      log.info(response.data);
+    })
+    .catch((error) => {
+      if (error.response) {
+        // Request made and server responded
+        log.error(error.response.data);
+        log.error(error.response.status);
+        log.error(error.response.headers);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        log.error("Error", error.message);
+      }
+    });
+};
+
 const postMenuItems = async (menuItems) => {
   const instance = axios.create({
     httpsAgent: new https.Agent({
@@ -89,4 +124,4 @@ const postMenuItems = async (menuItems) => {
     });
 };
 
-module.exports = { login, postMenuItems };
+module.exports = { login, postRevenueCenter, postMenuItems };

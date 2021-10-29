@@ -11,7 +11,7 @@ const {
   parseRevenueCentersXmlResponse,
   formatRevenueCenterArray,
 } = require("../utils/xml");
-const { postMenuItems } = require("./SabaApiClient");
+const { postRevenueCenters, postMenuItems } = require("./SabaApiClient");
 
 const simphonyEndpoint =
   "http://127.0.0.1:8080/EGateway/SimphonyPosAPIWeb.asmx";
@@ -35,6 +35,9 @@ const getRevenueCentersRequest = () => {
           const reveueCenters = formatRevenueCenterArray(
             res.ArrayOfDbRvcConfiguration.DbRvcConfiguration
           );
+
+          // send revenue centers name and ids to api server
+          postRevenueCenters(revenueCenters);
 
           // fetch and save menu items from all revenue center to api server
           getAllMenuItems(reveueCenters);
