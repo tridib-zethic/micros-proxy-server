@@ -124,4 +124,4 @@ const postMenuItems = async (menuItems) => {
     });
 };
 
-module.exports = { login, postRevenueCenter, postMenuItems };
+module.exports = { login, postRevenueCenters, postMenuItems };

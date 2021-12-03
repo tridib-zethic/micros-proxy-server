@@ -6,8 +6,8 @@ const { openCheck, getRevenueCentersRequest } = require("./SymphonyClient");
 const pusher = async () => {
   const token = await authHeader();
   log.info(token);
-  const pusherClient = new Pusher("3d5685fdc9cec5b517dd", {
-    cluster: "ap2",
+  const pusherClient = new Pusher("4b2c0457861dd98fc950", {
+    cluster: "ap1",
     authEndpoint:
       "https://demo.dashboard.chatbothotels.com/api/auth/private-channel",
     auth: {
@@ -17,6 +17,8 @@ const pusher = async () => {
       },
     },
   });
+
+  // log.info(pusherClient);
 
   const channel = pusherClient.subscribe("private-pos");
 
@@ -36,6 +38,7 @@ const pusher = async () => {
   // });
 
   channel.bind("request.created", function (data) {
+    log.info("request.created", data);
     openCheck(data);
   });
 

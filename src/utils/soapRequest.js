@@ -1,17 +1,37 @@
 const employeeObjectNum = `2130`;
+const { info } = require("electron-log");
+const log = require("electron-log");
 
 // Create soap request strings for simphony post, return array of strings
 const createNewCheckRequestBody = (revenueCenterItems) => {
   let checks = [];
-
-  revenueCenterItems.forEach((items) => {
-    checks.push(createSoapRequestBody(items));
+  const orderItems = revenueCenterItems.orders;
+  const orderInformations = {
+    order_instruction: revenueCenterItems.order_instruction,
+    customer_name: revenueCenterItems.customer_name,
+    room_number: revenueCenterItems.room_number,
+    order_price: revenueCenterItems.order_price,
+    payment_method: revenueCenterItems.payment_method,
+    delivery_location: revenueCenterItems.delivery_location,
+    guest_type: revenueCenterItems.guest_type,
+    taxes: revenueCenterItems.taxes,
+    svc: revenueCenterItems.svc,
+    tray_charges: revenueCenterItems.tray_charges,
+    schedule_time: revenueCenterItems.schedule_time,
+    schedule_day: revenueCenterItems.schedule_day,
+    location_name: revenueCenterItems.location_name
+  };
+  // revenueCenterItems.forEach((items) => {
+  //   checks.push(createSoapRequestBody(items));
+  // });
+  orderItems.forEach((items) => {
+    checks.push(createSoapRequestBody(items, orderItems, orderInformations));
   });
 
   return checks;
 };
 
-const createSoapRequestBody = (items) => {
+const createSoapRequestBody = (items, orderItems, orderInformations) => {
   const date = new Date();
 
   const requestBodyPart1 = `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -28,14 +48,20 @@ const createSoapRequestBody = (items) => {
                 <CheckNum>0</CheckNum>
                 <CheckOrderType>1</CheckOrderType>
                 <CheckRevenueCenterID>${
-                  items[0]["revenue_center"]
+                  orderItems[0]["revenue_center"]
                 }</CheckRevenueCenterID>
                 <CheckSeq>0</CheckSeq>
                 <CheckStatusBits>0</CheckStatusBits>
                 <CheckTableObjectNum>1</CheckTableObjectNum>
                 <PCheckInfoLines>
-                    <string />
-                    <string />
+                    <string>Name: ${orderInformations["customer_name"]}</string>
+                    <string>Payment: ${orderInformations["payment_method"]}</string>
+                    <string>Number #: ${orderInformations["room_number"]}</string>
+                    <string>Amount: ${orderInformations["order_price"]}</string>
+                    <string>Schedule: ${orderInformations["schedule_time"]} ${orderInformations["schedule_day"]}</string>
+                    <string>Deliver To: ${orderInformations["delivery_location"]}</string>
+                    <string>Special Instructions: ${orderInformations["order_instruction"]}</string>
+                    <string>Room Service Menu:</string>
                 </PCheckInfoLines>
                 <EventObjectNum>0</EventObjectNum>
             </pGuestCheck>
@@ -78,14 +104,17 @@ const createSoapRequestBody = (items) => {
     </soap:Body>
 </soap:Envelope>`;
 
-  items.forEach((item) => {
+  orderItems.forEach((item) => {
+    // const additionalInfo = JSON.parse(item.selected_additions);
+    // log.info(additionalInfo);
     const itemXml = `<MenuItem>
         <ItemDiscount>
             <DiscObjectNum>0</DiscObjectNum>
         </ItemDiscount>
         <MiObjectNum>${item["item_object_number"]}</MiObjectNum>
-        <MiOverridePrice />
-        <MiReference />
+        <MiQuantity>${item["quantity"]}</MiQuantity>
+        <MiOverridePrice>${item["total_price"]}</MiOverridePrice>
+        <MiReference>${item["instructions"]}</MiReference>
         <MiWeight />
     </MenuItem>`;
 
