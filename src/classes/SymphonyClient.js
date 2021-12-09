@@ -110,7 +110,8 @@ const openCheck = (items) => {
   const checks = createNewCheckRequestBody(items);
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
-    SOAPAction: "http://localhost:8080/EGateway/PostTransactionEx",
+    // SOAPAction: "http://localhost:8080/EGateway/PostTransactionEx",
+    SOAPAction: "http://localhost:8080/EGateway/PostTransactionEx2"
   };
   log.info("openCheck", checks);
 
