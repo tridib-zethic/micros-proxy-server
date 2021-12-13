@@ -93,41 +93,45 @@ const requestBodyPart1 = `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/
     </pGuestCheck>
     <ppMenuItemsEx>`;
 
-  let requestBodyPart2 = "";
+//-----------------------------------------------//
+//     SAMPLE ADDITIONS CODE                     //
+//-----------------------------------------------//
 
-//   const requestBodyPart3 = `</ppMenuItemsEx>
-//             <ppComboMeals />
-//             <pServiceChg>
-//                 <SvcChgObjectNum>0</SvcChgObjectNum>
-//             </pServiceChg>
-//             <pSubTotalDiscount>
-//                 <DiscObjectNum>0</DiscObjectNum>
-//             </pSubTotalDiscount>
-//             <pTmedDetailEx2>
-//               <SimphonyPosApi_TmedDetailItemEx2>
-//                 <TmedEPayment>
-//                     <AccountDataSource>SOURCE_UNDEFINED</AccountDataSource>
-//                     <AccountType>ACCOUNT_TYPE_UNDEFINED</AccountType>
-//                     <ExpirationDate>0001-01-01T00:00:00</ExpirationDate>
-//                     <IssueNumber>0</IssueNumber>
-//                     <PaymentCommand>NO_E_PAYMENT</PaymentCommand>
-//                     <StartDate>0001-01-01T00:00:00</StartDate>
-//                 </TmedEPayment>
-//                 <TmedObjectNum>902</TmedObjectNum>
-//                 <TmedPartialPayment />
-//                 <TmedReference />
-//               </SimphonyPosApi_TmedDetailItemEx2>
-//             </pTmedDetailEx2>
-//             <pTotalsResponseEx />
-//             <ppCheckPrintLines>
-//                 <string />
-//             </ppCheckPrintLines>
-//             <ppVoucherOutput>
-//                 <string />
-//             </ppVoucherOutput>
-//         </PostTransactionEx2>
-//     </soap:Body>
-// </soap:Envelope>`;
+
+{/* <SimphonyPosApi_MenuItemEx>
+<Condiments>
+  <SimphonyPosApi_MenuItemDefinitionEx>
+    <ItemDiscount />
+    <MiObjectNum>41103</MiObjectNum>
+    <MiOverridePrice />
+    <MiQuantity>3</MiQuantity>
+    <MiReference />
+    <MiWeight />
+    <MiMenuLevel>1</MiMenuLevel>
+    <MiSubLevel>1</MiSubLevel>
+    <MiPriceLevel>0</MiPriceLevel>
+    <MiDefinitionSeqNum>1</MiDefinitionSeqNum>
+  </SimphonyPosApi_MenuItemDefinitionEx>
+</Condiments>
+<MenuItem>
+  <ItemDiscount>
+    <SimphonyPosApi_DiscountEx>
+      <DiscObjectNum>0</DiscObjectNum>
+    </SimphonyPosApi_DiscountEx>
+  </ItemDiscount>
+  <MiObjectNum>110004</MiObjectNum>
+  <MiOverridePrice />
+  <MiQuantity>3</MiQuantity>
+  <MiReference />
+  <MiWeight />
+  <MiMenuLevel>1</MiMenuLevel>
+  <MiSubLevel>1</MiSubLevel>
+  <MiPriceLevel>0</MiPriceLevel>
+  <MiDefinitionSeqNum>1</MiDefinitionSeqNum>
+</MenuItem>
+</SimphonyPosApi_MenuItemEx> */}
+
+let requestBodyPart2 = "";
 
 const requestBodyPart3 = `</ppMenuItemsEx>
 <ppComboMealsEx />
@@ -160,7 +164,15 @@ const requestBodyPart3 = `</ppMenuItemsEx>
 
   orderItems.forEach((item) => {
     const additionalInfo = JSON.parse(item.selected_additions);
+    let total_price = item.total_price;
+    let total_quantity = item.quantity;
     let unitPrice = 0.0;
+    if(total_price && total_quantity) {
+      let tempUnitPrice = total_price / total_quantity;
+      if(!isNaN(tempUnitPrice)) {
+        unitPrice = parseFloat(tempUnitPrice);
+      }
+    }
     let productAdditions = [];
       for(let property in additionalInfo) {
         let el = additionalInfo[property];
@@ -185,10 +197,8 @@ const requestBodyPart3 = `</ppMenuItemsEx>
           }
         }
       }
-    // log.info('Unit Price');
-    // log.info(unitPrice);
-    // log.info('additions');
-    // log.info(productAdditions);
+    // log.info('Unit Price', unitPrice);
+    log.info('additions', productAdditions);
 
 
     // const itemXml = `<SimphonyPosApi_MenuItemEx>
@@ -205,8 +215,12 @@ const requestBodyPart3 = `</ppMenuItemsEx>
     //   </MenuItem>
     // </SimphonyPosApi_MenuItemEx>`;
 
-    const itemXml = `<SimphonyPosApi_MenuItemEx>
-    <Condiments />
+    let itemXml1 = `<SimphonyPosApi_MenuItemEx>
+    <Condiments>`;
+
+    let itemXml2 = ``;
+
+    let itemXml3 = `</Condiments>
     <MenuItem>
       <ItemDiscount>
         <SimphonyPosApi_DiscountEx>
@@ -224,6 +238,29 @@ const requestBodyPart3 = `</ppMenuItemsEx>
       <MiDefinitionSeqNum>1</MiDefinitionSeqNum>
     </MenuItem>
   </SimphonyPosApi_MenuItemEx>`;
+
+  
+  productAdditions.forEach(elementTemporary => {
+    let elementTempOptions = elementTemporary.options;
+    elementTempOptions.forEach(elementTemp => {
+      let currentTempElement = `<SimphonyPosApi_MenuItemDefinitionEx>
+      <ItemDiscount />
+      <MiObjectNum>${elementTemp["posMenu"]["menu_id"]}</MiObjectNum>
+      <MiOverridePrice />
+      <MiQuantity>${item["quantity"]}</MiQuantity>
+      <MiReference />
+      <MiWeight />
+      <MiMenuLevel>1</MiMenuLevel>
+      <MiSubLevel>1</MiSubLevel>
+      <MiPriceLevel>0</MiPriceLevel>
+      <MiDefinitionSeqNum>1</MiDefinitionSeqNum>
+      </SimphonyPosApi_MenuItemDefinitionEx>`;
+
+      itemXml2 = itemXml2 + currentTempElement;
+    });
+  });
+
+    let itemXml = itemXml1 + itemXml2 + itemXml3;
 
     requestBodyPart2 = requestBodyPart2 + itemXml;
   });
