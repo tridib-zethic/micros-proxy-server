@@ -32,7 +32,7 @@ const getRevenueCentersRequest = () => {
       parseRevenueCentersXmlResponse(response.data)
         .then((res) => {
           // Extract Revenue centers from response data
-          const reveueCenters = formatRevenueCenterArray(
+          const revenueCenters = formatRevenueCenterArray(
             res.ArrayOfDbRvcConfiguration.DbRvcConfiguration
           );
 
@@ -40,7 +40,7 @@ const getRevenueCentersRequest = () => {
           postRevenueCenters(revenueCenters);
 
           // fetch and save menu items from all revenue center to api server
-          getAllMenuItems(reveueCenters);
+          getAllMenuItems(revenueCenters);
         })
         .catch((err) => log.error("XML Parse Error: ", err));
     })
