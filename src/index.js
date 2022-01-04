@@ -72,7 +72,7 @@ app.whenReady().then(() => {
           // log.error(push);
           channel.bind("pusher:subscription_succeeded", function (status) {
             // Yipee!!
-            log.info("Hello");
+            // log.info("Hello");
           });
 
           channel.bind("pusher:subscription_error", function (status) {
@@ -99,7 +99,7 @@ app.whenReady().then(() => {
       },
     },
   ]);
-  tray.setToolTip("This is my application.");
+  tray.setToolTip("SABA Micros Proxy");
   tray.setContextMenu(contextMenu);
 });
 
