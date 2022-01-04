@@ -198,7 +198,7 @@ const requestBodyPart3 = `</ppMenuItemsEx>
         }
       }
     // log.info('Unit Price', unitPrice);
-    log.info('additions', productAdditions);
+    // log.info('additions', productAdditions);
 
 
     // const itemXml = `<SimphonyPosApi_MenuItemEx>
@@ -239,7 +239,7 @@ const requestBodyPart3 = `</ppMenuItemsEx>
     </MenuItem>
   </SimphonyPosApi_MenuItemEx>`;
 
-  
+  // <MiObjectNum>199090001</MiObjectNum>
   productAdditions.forEach(elementTemporary => {
     let elementTempOptions = elementTemporary.options;
     elementTempOptions.forEach(elementTemp => {
