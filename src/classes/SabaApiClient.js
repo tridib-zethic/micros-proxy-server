@@ -60,11 +60,13 @@ const postRevenueCenters = async (revenueCenters) => {
       rejectUnauthorized: false,
     }),
   });
+  log.info(revenueCenters);
   instance
     .post(
       url + "/simphony/revenue_centers",
       {
-        hotel_id: 2,
+        // hotel_id: 2,
+        hotel_id: 84,
         items: revenueCenters,
       },
       {
@@ -99,7 +101,8 @@ const postMenuItems = async (menuItems) => {
     .post(
       url + "/simphony/menu_item",
       {
-        hotel_id: 2,
+        // hotel_id: 2,
+        hotel_id: 84,
         items: menuItems,
       },
       {
