@@ -11,7 +11,7 @@ Pusher.logToConsole = true;
 const pusher = async () => {
   const token = await authHeader();
   const hotel = await hotelDashboardURL();
-  const hotelSlug = hotel.split('.')[0].split("//")[1];
+  // const hotelSlug = hotel.split('.')[0].split("//")[1];
   log.info(token);
 
   const authorizer = (channel, options) => {
