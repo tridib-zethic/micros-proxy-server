@@ -17,7 +17,11 @@ const simphonyEndpoint =
   "http://127.0.0.1:8080/EGateway/SimphonyPosAPIWeb.asmx";
 
 // Send request to pos to get list of revenue centers
-const getRevenueCentersRequest = () => {
+const getRevenueCentersRequest = (data = {}) => {
+  let hotel_id = 2;
+  if(data?.hotel_id) {
+    hotel_id = data.hotel_id;
+  }
   const soapRequestBody = createGetRevenueCenterRequestBody();
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
@@ -37,10 +41,10 @@ const getRevenueCentersRequest = () => {
           );
 
           // send revenue centers name and ids to api server
-          postRevenueCenters(revenueCenters);
+          postRevenueCenters(revenueCenters, hotel_id);
 
           // fetch and save menu items from all revenue center to api server
-          getAllMenuItems(revenueCenters);
+          getAllMenuItems(revenueCenters, hotel_id);
         })
         .catch((err) => log.error("XML Parse Error: ", err));
     })
@@ -56,14 +60,14 @@ const getRevenueCentersRequest = () => {
 };
 
 // Send request to get menu items from array of revenue center
-const getAllMenuItems = (reveueCenters) => {
-  reveueCenters.forEach((reveueCenter) => {
-    getMenuItemRequest(reveueCenter);
+const getAllMenuItems = (revenueCenters, hotel_id = 2) => {
+  revenueCenters.forEach((revenueCenter) => {
+    getMenuItemRequest(revenueCenter, hotel_id);
   });
 };
 
 // Send request to get menu item from revenue center no, then save it to backend server
-const getMenuItemRequest = (revenueCenter) => {
+const getMenuItemRequest = (revenueCenter, hotel_id = 2) => {
   const soapRequestBody = createGetMenuItemsRequestBody(revenueCenter);
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
@@ -84,7 +88,7 @@ const getMenuItemRequest = (revenueCenter) => {
           const menuItemsArray = formatMenuItemsArray(menuItems, revenueCenter);
 
           // post menu items to saba api
-          postMenuItems(menuItemsArray, revenueCenter);
+          postMenuItems(menuItemsArray, revenueCenter, hotel_id);
         })
         .catch((err) => log.error(err));
     })

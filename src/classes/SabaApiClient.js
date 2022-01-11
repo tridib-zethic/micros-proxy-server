@@ -54,19 +54,17 @@ const login = (data) => {
     });
 };
 
-const postRevenueCenters = async (revenueCenters) => {
+const postRevenueCenters = async (revenueCenters, hotel_id = 2) => {
   const instance = axios.create({
     httpsAgent: new https.Agent({
       rejectUnauthorized: false,
     }),
   });
-  log.info(revenueCenters);
   instance
     .post(
       url + "/simphony/revenue_centers",
       {
-        // hotel_id: 2,
-        hotel_id: 84,
+        hotel_id: hotel_id,
         items: revenueCenters,
       },
       {
@@ -82,8 +80,8 @@ const postRevenueCenters = async (revenueCenters) => {
       if (error.response) {
         // Request made and server responded
         log.error(error.response.data);
-        log.error(error.response.status);
-        log.error(error.response.headers);
+        // log.error(error.response.status);
+        // log.error(error.response.headers);
       } else {
         // Something happened in setting up the request that triggered an Error
         log.error("Error", error.message);
@@ -91,7 +89,7 @@ const postRevenueCenters = async (revenueCenters) => {
     });
 };
 
-const postMenuItems = async (menuItems) => {
+const postMenuItems = async (menuItems, hotel_id = 2) => {
   const instance = axios.create({
     httpsAgent: new https.Agent({
       rejectUnauthorized: false,
@@ -101,8 +99,7 @@ const postMenuItems = async (menuItems) => {
     .post(
       url + "/simphony/menu_item",
       {
-        // hotel_id: 2,
-        hotel_id: 84,
+        hotel_id: hotel_id,
         items: menuItems,
       },
       {
