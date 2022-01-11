@@ -89,7 +89,7 @@ const postRevenueCenters = async (revenueCenters, hotel_id = 2) => {
     });
 };
 
-const postMenuItems = async (menuItems, hotel_id = 2) => {
+const postMenuItems = async (menuItems, revenueCenter = 11, hotel_id = 2) => {
   const instance = axios.create({
     httpsAgent: new https.Agent({
       rejectUnauthorized: false,
