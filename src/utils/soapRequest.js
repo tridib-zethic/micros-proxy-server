@@ -280,6 +280,7 @@ const requestBodyPart3 = `</ppMenuItemsEx>
       //     <MiWeight />
       //   </MenuItem>
       // </SimphonyPosApi_MenuItemEx>`;
+      log.info(elementTemp["posMenu"]);
       let tempOverridePrice = elementTemp["posMenu"]["sequences"][0]['price'];
       let totalTempOverridePrice = tempOverridePrice * item["quantity"];
       let currentTempElement = `<string>${item["quantity"]} x ${elementTemp["posMenu"]["name"]} - @${tempOverridePrice} - ${totalTempOverridePrice}</string>`;
