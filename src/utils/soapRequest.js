@@ -243,20 +243,33 @@ const requestBodyPart3 = `</ppMenuItemsEx>
   productAdditions.forEach(elementTemporary => {
     let elementTempOptions = elementTemporary.options;
     elementTempOptions.forEach(elementTemp => {
-      let currentTempElement = `<SimphonyPosApi_MenuItemDefinitionEx>
-      <ItemDiscount />
-      <MiObjectNum>${elementTemp["posMenu"]["menu_id"]}</MiObjectNum>
-      <MiOverridePrice />
-      <MiQuantity>${item["quantity"]}</MiQuantity>
-      <MiReference />
-      <MiWeight />
-      <MiMenuLevel>1</MiMenuLevel>
-      <MiSubLevel>1</MiSubLevel>
-      <MiPriceLevel>0</MiPriceLevel>
-      <MiDefinitionSeqNum>1</MiDefinitionSeqNum>
-      </SimphonyPosApi_MenuItemDefinitionEx>`;
+      // let currentTempElement = `<SimphonyPosApi_MenuItemDefinitionEx>
+      // <ItemDiscount />
+      // <MiObjectNum>${elementTemp["posMenu"]["menu_id"]}</MiObjectNum>
+      // <MiOverridePrice />
+      // <MiQuantity>${item["quantity"]}</MiQuantity>
+      // <MiReference />
+      // <MiWeight />
+      // <MiMenuLevel>1</MiMenuLevel>
+      // <MiSubLevel>1</MiSubLevel>
+      // <MiPriceLevel>0</MiPriceLevel>
+      // <MiDefinitionSeqNum>1</MiDefinitionSeqNum>
+      // </SimphonyPosApi_MenuItemDefinitionEx>`;
 
-      itemXml2 = itemXml2 + currentTempElement;
+      let currentTempElement = `<SimphonyPosApi_MenuItemEx>
+        <Condiments />
+        <MenuItem>
+          <ItemDiscount>
+              <DiscObjectNum>0</DiscObjectNum>
+          </ItemDiscount>
+          <MiObjectNum>${elementTemp["posMenu"]["menu_id"]}</MiObjectNum>
+          <MiQuantity>${item["quantity"]}</MiQuantity>
+          <MiWeight />
+        </MenuItem>
+      </SimphonyPosApi_MenuItemEx>`;
+
+      // itemXml2 = itemXml2 + currentTempElement;
+      requestBodyPart2 = requestBodyPart2 + currentTempElement;
     });
   });
 
