@@ -66,6 +66,11 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
   //               <EventObjectNum>0</EventObjectNum>
   //           </pGuestCheck>
   //           <ppMenuItemsEx>`;
+
+  let totalOtherCharges = 0;
+
+  let checkInfoLines = `<string />`;
+
 const requestBodyPart1 = `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 <soap:Body>
   <PostTransactionEx2 xmlns="http://micros-hosting.com/EGateway/">
@@ -152,9 +157,9 @@ const requestBodyPart3 = `</ppMenuItemsEx>
     <TmedObjectNum>902</TmedObjectNum>
   </SimphonyPosApi_TmedDetailItemEx2>
 </pTmedDetailEx2>
-<ppCheckPrintLines>
-  <string />
-</ppCheckPrintLines>
+<ppCheckPrintLines>`
+  + checkInfoLines +
+`</ppCheckPrintLines>
 <ppVoucherOutput>
   <string />
 </ppVoucherOutput>
@@ -242,7 +247,13 @@ const requestBodyPart3 = `</ppMenuItemsEx>
   // <MiObjectNum>199090001</MiObjectNum>
   productAdditions.forEach(elementTemporary => {
     let elementTempOptions = elementTemporary.options;
+    if(elementTempOptions?.length > 0) {
+      checkInfoLines = checkInfoLines + '<string>Product Additions</string>';
+    }
     elementTempOptions.forEach(elementTemp => {
+      
+      // FIRST REVISION
+
       // let currentTempElement = `<SimphonyPosApi_MenuItemDefinitionEx>
       // <ItemDiscount />
       // <MiObjectNum>${elementTemp["posMenu"]["menu_id"]}</MiObjectNum>
@@ -256,20 +267,28 @@ const requestBodyPart3 = `</ppMenuItemsEx>
       // <MiDefinitionSeqNum>1</MiDefinitionSeqNum>
       // </SimphonyPosApi_MenuItemDefinitionEx>`;
 
-      let currentTempElement = `<SimphonyPosApi_MenuItemEx>
-        <Condiments />
-        <MenuItem>
-          <ItemDiscount>
-              <DiscObjectNum>0</DiscObjectNum>
-          </ItemDiscount>
-          <MiObjectNum>${elementTemp["posMenu"]["menu_id"]}</MiObjectNum>
-          <MiQuantity>${item["quantity"]}</MiQuantity>
-          <MiWeight />
-        </MenuItem>
-      </SimphonyPosApi_MenuItemEx>`;
+      // SECOND REVISION
+
+      // let currentTempElement = `<SimphonyPosApi_MenuItemEx>
+      //   <Condiments />
+      //   <MenuItem>
+      //     <ItemDiscount>
+      //         <DiscObjectNum>0</DiscObjectNum>
+      //     </ItemDiscount>
+      //     <MiObjectNum>${elementTemp["posMenu"]["menu_id"]}</MiObjectNum>
+      //     <MiQuantity>${item["quantity"]}</MiQuantity>
+      //     <MiWeight />
+      //   </MenuItem>
+      // </SimphonyPosApi_MenuItemEx>`;
+      let tempOverridePrice = elementTemp["posMenu"]["sequences"][0]['price'];
+      let totalTempOverridePrice = tempOverridePrice * item["quantity"];
+      let currentTempElement = `<string>${item["quantity"]} x ${elementTemp["posMenu"]["name"]} - @${tempOverridePrice} - ${totalTempOverridePrice}</string>`;
+      
+      totalOtherCharges = totalOtherCharges + totalTempOverridePrice;
 
       // itemXml2 = itemXml2 + currentTempElement;
-      requestBodyPart2 = requestBodyPart2 + currentTempElement;
+      // requestBodyPart2 = requestBodyPart2 + currentTempElement;
+      checkInfoLines = checkInfoLines + currentTempElement;
     });
   });
 
