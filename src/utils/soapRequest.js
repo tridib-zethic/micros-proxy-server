@@ -69,7 +69,13 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
 
   let totalOtherCharges = 0;
 
-  let checkInfoLines = `<string />`;
+  let checkInfoLines = `<string>Name: ${orderInformations["customer_name"]}</string>
+  <string>Payment: ${orderInformations["payment_method"]}</string>
+  <string>Number #: ${orderInformations["room_number"]}</string>
+  <string>Schedule: ${orderInformations["schedule_time"]} ${orderInformations["schedule_day"]}</string>
+  <string>Deliver To: ${orderInformations["delivery_location"]}</string>
+  <string>Special Instructions: ${orderInformations["order_instruction"]}</string>
+  <string>Room Service Menu:</string>`;
 
 const requestBodyPart1 = `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 <soap:Body>
@@ -85,15 +91,9 @@ const requestBodyPart1 = `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/
       <CheckSeq>0</CheckSeq>
       <CheckStatusBits>0</CheckStatusBits>
       <CheckTableObjectNum>1</CheckTableObjectNum>
-      <PCheckInfoLines>
-        <string>Name: ${orderInformations["customer_name"]}</string>
-        <string>Payment: ${orderInformations["payment_method"]}</string>
-        <string>Number #: ${orderInformations["room_number"]}</string>
-        <string>Schedule: ${orderInformations["schedule_time"]} ${orderInformations["schedule_day"]}</string>
-        <string>Deliver To: ${orderInformations["delivery_location"]}</string>
-        <string>Special Instructions: ${orderInformations["order_instruction"]}</string>
-        <string>Room Service Menu:</string>
-      </PCheckInfoLines>
+      <PCheckInfoLines>`
+        + checkInfoLines +
+      `</PCheckInfoLines>
       <EventObjectNum>0</EventObjectNum>
     </pGuestCheck>
     <ppMenuItemsEx>`;
@@ -157,9 +157,9 @@ const requestBodyPart3 = `</ppMenuItemsEx>
     <TmedObjectNum>902</TmedObjectNum>
   </SimphonyPosApi_TmedDetailItemEx2>
 </pTmedDetailEx2>
-<ppCheckPrintLines>`
-  + checkInfoLines +
-`</ppCheckPrintLines>
+<ppCheckPrintLines>
+  <string />
+</ppCheckPrintLines>
 <ppVoucherOutput>
   <string />
 </ppVoucherOutput>
