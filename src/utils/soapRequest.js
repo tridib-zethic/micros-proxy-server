@@ -67,7 +67,7 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
   //           </pGuestCheck>
   //           <ppMenuItemsEx>`;
 
-  let totalOtherCharges = 0;
+  // let totalOtherCharges = 0;
 
   let checkInfoLines = `<string>Name: ${orderInformations["customer_name"]}</string>
   <string>Payment: ${orderInformations["payment_method"]}</string>
@@ -91,9 +91,15 @@ const requestBodyPart1 = `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/
       <CheckSeq>0</CheckSeq>
       <CheckStatusBits>0</CheckStatusBits>
       <CheckTableObjectNum>1</CheckTableObjectNum>
-      <PCheckInfoLines>`
-        + checkInfoLines +
-      `</PCheckInfoLines>
+      <PCheckInfoLines>
+        <string>Name: ${orderInformations["customer_name"]}</string>
+        <string>Payment: ${orderInformations["payment_method"]}</string>
+        <string>Number #: ${orderInformations["room_number"]}</string>
+        <string>Schedule: ${orderInformations["schedule_time"]} ${orderInformations["schedule_day"]}</string>
+        <string>Deliver To: ${orderInformations["delivery_location"]}</string>
+        <string>Special Instructions: ${orderInformations["order_instruction"]}</string>
+        <string>Room Service Menu:</string>
+      </PCheckInfoLines>
       <EventObjectNum>0</EventObjectNum>
     </pGuestCheck>
     <ppMenuItemsEx>`;
@@ -254,18 +260,18 @@ const requestBodyPart3 = `</ppMenuItemsEx>
       
       // FIRST REVISION
 
-      // let currentTempElement = `<SimphonyPosApi_MenuItemDefinitionEx>
-      // <ItemDiscount />
-      // <MiObjectNum>${elementTemp["posMenu"]["menu_id"]}</MiObjectNum>
-      // <MiOverridePrice />
-      // <MiQuantity>${item["quantity"]}</MiQuantity>
-      // <MiReference />
-      // <MiWeight />
-      // <MiMenuLevel>1</MiMenuLevel>
-      // <MiSubLevel>1</MiSubLevel>
-      // <MiPriceLevel>0</MiPriceLevel>
-      // <MiDefinitionSeqNum>1</MiDefinitionSeqNum>
-      // </SimphonyPosApi_MenuItemDefinitionEx>`;
+      let currentTempElement = `<SimphonyPosApi_MenuItemDefinitionEx>
+      <ItemDiscount />
+      <MiObjectNum>${elementTemp["posMenu"]["menu_id"]}</MiObjectNum>
+      <MiOverridePrice>${elementTemp["price"]}</MiOverridePrice>
+      <MiQuantity>${item["quantity"]}</MiQuantity>
+      <MiReference />
+      <MiWeight />
+      <MiMenuLevel>1</MiMenuLevel>
+      <MiSubLevel>1</MiSubLevel>
+      <MiPriceLevel>0</MiPriceLevel>
+      <MiDefinitionSeqNum>1</MiDefinitionSeqNum>
+      </SimphonyPosApi_MenuItemDefinitionEx>`;
 
       // SECOND REVISION
 
@@ -280,16 +286,17 @@ const requestBodyPart3 = `</ppMenuItemsEx>
       //     <MiWeight />
       //   </MenuItem>
       // </SimphonyPosApi_MenuItemEx>`;
-      log.info(elementTemp["posMenu"]);
-      let tempOverridePrice = elementTemp["posMenu"]["sequences"][0]['price'];
-      let totalTempOverridePrice = tempOverridePrice * item["quantity"];
-      let currentTempElement = `<string>${item["quantity"]} x ${elementTemp["posMenu"]["name"]} - @${tempOverridePrice} - ${totalTempOverridePrice}</string>`;
+      // log.info(elementTemp);
+      // let tempOverridePrice = elementTemp["posMenu"]["sequences"][0]['price'];
+      // let totalTempOverridePrice = tempOverridePrice * item["quantity"];
+      // let currentTempElement = `<string>${item["quantity"]} x ${elementTemp["posMenu"]["name"]} - @${tempOverridePrice} - ${totalTempOverridePrice}</string>`;
       
-      totalOtherCharges = totalOtherCharges + totalTempOverridePrice;
+      // totalOtherCharges = totalOtherCharges + totalTempOverridePrice;
 
       // itemXml2 = itemXml2 + currentTempElement;
+      itemXml3 = itemXml3 + currentTempElement;
       // requestBodyPart2 = requestBodyPart2 + currentTempElement;
-      checkInfoLines = checkInfoLines + currentTempElement;
+      // checkInfoLines = checkInfoLines + currentTempElement;
     });
   });
 
