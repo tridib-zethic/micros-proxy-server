@@ -131,8 +131,21 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
             }
           });
         } else {
-          // for additions
-          productAdditions.push({ ...el });
+          let options = el.options;
+          options.forEach((element) => {
+            if(element?.posMenu?.is_condiment == false) {
+              let tempProduct = {
+                revenue_center: element?.posMenu?.revenue_center,
+                quantity: total_quantity,
+                item_object_number: element?.posMenu?.menu_id,
+                unit_price: (!isNaN(parseFloat(element?.price))) ? parseFloat(element?.price) : 0.0,
+              }
+              additionalMainProducts.push(tempProduct);
+            } else {
+              // for additions
+              productAdditions.push({ ...el });
+            }
+          });
         }
       }
     }
