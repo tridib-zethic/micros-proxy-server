@@ -244,8 +244,8 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
 
         menuItems.push(productItem);
       });
-
-      postMenuItems(menuItems, revenueCenter, hotel_id);
+      let formattedMenuItems = formatMenuItemsDetailedArray(menuItems);
+      postMenuItems(formattedMenuItems, revenueCenter, hotel_id);
 };
 
 
