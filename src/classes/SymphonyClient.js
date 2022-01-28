@@ -4,13 +4,11 @@ const {
   createNewCheckRequestBody,
   createGetRevenueCenterRequestBody,
   createGetMenuItemsRequestBody,
-  createGetDetailedMenuItemsRequestBody,
   createGetDefinitionsRequestBody,
   createGetPriceRequestBody,
 } = require("../utils/soapRequest");
 const {
   parseXml,
-  parseXmlArr,
   parsePriceXml,
   formatMenuItemsArray,
   formatMenuItemsDetailedArray,
@@ -117,7 +115,6 @@ const getMenuItemRequest = (revenueCenter, hotel_id = 2) => {
 
 // Send request to get menu item from revenue center no, then save it to backend server
 const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
-  // const soapRequestBody = createGetDetailedMenuItemsRequestBody(revenueCenter);
   const soapRequestBody1 = createGetPriceRequestBody(revenueCenter);
   const soapRequestBody2 = createGetMenuItemsRequestBody(revenueCenter);
 
@@ -259,7 +256,6 @@ const openCheck = (items) => {
     // SOAPAction: "http://localhost:8080/EGateway/PostTransactionEx",
     SOAPAction: "http://localhost:8080/EGateway/PostTransactionEx2"
   };
-  log.info("openCheck", checks);
 
   checks.forEach((checkRequestBody) => {
     // send post request to open check
