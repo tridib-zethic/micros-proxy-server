@@ -11,6 +11,8 @@ const {
   parseXmlArr,
   formatMenuItemsArray,
   formatMenuItemsDetailedArray,
+  createGetDefinitionsRequestBody,
+  createGetPriceRequestBody,
   parseRevenueCentersXmlResponse,
   formatRevenueCenterArray,
 } = require("../utils/xml");
