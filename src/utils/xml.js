@@ -205,12 +205,18 @@ const formatMenuItemsArray = (data, revenueCenter) => {
 // Extract detailed menu items from response data
 const formatMenuItemsDetailedArray = () => {
   return data.map((menu) => {
-    const definitionSequence = {};
+    const definitionSequence = [{
+      "definitionSequence": menu?.DefinitionSequence?.SequenceNum[0] ? menu.DefinitionSequence.SequenceNum[0] : '1',
+      "name": {
+        "en-US": menu.Name[0].StringText[0]
+      },
+      "price": menu?.DefinitionSequence?.Price[0] ? menu.DefinitionSequence.Price[0] : '0',
+    }];
     return {
       menu_id: menu.ObjectNumber[0],
       name: menu.Name[0].StringText[0],
       revenue_center: revenueCenter,
-      definition_sequence: definitionSequence
+      sequences: definitionSequence
     };
   });
 };

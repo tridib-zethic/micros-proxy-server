@@ -68,7 +68,8 @@ const getRevenueCentersRequest = (data = {}) => {
 // Send request to get menu items from array of revenue center
 const getAllMenuItems = (revenueCenters, hotel_id = 2) => {
   revenueCenters.forEach((revenueCenter) => {
-    getMenuItemRequest(revenueCenter, hotel_id);
+    // getMenuItemRequest(revenueCenter, hotel_id);
+    getMenuItemDetailsRequest(revenueCenter, hotel_id);
   });
 };
 
@@ -115,27 +116,31 @@ const getMenuItemRequest = (revenueCenter, hotel_id = 2) => {
 };
 
 // Send request to get menu item from revenue center no, then save it to backend server
-const getMenuItemDetailsRequest = (revenueCenter, hotel_id = 2) => {
-  const soapRequestBody = createGetDetailedMenuItemsRequestBody(revenueCenter);
+const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
+  // const soapRequestBody = createGetDetailedMenuItemsRequestBody(revenueCenter);
+  const soapRequestBody1 = createGetPriceRequestBody(revenueCenter);
+  const soapRequestBody2 = createGetMenuItemsRequestBody(revenueCenter);
+
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
     SOAPAction: "http://localhost:8080/EGateway/GetConfigurationInfo",
   };
 
-  axios
-    .post(simphonyEndpoint, soapRequestBody, {
+  let menuItemElements = [];
+  let priceDetailsArray = [];
+
+  let menuItems = [];
+
+  // menu items elements
+  await axios
+    .post(simphonyEndpoint, soapRequestBody2, {
       headers,
     })
     .then((response) => {
       // parse xml response
-      parseXmlArr(response.data)
+      parseXml(response.data)
         .then((res) => {
-          const menuItems = res;
-          log.info(menuItems);
-          // const menuItemsArray = formatMenuItemsDetailedArray(menuItems, revenueCenter);
-          // log
-          // post menu items to saba api
-          // postMenuItems(menuItemsArray, revenueCenter, hotel_id);
+          menuItemElements = res.ArrayOfDbMenuItemMaster.DbMenuItemMaster;
         })
         .catch((err) => log.error(err));
     })
@@ -153,6 +158,94 @@ const getMenuItemDetailsRequest = (revenueCenter, hotel_id = 2) => {
         log.error("Error", error.message);
       }
     });
+
+    // Get menu item prices
+    await axios
+      .post(simphonyEndpoint, soapRequestBody1, {
+        headers,
+      })
+      .then((response) => {
+        // parse xml response
+        parsePriceXml(response.data)
+          .then((res) => {
+            priceDetailsArray = res.ArrayOfDbMenuItemPrice.DbMenuItemPrice;
+          })
+          .catch((err) => log.error(err));
+      })
+      .catch((error) => {
+        if (error.response) {
+          // Request made and server responded
+          log.error(error.response.data);
+          log.error(error.response.status);
+          log.error(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          log.error(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          log.error("Error", error.message);
+        }
+      });
+
+      // Get file updates
+      await menuItemElements.forEach((item, index) => {
+        let productItem = {...item};
+        let priceElement = {
+          "MenuItemPriceID": [
+              "77805"
+          ],
+          "HierStrucID": [
+              "3390"
+          ],
+          "MenuItemDefID": [
+              "61380"
+          ],
+          "SequenceNum": [
+              "1"
+          ],
+          "MenuLvlIndex": [
+              "0"
+          ],
+          "OptionBits": [
+              "00000000"
+          ],
+          "Price": [
+              "0"
+          ],
+          "PrepCost": [
+              "0"
+          ],
+          "RecipeNameID": [
+              "0"
+          ],
+          "PriceGroupID": [
+              "0"
+          ],
+          "TaxClassObjNum": [
+              "0"
+          ],
+          "ChangeSetObjNum": [
+              "0"
+          ],
+          "PosRef": [
+              "0"
+          ],
+          "ServiceChargeGroupObjNum": [
+              "0"
+          ],
+          "ParentTaxClassOvrdObjNmbr": [
+              "0"
+          ]
+        };
+        if(priceDetailsArray[index]) {
+          priceElement = priceDetailsArray[index];
+        }
+        productItem.DefinitionSequence = priceElement;
+
+        menuItems.push(productItem);
+      });
+
+      postMenuItems(menuItems, revenueCenter, hotel_id);
 };
 
 
