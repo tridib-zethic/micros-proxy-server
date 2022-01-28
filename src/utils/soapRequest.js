@@ -342,8 +342,51 @@ const createGetMenuItemsRequestBody = (revenueCenter) => {
 </soap:Envelope>`;
 };
 
+// Create XML Soap request for retrieving list of price details along with menu items
+const createGetDetailedMenuItemsRequestBody = (revenueCenter) => {
+  return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <GetConfigurationInfo xmlns="http://localhost:8080/EGateway/">
+      <vendorCode />
+      <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
+      <configurationInfoType>
+        <int>0</int>
+        <int>1</int>
+        <int>2</int>
+        <int>3</int>
+        <int>4</int>
+        <int>5</int>
+        <int>6</int>
+        <int>7</int>
+        <int>8</int>
+        <int>9</int>
+        <int>10</int>
+        <int>11</int>
+        <int>12</int>
+        <int>13</int>
+        <int>14</int>
+        <int>15</int>
+        <int>16</int>
+        <int>17</int>
+        <int>18</int>
+        <int>19</int>
+        <int>20</int>
+        <int>21</int>
+        <int>22</int>
+        <int>23</int>
+        <int>24</int>
+        <int>25</int>
+      </configurationInfoType>
+      <revenueCenter>${revenueCenter}</revenueCenter>
+      <configInfoResponse />
+    </GetConfigurationInfo>
+  </soap:Body>
+</soap:Envelope>`;
+};
+
 module.exports = {
   createNewCheckRequestBody,
   createGetRevenueCenterRequestBody,
   createGetMenuItemsRequestBody,
+  createGetDetailedMenuItemsRequestBody,
 };

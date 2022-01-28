@@ -4,10 +4,13 @@ const {
   createNewCheckRequestBody,
   createGetRevenueCenterRequestBody,
   createGetMenuItemsRequestBody,
+  createGetDetailedMenuItemsRequestBody,
 } = require("../utils/soapRequest");
 const {
   parseXml,
+  parseXmlArr,
   formatMenuItemsArray,
+  formatMenuItemsDetailedArray,
   parseRevenueCentersXmlResponse,
   formatRevenueCenterArray,
 } = require("../utils/xml");
@@ -107,6 +110,49 @@ const getMenuItemRequest = (revenueCenter, hotel_id = 2) => {
       }
     });
 };
+
+// Send request to get menu item from revenue center no, then save it to backend server
+const getMenuItemDetailsRequest = (revenueCenter, hotel_id = 2) => {
+  const soapRequestBody = createGetDetailedMenuItemsRequestBody(revenueCenter);
+  const headers = {
+    "Content-Type": "text/xml;charset=UTF-8",
+    SOAPAction: "http://localhost:8080/EGateway/GetConfigurationInfo",
+  };
+
+  axios
+    .post(simphonyEndpoint, soapRequestBody, {
+      headers,
+    })
+    .then((response) => {
+      // parse xml response
+      parseXmlArr(response.data)
+        .then((res) => {
+          const menuItems = res;
+          log.info(menuItems);
+          // const menuItemsArray = formatMenuItemsDetailedArray(menuItems, revenueCenter);
+          // log
+          // post menu items to saba api
+          // postMenuItems(menuItemsArray, revenueCenter, hotel_id);
+        })
+        .catch((err) => log.error(err));
+    })
+    .catch((error) => {
+      if (error.response) {
+        // Request made and server responded
+        log.error(error.response.data);
+        log.error(error.response.status);
+        log.error(error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        log.error(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        log.error("Error", error.message);
+      }
+    });
+};
+
+
 
 // Send Request to open multiple checks
 const openCheck = (items) => {
