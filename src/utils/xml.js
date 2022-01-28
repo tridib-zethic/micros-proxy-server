@@ -203,7 +203,7 @@ const formatMenuItemsArray = (data, revenueCenter) => {
 };
 
 // Extract detailed menu items from response data
-const formatMenuItemsDetailedArray = () => {
+const formatMenuItemsDetailedArray = (data) => {
   return data.map((menu) => {
     const definitionSequence = [{
       "definitionSequence": menu?.DefinitionSequence?.SequenceNum[0] ? menu.DefinitionSequence.SequenceNum[0] : '1',
