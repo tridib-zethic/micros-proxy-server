@@ -11,6 +11,7 @@ const {
 const {
   parseXml,
   parseXmlArr,
+  parsePriceXml,
   formatMenuItemsArray,
   formatMenuItemsDetailedArray,
   parseRevenueCentersXmlResponse,
