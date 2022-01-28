@@ -293,8 +293,8 @@ const requestBodyPart3 = `</ppMenuItemsEx>
       
       // totalOtherCharges = totalOtherCharges + totalTempOverridePrice;
 
-      // itemXml2 = itemXml2 + currentTempElement;
-      itemXml3 = itemXml3 + currentTempElement;
+      itemXml2 = itemXml2 + currentTempElement;
+      // itemXml3 = itemXml3 + currentTempElement;
       // requestBodyPart2 = requestBodyPart2 + currentTempElement;
       // checkInfoLines = checkInfoLines + currentTempElement;
     });
