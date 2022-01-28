@@ -32,13 +32,7 @@ const createNewCheckRequestBody = (revenueCenterItems) => {
 const createSoapRequestBody = (items, orderItems, orderInformations) => {
   const date = new Date();
 
-  let checkInfoLines = `<string>Name: ${orderInformations["customer_name"]}</string>
-  <string>Payment: ${orderInformations["payment_method"]}</string>
-  <string>Number #: ${orderInformations["room_number"]}</string>
-  <string>Schedule: ${orderInformations["schedule_time"]} ${orderInformations["schedule_day"]}</string>
-  <string>Deliver To: ${orderInformations["delivery_location"]}</string>
-  <string>Special Instructions: ${orderInformations["order_instruction"]}</string>
-  <string>Room Service Menu:</string>`;
+  const additionalMainProducts = [];
 
   const requestBodyPart1 = `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 <soap:Body>
@@ -124,7 +118,15 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
         if (price_type == "replace") {
           let options = el.options;
           options.forEach((element) => {
-            if (!isNaN(parseFloat(element?.price))) {
+            if(element?.posMenu?.is_condiment == false) {
+              let tempProduct = {
+                revenue_center: element?.posMenu?.revenue_center,
+                quantity: total_quantity,
+                item_object_number: element?.posMenu?.menu_id,
+                unit_price: (!isNaN(parseFloat(element?.price))) ? parseFloat(element?.price) : 0.0,
+              }
+              additionalMainProducts.push(tempProduct);
+            } else if (!isNaN(parseFloat(element?.price))) {
               unitPrice = parseFloat(element.price);
             }
           });
@@ -161,30 +163,53 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
 
     productAdditions.forEach((elementTemporary) => {
       let elementTempOptions = elementTemporary.options;
-      if (elementTempOptions?.length > 0) {
-        checkInfoLines = checkInfoLines + "<string>Product Additions</string>";
-      }
+      
       elementTempOptions.forEach((elementTemp) => {
-        // FIRST REVISION
 
         let currentTempElement = `<SimphonyPosApi_MenuItemDefinitionEx>
-      <ItemDiscount />
-      <MiObjectNum>${elementTemp["posMenu"]["menu_id"]}</MiObjectNum>
-      <MiOverridePrice>${elementTemp["price"]}</MiOverridePrice>
-      <MiQuantity>${item["quantity"]}</MiQuantity>
-      <MiReference />
-      <MiWeight />
-      <MiMenuLevel>1</MiMenuLevel>
-      <MiSubLevel>1</MiSubLevel>
-      <MiPriceLevel>0</MiPriceLevel>
-      <MiDefinitionSeqNum>1</MiDefinitionSeqNum>
-      </SimphonyPosApi_MenuItemDefinitionEx>`;
+          <ItemDiscount />
+          <MiObjectNum>${elementTemp["posMenu"]["menu_id"]}</MiObjectNum>
+          <MiOverridePrice>${elementTemp["price"]}</MiOverridePrice>
+          <MiQuantity>${item["quantity"]}</MiQuantity>
+          <MiReference />
+          <MiWeight />
+          <MiMenuLevel>1</MiMenuLevel>
+          <MiSubLevel>1</MiSubLevel>
+          <MiPriceLevel>0</MiPriceLevel>
+          <MiDefinitionSeqNum>1</MiDefinitionSeqNum>
+          </SimphonyPosApi_MenuItemDefinitionEx>`;
 
         itemXml2 = itemXml2 + currentTempElement;
       });
     });
 
-    let itemXml = itemXml1 + itemXml2 + itemXml3;
+    let itemXml = '';
+
+    additionalMainProducts.forEach(elementTempOpt => {
+      let tempItemXml = `<SimphonyPosApi_MenuItemEx>
+        <Condiments/>
+        <MenuItem>
+          <ItemDiscount>
+            <SimphonyPosApi_DiscountEx>
+              <DiscObjectNum>0</DiscObjectNum>
+            </SimphonyPosApi_DiscountEx>
+          </ItemDiscount>
+          <MiObjectNum>${elementTempOpt["item_object_number"]}</MiObjectNum>
+          <MiOverridePrice>${elementTempOpt['unit_price']}</MiOverridePrice>
+          <MiQuantity>${item["quantity"]}</MiQuantity>
+          <MiReference />
+          <MiWeight />
+          <MiMenuLevel>1</MiMenuLevel>
+          <MiSubLevel>1</MiSubLevel>
+          <MiPriceLevel>0</MiPriceLevel>
+          <MiDefinitionSeqNum>1</MiDefinitionSeqNum>
+        </MenuItem>
+      </SimphonyPosApi_MenuItemEx>`;
+
+      itemXml = itemXml + tempItemXml;
+    });
+
+    itemXml = itemXml1 + itemXml2 + itemXml3;
 
     requestBodyPart2 = requestBodyPart2 + itemXml;
   });
