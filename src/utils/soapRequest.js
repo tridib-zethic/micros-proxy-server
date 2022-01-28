@@ -350,7 +350,6 @@ const createGetDetailedMenuItemsRequestBody = (revenueCenter) => {
       <vendorCode />
       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
       <configurationInfoType>
-        <int>0</int>
         <int>1</int>
         <int>2</int>
         <int>3</int>
@@ -384,9 +383,45 @@ const createGetDetailedMenuItemsRequestBody = (revenueCenter) => {
 </soap:Envelope>`;
 };
 
+// Create XML Soap request for retrieving list of definitions
+const createGetDefinitionsRequestBody = (revenueCenter) => {
+  return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <GetConfigurationInfo xmlns="http://localhost:8080/EGateway/">
+      <vendorCode />
+      <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
+      <configurationInfoType>
+        <int>1</int>
+      </configurationInfoType>
+      <revenueCenter>${revenueCenter}</revenueCenter>
+      <configInfoResponse />
+    </GetConfigurationInfo>
+  </soap:Body>
+</soap:Envelope>`;
+};
+
+// Create XML Soap request for retrieving list of price details
+const createGetPriceRequestBody = (revenueCenter) => {
+  return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <GetConfigurationInfo xmlns="http://localhost:8080/EGateway/">
+      <vendorCode />
+      <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
+      <configurationInfoType>
+        <int>2</int>
+      </configurationInfoType>
+      <revenueCenter>${revenueCenter}</revenueCenter>
+      <configInfoResponse />
+    </GetConfigurationInfo>
+  </soap:Body>
+</soap:Envelope>`;
+};
+
 module.exports = {
   createNewCheckRequestBody,
   createGetRevenueCenterRequestBody,
   createGetMenuItemsRequestBody,
   createGetDetailedMenuItemsRequestBody,
+  createGetDefinitionsRequestBody,
+  createGetPriceRequestBody,
 };
