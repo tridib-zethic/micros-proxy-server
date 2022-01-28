@@ -5,14 +5,14 @@ const {
   createGetRevenueCenterRequestBody,
   createGetMenuItemsRequestBody,
   createGetDetailedMenuItemsRequestBody,
+  createGetDefinitionsRequestBody,
+  createGetPriceRequestBody,
 } = require("../utils/soapRequest");
 const {
   parseXml,
   parseXmlArr,
   formatMenuItemsArray,
   formatMenuItemsDetailedArray,
-  createGetDefinitionsRequestBody,
-  createGetPriceRequestBody,
   parseRevenueCentersXmlResponse,
   formatRevenueCenterArray,
 } = require("../utils/xml");
