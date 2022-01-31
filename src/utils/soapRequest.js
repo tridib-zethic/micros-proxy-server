@@ -31,12 +31,10 @@ const createNewCheckRequestBody = (revenueCenterItems) => {
     }
     tempOrderItems[tempOrderRevenueCenter].push(items);
   });
+  
   for(objectProperty in tempOrderItems) {
     checks.push(createSoapRequestBody(tempOrderItems, tempOrderItems[objectProperty], orderInformations));
   }
-  // tempOrderItems.forEach(el => {
-  //   checks.push(createSoapRequestBody(items, el, orderInformations));
-  // });
 
   return checks;
 };
