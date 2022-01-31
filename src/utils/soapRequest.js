@@ -22,12 +22,16 @@ const createNewCheckRequestBody = (revenueCenterItems) => {
     location_name: revenueCenterItems.location_name,
   };
 
-  let tempOrderItems = [];
+  let tempOrderItems = {};
 
   orderItems.forEach((items) => {
     let tempOrderRevenueCenter = items.revenue_center;
+    if(!tempOrderItems[tempOrderRevenueCenter]) {
+      tempOrderItems[tempOrderRevenueCenter] = [];
+    }
     tempOrderItems[tempOrderRevenueCenter].push(items);
   });
+
   tempOrderItems.forEach(el => {
     checks.push(createSoapRequestBody(items, el, orderInformations));
   });
