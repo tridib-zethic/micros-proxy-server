@@ -21,22 +21,26 @@ const createNewCheckRequestBody = (revenueCenterItems) => {
     schedule_day: revenueCenterItems.schedule_day,
     location_name: revenueCenterItems.location_name,
   };
+  if(orderItems) {
+    let tempOrderItems = {};
 
-  let tempOrderItems = {};
-
-  orderItems.forEach((items) => {
-    let tempOrderRevenueCenter = items.revenue_center;
-    if(!tempOrderItems[tempOrderRevenueCenter]) {
-      tempOrderItems[tempOrderRevenueCenter] = [];
+    orderItems.forEach((items) => {
+      let tempOrderRevenueCenter = items.revenue_center;
+      if(!tempOrderItems[tempOrderRevenueCenter]) {
+        tempOrderItems[tempOrderRevenueCenter] = [];
+      }
+      tempOrderItems[tempOrderRevenueCenter].push(items);
+    });
+    for(objectProperty in tempOrderItems) {
+      checks.push(createSoapRequestBody(tempOrderItems, tempOrderItems[objectProperty], orderInformations));
     }
-    tempOrderItems[tempOrderRevenueCenter].push(items);
-  });
-  
-  for(objectProperty in tempOrderItems) {
-    checks.push(createSoapRequestBody(tempOrderItems, tempOrderItems[objectProperty], orderInformations));
-  }
+    // tempOrderItems.forEach(el => {
+    //   checks.push(createSoapRequestBody(items, el, orderInformations));
+    // });
 
-  return checks;
+    return checks;
+  }
+  
 };
 
 const createSoapRequestBody = (items, orderItems, orderInformations) => {
@@ -183,21 +187,24 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
       let elementTempOptions = elementTemporary.options;
       
       elementTempOptions.forEach((elementTemp) => {
+        if(elementTemp["posMenu"]) {
+          if(elementTemp["posMenu"]["menu_id"]) {
+            let currentTempElement = `<SimphonyPosApi_MenuItemDefinitionEx>
+              <ItemDiscount />
+              <MiObjectNum>${elementTemp["posMenu"]["menu_id"]}</MiObjectNum>
+              <MiOverridePrice>${elementTemp["price"]}</MiOverridePrice>
+              <MiQuantity>${item["quantity"]}</MiQuantity>
+              <MiReference />
+              <MiWeight />
+              <MiMenuLevel>1</MiMenuLevel>
+              <MiSubLevel>1</MiSubLevel>
+              <MiPriceLevel>0</MiPriceLevel>
+              <MiDefinitionSeqNum>1</MiDefinitionSeqNum>
+              </SimphonyPosApi_MenuItemDefinitionEx>`;
 
-        let currentTempElement = `<SimphonyPosApi_MenuItemDefinitionEx>
-          <ItemDiscount />
-          <MiObjectNum>${elementTemp["posMenu"]["menu_id"]}</MiObjectNum>
-          <MiOverridePrice>${elementTemp["price"]}</MiOverridePrice>
-          <MiQuantity>${item["quantity"]}</MiQuantity>
-          <MiReference />
-          <MiWeight />
-          <MiMenuLevel>1</MiMenuLevel>
-          <MiSubLevel>1</MiSubLevel>
-          <MiPriceLevel>0</MiPriceLevel>
-          <MiDefinitionSeqNum>1</MiDefinitionSeqNum>
-          </SimphonyPosApi_MenuItemDefinitionEx>`;
-
-        itemXml2 = itemXml2 + currentTempElement;
+            itemXml2 = itemXml2 + currentTempElement;
+          }
+        }
       });
     });
 
