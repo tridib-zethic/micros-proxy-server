@@ -63,7 +63,6 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
       }</CheckRevenueCenterID>
       <CheckSeq>0</CheckSeq>
       <CheckStatusBits>0</CheckStatusBits>
-      <CheckTableObjectNum>1</CheckTableObjectNum>
       <PCheckInfoLines>
         <string>Name: ${orderInformations["customer_name"]}</string>
         <string>Payment: ${orderInformations["payment_method"]}</string>
