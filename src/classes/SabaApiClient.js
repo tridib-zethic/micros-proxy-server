@@ -23,6 +23,11 @@ const login = (data, pusher, pusherClient, event, win) => {
     }),
   });
   url = `${data.hotel}/api`;
+  keytar.setPassword(
+    "login",
+    "hotel",
+    data.hotel
+  );
   data["grant_type"] = "password";
   data["scope"] = "*";
   data["client_id"] = clientId;
