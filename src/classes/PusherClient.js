@@ -150,7 +150,7 @@ const pusher = async (win = undefined, event = undefined) => {
 
   // log.info(pusherClient);
 
-  const channel = pusherClient.subscribe("private-pos");
+  const channel = pusherClient.subscribe(`private-${hotelSlug}-pos`);
 
   channel.bind("pusher:subscription_succeeded", function (status) {
     // Yipee!!
