@@ -115,6 +115,7 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
 </soap:Envelope>`;
 
   orderItems.forEach((item) => {
+    let unique_item_object_number = item["item_object_number"];
     const additionalInfo = JSON.parse(item.selected_additions);
     let total_price = item.total_price;
     let total_quantity = item.quantity;
@@ -133,6 +134,9 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
         // for replace
         if (price_type == "replace") {
           let options = el.options;
+          if(options?.posMenu?.menu_id) {
+            unique_item_object_number = options.posMenu.menu_id;
+          }
           options.forEach((element) => {
             if (!isNaN(parseFloat(element?.price))) {
               unitPrice = parseFloat(element.price);
@@ -162,7 +166,7 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
     <Condiments>`;
 
     let itemXml2 = ``;
-
+    // <MiOverridePrice>${unitPrice}</MiOverridePrice>
     let itemXml3 = `</Condiments>
     <MenuItem>
       <ItemDiscount>
@@ -170,8 +174,8 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
           <DiscObjectNum>0</DiscObjectNum>
         </SimphonyPosApi_DiscountEx>
       </ItemDiscount>
-      <MiObjectNum>${item["item_object_number"]}</MiObjectNum>
-      <MiOverridePrice>${unitPrice}</MiOverridePrice>
+      <MiObjectNum>${unique_item_object_number}</MiObjectNum>
+      <MiOverridePrice />
       <MiQuantity>${item["quantity"]}</MiQuantity>
       <MiReference>${item["instructions"]}</MiReference>
       <MiWeight />
@@ -184,14 +188,14 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
 
     productAdditions.forEach((elementTemporary) => {
       let elementTempOptions = elementTemporary.options;
-      
+      // <MiOverridePrice>${elementTemp["price"]}</MiOverridePrice>
       elementTempOptions.forEach((elementTemp) => {
         if(elementTemp["posMenu"]) {
           if(elementTemp["posMenu"]["menu_id"]) {
             let currentTempElement = `<SimphonyPosApi_MenuItemDefinitionEx>
               <ItemDiscount />
               <MiObjectNum>${elementTemp["posMenu"]["menu_id"]}</MiObjectNum>
-              <MiOverridePrice>${elementTemp["price"]}</MiOverridePrice>
+              <MiOverridePrice />
               <MiQuantity>${item["quantity"]}</MiQuantity>
               <MiReference />
               <MiWeight />
@@ -208,7 +212,7 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
     });
 
     let itemXml = '';
-
+    // <MiOverridePrice>${elementTempOpt['unit_price']}</MiOverridePrice>
     additionalMainProducts.forEach(elementTempOpt => {
       let tempItemXml = `<SimphonyPosApi_MenuItemEx>
         <Condiments/>
@@ -219,7 +223,7 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
             </SimphonyPosApi_DiscountEx>
           </ItemDiscount>
           <MiObjectNum>${elementTempOpt["item_object_number"]}</MiObjectNum>
-          <MiOverridePrice>${elementTempOpt['unit_price']}</MiOverridePrice>
+          <MiOverridePrice />
           <MiQuantity>${item["quantity"]}</MiQuantity>
           <MiReference />
           <MiWeight />

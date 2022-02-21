@@ -139,3 +139,23 @@ body {
 .log-form .forgot:hover {
   color: #1ba0a9;
 }
+.response-block {
+  border-radius: 4px;
+  font-size: 14px;
+  width: 95%;
+  margin: 10px auto;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.login-success {
+  background-color: #aeff8e;
+  color: #428b24;
+  border: 1px solid #428b24;
+  padding: 15px;
+}
+.login-error {
+  background-color: #fda1a1;
+  color: #c20000;
+  border: 1px solid #c20000;
+  padding: 15px;
+}

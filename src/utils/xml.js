@@ -135,6 +135,52 @@ const parseXml = (xmlData) => {
 };
 
 /**
+ * Parse XML response
+ * @param string xmlData
+ * @returns obj
+ */
+ const parseDefinitionXml = (xmlData) => {
+  // pass options to remove soap prefixes
+  var options = {
+    explicitArray: false,
+    tagNameProcessors: [xml2js.processors.stripPrefix],
+  };
+  let resp = new Promise((resolve, reject) => {
+    xml2js.parseString(xmlData, options, (err, result) => {
+      // catch error
+      if (err) {
+        reject(err);
+      }
+
+      // check if keys exists
+      if (
+        !checkNestedParameter(
+          result,
+          "Envelope",
+          "Body",
+          "GetConfigurationInfoResponse",
+          "configInfoResponse",
+          "MenuItemDefinitions"
+        )
+      ) {
+        reject("Unexpected Response");
+      }
+
+      // parse again to retrieve menu items
+      xml2js
+        .parseStringPromise(
+          result.Envelope.Body.GetConfigurationInfoResponse.configInfoResponse
+            .MenuItemDefinitions
+        )
+        .then((res) => resolve(res))
+        .catch((err) => reject(err));
+    });
+  });
+
+  return resp;
+};
+
+/**
  * Equivalent to obj.hasOwnProperty but for nested levels
  * @param {*} obj
  * @param {*} level
@@ -191,4 +237,5 @@ module.exports = {
   formatMenuItemsDetailedArray,
   parseRevenueCentersXmlResponse,
   formatRevenueCenterArray,
+  parseDefinitionXml
 };

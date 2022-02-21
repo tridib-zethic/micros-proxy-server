@@ -14,7 +14,7 @@ const { pusher } = require("./classes/PusherClient");
 unhandled();
 
 const autoLauncher = new AutoLaunch({
-  name: "Saba Proxy",
+  name: "Saba Micros Integration",
 });
 
 autoLauncher
@@ -29,7 +29,9 @@ autoLauncher
     throw err;
   });
 
-pusher();
+const pusherClient = pusher();
+
+let win = "";
 
 let tray = null;
 app.whenReady().then(() => {
@@ -54,7 +56,7 @@ app.whenReady().then(() => {
     {
       label: "Saba Login Api",
       click: function () {
-        const win = new BrowserWindow({
+        win = new BrowserWindow({
           webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
@@ -103,8 +105,8 @@ app.whenReady().then(() => {
   tray.setContextMenu(contextMenu);
 });
 
-ipcMain.on("login_submit", (event, arg) => {
-  login(arg);
-
-  event.returnValue = true;
+ipcMain.on("login_submit", async (event, arg) => {
+  // login(arg);
+  await login(arg, pusher, pusherClient, event, win);
+  // event.returnValue = true;
 });

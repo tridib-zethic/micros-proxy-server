@@ -3,18 +3,26 @@ const log = require("electron-log");
 const https = require("https");
 const keytar = require("keytar");
 const { authHeader } = require("../utils/auth");
+const { hotelDashboardURL } = require("../utils/constants");
 
-const url = "https://app.chatbothotels.com/api";
+const hotelBaseUrl = hotelDashboardURL;
+// const url = "https://app.chatbothotels.com/api";
+let url = "https://demo.dashboard.chatbothotels.com/api";
+
+if(hotelBaseUrl) {
+  url = hotelBaseUrl + "/api"
+}
+
 const clientId = "1";
 const clientSecret = "MBr4dqsss0Qn4UcXLW3tTWYA5qk2IkevqhEwvDDj";
 
-const login = (data) => {
+const login = (data, pusher, pusherClient, event, win) => {
   const instance = axios.create({
     httpsAgent: new https.Agent({
       rejectUnauthorized: false,
     }),
   });
-
+  url = `${data.hotel}/api`;
   data["grant_type"] = "password";
   data["scope"] = "*";
   data["client_id"] = clientId;
@@ -39,6 +47,10 @@ const login = (data) => {
         "expires_in",
         response.data.expires_in.toString()
       );
+      pusher(win, event);
+      setTimeout(() => {
+        win.hide();
+      }, 5000);
     })
     .catch(function (error) {
       if (error.response) {
