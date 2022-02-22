@@ -6,7 +6,6 @@ const { authHeader } = require("../utils/auth");
 const { hotelDashboardURL } = require("../utils/constants");
 
 const hotelBaseUrl = hotelDashboardURL;
-// const url = "https://app.chatbothotels.com/api";
 let url = "https://demo.dashboard.chatbothotels.com/api";
 
 if(hotelBaseUrl) {
@@ -97,8 +96,6 @@ const postRevenueCenters = async (revenueCenters, hotel_id = 2) => {
       if (error.response) {
         // Request made and server responded
         log.error(error.response.data);
-        // log.error(error.response.status);
-        // log.error(error.response.headers);
       } else {
         // Something happened in setting up the request that triggered an Error
         log.error("Error", error.message);

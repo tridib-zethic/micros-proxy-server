@@ -8,6 +8,16 @@ const https = require("https");
 
 Pusher.logToConsole = true;
 
+let pusherClient = undefined;
+let channel = undefined;
+let token = authHeader();
+let hotel = "https://demo.dashboard.chatbothotels.com";
+let tempHotel = hotelDashboardURL();
+if(tempHotel) {
+  hotel = tempHotel;
+}
+let hotelSlug = hotel.split('.')[0].split("//")[1];
+
 const autoLoginWithRefreshToken = async () => {
   const hotel = await hotelDashboardURL();
   const url = `${hotel}/api`;
@@ -27,8 +37,6 @@ const autoLoginWithRefreshToken = async () => {
       rejectUnauthorized: false,
     }),
   });
-  log.info("Data", data);
-  log.info(url + "/v1/oauth/token/refresh");
 
   instance
     .post(url + "/v1/oauth/token/refresh", data)
@@ -69,10 +77,17 @@ const autoLoginWithRefreshToken = async () => {
 };
 
 const pusher = async (win = undefined, event = undefined) => {
-  const token = await authHeader();
-  const hotel = await hotelDashboardURL();
-  const hotelSlug = hotel.split('.')[0].split("//")[1];
-  log.info(token);
+  token = await authHeader();
+  hotel = await hotelDashboardURL();
+  hotelSlug = hotel.split('.')[0].split("//")[1];
+
+  if(hotel) {
+    // do nothing
+  } else {
+    hotel = 'https://demo.dashboard.chatbothotels.com';
+  }
+  hotelSlug = hotel.split('.')[0].split("//")[1];
+  // log.info(token);
 
   const replyEventHandler = (status, message) => {
     if (win != undefined && event != undefined) {
@@ -104,7 +119,6 @@ const pusher = async (win = undefined, event = undefined) => {
             data,
             {
               headers: {
-                // Authorization: await authHeader(),
                 "Content-Type": "application/x-www-form-urlencoded",
                 "X-Requested-With": "XMLHttpRequest",
                 "Authorization": token,
@@ -130,42 +144,20 @@ const pusher = async (win = undefined, event = undefined) => {
     };
   };
 
-  // const pusherClient = new Pusher("4b2c0457861dd98fc950", {
-  //   cluster: "ap1",
-  //   authEndpoint:
-  //     "https://demo.dashboard.chatbothotels.com/api/auth/private-channel",
-  //   auth: {
-  //     headers: {
-  //       "X-Requested-With": "XMLHttpRequest",
-  //       Authorization: token,
-  //     },
-  //   },
-  // });
-
-  
-  const pusherClient = new Pusher(pusherAppId, {
+  pusherClient = new Pusher(pusherAppId, {
     cluster: pusherCluster,
     authorizer: authorizer,
   });
 
-  // log.info(pusherClient);
-
-  const channel = pusherClient.subscribe(`private-${hotelSlug}-pos`);
+  channel = pusherClient.subscribe(`private-${hotelSlug}-pos`);
 
   channel.bind("pusher:subscription_succeeded", function (status) {
-    // Yipee!!
     log.info("Hello");
   });
 
   channel.bind("pusher:subscription_error", function (status) {
     log.error(status);
   });
-
-  // channel.bind_global(function (eventName, data )  {
-  //   log.info(eventName);
-  //   openCheck(data);
-
-  // });
 
   channel.bind("request.created", function (data) {
     log.info("request.created", data);
