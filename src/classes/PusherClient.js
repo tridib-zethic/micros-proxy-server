@@ -12,11 +12,14 @@ let pusherClient = undefined;
 let channel = undefined;
 let token = authHeader();
 let hotel = "https://demo.dashboard.chatbothotels.com";
+let hotelSlug = "demo";
 let tempHotel = hotelDashboardURL();
 if(tempHotel) {
   hotel = tempHotel;
+  if(typeof hotel == "string") {
+    hotelSlug = hotel.split('.')[0].split("//")[1];
+  }
 }
-let hotelSlug = hotel.split('.')[0].split("//")[1];
 
 const autoLoginWithRefreshToken = async () => {
   const hotel = await hotelDashboardURL();
