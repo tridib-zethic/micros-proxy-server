@@ -8,8 +8,8 @@ const { hotelDashboardURL } = require("../utils/constants");
 const hotelBaseUrl = hotelDashboardURL;
 let url = "https://demo.dashboard.chatbothotels.com/api";
 
-if(hotelBaseUrl) {
-  url = hotelBaseUrl + "/api"
+if (hotelBaseUrl) {
+  url = hotelBaseUrl + "/api";
 }
 
 const clientId = "1";
@@ -20,13 +20,14 @@ const login = (data, pusher, pusherClient, event, win) => {
     httpsAgent: new https.Agent({
       rejectUnauthorized: false,
     }),
+    headers: {
+      post: {
+        "application-type": "proxy",
+      },
+    },
   });
   url = `${data.hotel}/api`;
-  keytar.setPassword(
-    "login",
-    "hotel",
-    data.hotel
-  );
+  keytar.setPassword("login", "hotel", data.hotel);
   data["grant_type"] = "password";
   data["scope"] = "*";
   data["client_id"] = clientId;
