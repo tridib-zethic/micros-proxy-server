@@ -10,6 +10,7 @@ const {
 const {
   parseXml,
   parsePriceXml,
+  parseDefinitionXml,
   formatMenuItemsArray,
   formatMenuItemsDetailedArray,
   parseRevenueCentersXmlResponse,
@@ -23,7 +24,7 @@ const simphonyEndpoint =
 // Send request to pos to get list of revenue centers
 const getRevenueCentersRequest = (data = {}) => {
   let hotel_id = 2;
-  if(data?.hotel_id) {
+  if (data?.hotel_id) {
     hotel_id = data.hotel_id;
   }
   const soapRequestBody = createGetRevenueCenterRequestBody();
@@ -87,8 +88,7 @@ const getMenuItemRequest = (revenueCenter, hotel_id = 2) => {
       // parse xml response
       parseXml(response.data)
         .then((res) => {
-          const menuItems =
-            res.ArrayOfDbMenuItemMaster.DbMenuItemMaster;
+          const menuItems = res.ArrayOfDbMenuItemMaster.DbMenuItemMaster;
 
           const menuItemsArray = formatMenuItemsArray(menuItems, revenueCenter);
 
@@ -117,16 +117,44 @@ const getMenuItemRequest = (revenueCenter, hotel_id = 2) => {
 const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
   const soapRequestBody1 = createGetPriceRequestBody(revenueCenter);
   const soapRequestBody2 = createGetMenuItemsRequestBody(revenueCenter);
+  const soapRequestBody3 = createGetDefinitionsRequestBody(revenueCenter);
 
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
     SOAPAction: "http://localhost:8080/EGateway/GetConfigurationInfo",
   };
 
+  let menuDefinitions = [];
   let menuItemElements = [];
   let priceDetailsArray = [];
 
   let menuItems = [];
+
+  // menu items definitions
+  await axios
+    .post(simphonyEndpoint, soapRequestBody3, {
+      headers,
+    })
+    .then((response) => {
+      // parse definition xml
+      parseDefinitionXml(response.data)
+        .then((res) => {
+          menuDefinitions =
+            res.ArrayOfDbMenuItemDefinition.DbMenuItemDefinition;
+        })
+        .catch((err) => {
+          log.error(
+            "MICROS Menu Definitions XML Parse Error: (SymphonyClient.js - Line:144)",
+            err
+          );
+        });
+    })
+    .catch((error) => {
+      log.error(
+        "MICROS Menu Definitions Fetch Error: (SymphonyClient.js - Line:147)",
+        error
+      );
+    });
 
   // menu items elements
   await axios
@@ -139,113 +167,116 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
         .then((res) => {
           menuItemElements = res.ArrayOfDbMenuItemMaster.DbMenuItemMaster;
         })
-        .catch((err) => log.error(err));
+        .catch((err) => {
+          log.error(
+            "MICROS Menu Items XML Parse Error: (SymphonyClient.js - Line:162)",
+            err
+          );
+        });
     })
     .catch((error) => {
-      if (error.response) {
-        // Request made and server responded
-        log.error(error.response.data);
-        log.error(error.response.status);
-        log.error(error.response.headers);
-      } else if (error.request) {
-        // The request was made but no response was received
-        log.error(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        log.error("Error", error.message);
-      }
+      log.error(
+        "MICROS Menu Items Fetch Error: (SymphonyClient.js - Line:166)",
+        error
+      );
     });
 
-    // Get menu item prices
-    await axios
-      .post(simphonyEndpoint, soapRequestBody1, {
-        headers,
-      })
-      .then((response) => {
-        // parse xml response
-        parsePriceXml(response.data)
-          .then((res) => {
-            priceDetailsArray = res.ArrayOfDbMenuItemPrice.DbMenuItemPrice;
-          })
-          .catch((err) => log.error(err));
-      })
-      .catch((error) => {
-        if (error.response) {
-          // Request made and server responded
-          log.error(error.response.data);
-          log.error(error.response.status);
-          log.error(error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          log.error(error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          log.error("Error", error.message);
-        }
-      });
+  // Get menu item prices
+  await axios
+    .post(simphonyEndpoint, soapRequestBody1, {
+      headers,
+    })
+    .then((response) => {
+      // parse xml response
+      parsePriceXml(response.data)
+        .then((res) => {
+          priceDetailsArray = res.ArrayOfDbMenuItemPrice.DbMenuItemPrice;
+        })
+        .catch((err) => {
+          log.error(
+            "MICROS Menu Price XML Parse Error: (SymphonyClient.js - Line:181)",
+            err
+          );
+        });
+    })
+    .catch((error) => {
+      log.error(
+        "MICROS Menu Price Fetch Error: (SymphonyClient.js - Line:185)",
+        error
+      );
+    });
 
-      // Get file updates
-      await menuItemElements.forEach((item, index) => {
-        let productItem = {...item};
-        let priceElement = {
-          "MenuItemPriceID": [
-              "77805"
-          ],
-          "HierStrucID": [
-              "3390"
-          ],
-          "MenuItemDefID": [
-              "61380"
-          ],
-          "SequenceNum": [
-              "1"
-          ],
-          "MenuLvlIndex": [
-              "0"
-          ],
-          "OptionBits": [
-              "00000000"
-          ],
-          "Price": [
-              "0"
-          ],
-          "PrepCost": [
-              "0"
-          ],
-          "RecipeNameID": [
-              "0"
-          ],
-          "PriceGroupID": [
-              "0"
-          ],
-          "TaxClassObjNum": [
-              "0"
-          ],
-          "ChangeSetObjNum": [
-              "0"
-          ],
-          "PosRef": [
-              "0"
-          ],
-          "ServiceChargeGroupObjNum": [
-              "0"
-          ],
-          "ParentTaxClassOvrdObjNmbr": [
-              "0"
-          ]
-        };
-        if(priceDetailsArray[index]) {
-          priceElement = priceDetailsArray[index];
-        }
-        productItem.DefinitionSequence = priceElement;
+  // Get file updates
+  await menuItemElements.forEach((item, index) => {
+    let productItem = { ...item };
+    const menuDefinitionItem = menuDefinitions.find(
+      (def) => def["MenuItemMasterID"] == item["MenuItemMasterID"]
+    );
+    const priceElement = priceDetailsArray.find(
+      (el) => el["MenuItemDefID"] == menuDefinitionItem["MenuItemDefID"]
+    );
+    // let defaultPriceElement = {
+    //   "MenuItemPriceID": [
+    //       "77805"
+    //   ],
+    //   "HierStrucID": [
+    //       "3390"
+    //   ],
+    //   "MenuItemDefID": [
+    //       "61380"
+    //   ],
+    //   "SequenceNum": [
+    //       "1"
+    //   ],
+    //   "MenuLvlIndex": [
+    //       "0"
+    //   ],
+    //   "OptionBits": [
+    //       "00000000"
+    //   ],
+    //   "Price": [
+    //       "0"
+    //   ],
+    //   "PrepCost": [
+    //       "0"
+    //   ],
+    //   "RecipeNameID": [
+    //       "0"
+    //   ],
+    //   "PriceGroupID": [
+    //       "0"
+    //   ],
+    //   "TaxClassObjNum": [
+    //       "0"
+    //   ],
+    //   "ChangeSetObjNum": [
+    //       "0"
+    //   ],
+    //   "PosRef": [
+    //       "0"
+    //   ],
+    //   "ServiceChargeGroupObjNum": [
+    //       "0"
+    //   ],
+    //   "ParentTaxClassOvrdObjNmbr": [
+    //       "0"
+    //   ]
+    // };
+    // if(priceDetailsArray[index]) {
+    //   priceElement = priceDetailsArray[index];
+    // } else {
+    //   priceElement = defaultPriceElement;
+    // }
+    productItem.DefinitionSequence = priceElement;
 
-        menuItems.push(productItem);
-      });
-      let formattedMenuItems = formatMenuItemsDetailedArray(menuItems, revenueCenter);
-      postMenuItems(formattedMenuItems, revenueCenter, hotel_id);
+    menuItems.push(productItem);
+  });
+  let formattedMenuItems = formatMenuItemsDetailedArray(
+    menuItems,
+    revenueCenter
+  );
+  postMenuItems(formattedMenuItems, revenueCenter, hotel_id);
 };
-
-
 
 // Send Request to open multiple checks
 const openCheck = (items) => {
@@ -254,7 +285,7 @@ const openCheck = (items) => {
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
     // SOAPAction: "http://localhost:8080/EGateway/PostTransactionEx",
-    SOAPAction: "http://localhost:8080/EGateway/PostTransactionEx2"
+    SOAPAction: "http://localhost:8080/EGateway/PostTransactionEx2",
   };
 
   checks.forEach((checkRequestBody) => {
