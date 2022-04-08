@@ -7,7 +7,7 @@ const hotelDashboardURL = async () => {
 };
 
 module.exports = {
-  pusherAppId: "4b2c0457861dd98fc950",
+  pusherAppId: "8ff0572d6882103f1606",
   pusherCluster: "ap1",
   hotelDashboardURL,
 };
