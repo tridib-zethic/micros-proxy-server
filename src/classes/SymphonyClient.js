@@ -210,10 +210,10 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
   await menuItemElements.forEach((item, index) => {
     let productItem = { ...item };
     const menuDefinitionItem = menuDefinitions.find(
-      (def) => def["MenuItemMasterID"] == item["MenuItemMasterID"]
+      (def) => def["MenuItemMasterID"][0] == item["MenuItemMasterID"][0]
     );
     const priceElement = priceDetailsArray.find(
-      (el) => el["MenuItemDefID"] == menuDefinitionItem["MenuItemDefID"]
+      (el) => el["MenuItemDefID"][0] == menuDefinitionItem["MenuItemDefID"][0]
     );
     // let defaultPriceElement = {
     //   "MenuItemPriceID": [
