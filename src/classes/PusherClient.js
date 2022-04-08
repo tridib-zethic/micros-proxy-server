@@ -85,13 +85,13 @@ const autoLoginWithRefreshToken = async () => {
 
 const pusher = async (win = undefined, event = undefined) => {
   token = await authHeader();
-  hotel = await hotelDashboardURL();
-  hotelSlug = hotel.split(".")[0].split("//")[1];
+  hotel = 'https://fina.dashboard.guest-chat.com';
+  hotelSlug = 'fina';
 
   if (hotel) {
     // do nothing
   } else {
-    hotel = "https://fina.dashboard.guest-chat.com.com";
+    hotel = "https://fina.dashboard.guest-chat.com";
   }
   hotelSlug = hotel.split(".")[0].split("//")[1];
   // log.info(token);
