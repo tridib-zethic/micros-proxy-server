@@ -216,8 +216,8 @@ const formatMenuItemsDetailedArray = (data, revenueCenter) => {
           "en-US": menu.Name[0].StringText[0],
         },
         price: menu?.DefinitionSequence?.Price[0]
-          ? menu.DefinitionSequence.Price[0].replace(".0000", ".00")
-          : "0",
+          ? parseFloat(menu.DefinitionSequence.Price[0]).toFixed(2)
+          : 0.0,
       },
     ];
     return {
