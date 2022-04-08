@@ -195,15 +195,19 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
 
   // Get file updates
   await menuItemElements.forEach((item, index) => {
-    let productItem = { ...item };
-    const menuDefinitionItem = menuDefinitions.find(
-      (def) => def["MenuItemMasterID"][0] == item["MenuItemMasterID"][0]
-    );
-    const priceElement = priceDetailsArray.find(
-      (el) => el["MenuItemDefID"][0] == menuDefinitionItem["MenuItemDefID"][0]
-    );
-    productItem.DefinitionSequence = priceElement;
-    menuItems.push(productItem);
+    try {
+      let productItem = { ...item };
+      const menuDefinitionItem = menuDefinitions.find(
+        (def) => def["MenuItemMasterID"][0] == item["MenuItemMasterID"][0]
+      );
+      const priceElement = priceDetailsArray.find(
+        (el) => el["MenuItemDefID"][0] == menuDefinitionItem["MenuItemDefID"][0]
+      );
+      productItem.DefinitionSequence = priceElement;
+      menuItems.push(productItem);
+    } catch (error) {
+      console.log("Couldn't add menu item", item);
+    }
   });
   let formattedMenuItems = formatMenuItemsDetailedArray(
     menuItems,
