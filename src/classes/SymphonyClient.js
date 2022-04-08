@@ -37,6 +37,7 @@ const getRevenueCentersRequest = (data = {}) => {
       headers,
     })
     .then((response) => {
+      console.log("Revenue center request", response.data);
       // parse xml response
       parseRevenueCentersXmlResponse(response.data)
         .then((res) => {
@@ -119,6 +120,7 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
       headers,
     })
     .then((response) => {
+      console.log("getMenuItemDetailsRequest definition", response.data);
       // parse definition xml
       parseDefinitionXml(response.data)
         .then((res) => {
@@ -145,6 +147,7 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
       headers,
     })
     .then((response) => {
+      console.log("getMenuItemDetailsRequest menu items", response.data);
       // parse xml response
       parseXml(response.data)
         .then((res) => {
@@ -170,6 +173,7 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
       headers,
     })
     .then((response) => {
+      console.log("getMenuItemDetailsRequest menu items price", response.data);
       // parse xml response
       parsePriceXml(response.data)
         .then((res) => {
