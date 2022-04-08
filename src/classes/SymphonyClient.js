@@ -54,13 +54,7 @@ const getRevenueCentersRequest = (data = {}) => {
         .catch((err) => log.error("XML Parse Error: ", err));
     })
     .catch((error) => {
-      if (error.response) {
-        log.error(error.response.data);
-        log.error(error.response.status);
-        log.error(error.response.headers);
-      } else {
-        log.error("Error", error.message);
-      }
+      log.error("Revenue center micros fetch error", error);
     });
 };
 
@@ -95,21 +89,10 @@ const getMenuItemRequest = (revenueCenter, hotel_id = 2) => {
           // post menu items to saba api
           postMenuItems(menuItemsArray, revenueCenter, hotel_id);
         })
-        .catch((err) => log.error(err));
+        .catch((err) => log.error("Menu items xml parse error", err));
     })
     .catch((error) => {
-      if (error.response) {
-        // Request made and server responded
-        log.error(error.response.data);
-        log.error(error.response.status);
-        log.error(error.response.headers);
-      } else if (error.request) {
-        // The request was made but no response was received
-        log.error(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        log.error("Error", error.message);
-      }
+      log.error("Menu items micros fetch error", error);
     });
 };
 
