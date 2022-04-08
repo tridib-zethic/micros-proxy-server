@@ -2,7 +2,7 @@ const { DeepstreamClient } = require("@deepstream/client");
 const log = require("electron-log");
 
 function deepStreamPing() {
-  const client = new DeepstreamClient("localhost:6020/api");
+  const client = new DeepstreamClient("172.40.104.8:6020/api");
   client.login();
 
   try {

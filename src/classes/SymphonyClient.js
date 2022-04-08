@@ -30,7 +30,7 @@ const getRevenueCentersRequest = (data = {}) => {
   const soapRequestBody = createGetRevenueCenterRequestBody();
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
-    SOAPAction: "http://localhost:8080/EGateway/GetConfigurationInfo",
+    SOAPAction: "http://172.40.104.8:8080/EGateway/GetConfigurationInfo",
   };
   axios
     .post(simphonyEndpoint, soapRequestBody, {
@@ -77,7 +77,7 @@ const getMenuItemRequest = (revenueCenter, hotel_id = 2) => {
   const soapRequestBody = createGetMenuItemsRequestBody(revenueCenter);
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
-    SOAPAction: "http://localhost:8080/EGateway/GetConfigurationInfo",
+    SOAPAction: "http://172.40.104.8:8080/EGateway/GetConfigurationInfo",
   };
 
   axios
@@ -121,7 +121,7 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
 
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
-    SOAPAction: "http://localhost:8080/EGateway/GetConfigurationInfo",
+    SOAPAction: "http://172.40.104.8:8080/EGateway/GetConfigurationInfo",
   };
 
   let menuDefinitions = [];
@@ -284,8 +284,8 @@ const openCheck = (items) => {
   const checks = createNewCheckRequestBody(items);
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
-    // SOAPAction: "http://localhost:8080/EGateway/PostTransactionEx",
-    SOAPAction: "http://localhost:8080/EGateway/PostTransactionEx2",
+    // SOAPAction: "http://172.40.104.8:8080/EGateway/PostTransactionEx",
+    SOAPAction: "http://172.40.104.8:8080/EGateway/PostTransactionEx2",
   };
 
   checks.forEach((checkRequestBody) => {
