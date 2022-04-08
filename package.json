@@ -1,7 +1,7 @@
 {
   "name": "saba-proxy-app",
   "productName": "saba-proxy-app",
-  "version": "1.0.0",
+  "version": "1.0.13",
   "description": "My Electron application description",
   "main": "src/index.js",
   "scripts": {
@@ -13,8 +13,8 @@
   },
   "keywords": [],
   "author": {
-    "name": "Himanshu",
-    "email": "himanshu@zethic.com"
+    "name": "SABA Hospitality",
+    "email": "info@sabahospitality.com"
   },
   "license": "MIT",
   "config": {
