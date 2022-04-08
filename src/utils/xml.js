@@ -93,7 +93,7 @@ const parseXml = (xmlData) => {
  * @param string xmlData
  * @returns obj
  */
- const parsePriceXml = (xmlData) => {
+const parsePriceXml = (xmlData) => {
   // pass options to remove soap prefixes
   var options = {
     explicitArray: false,
@@ -139,7 +139,7 @@ const parseXml = (xmlData) => {
  * @param string xmlData
  * @returns obj
  */
- const parseDefinitionXml = (xmlData) => {
+const parseDefinitionXml = (xmlData) => {
   // pass options to remove soap prefixes
   var options = {
     explicitArray: false,
@@ -207,18 +207,24 @@ const formatMenuItemsArray = (data, revenueCenter) => {
 // Extract detailed menu items from response data
 const formatMenuItemsDetailedArray = (data, revenueCenter) => {
   return data.map((menu) => {
-    const definitionSequence = [{
-      "definitionSequence": menu?.DefinitionSequence?.SequenceNum[0] ? menu.DefinitionSequence.SequenceNum[0] : '1',
-      "name": {
-        "en-US": menu.Name[0].StringText[0]
+    const definitionSequence = [
+      {
+        definitionSequence: menu?.DefinitionSequence?.SequenceNum[0]
+          ? menu.DefinitionSequence.SequenceNum[0]
+          : "1",
+        name: {
+          "en-US": menu.Name[0].StringText[0],
+        },
+        price: menu?.DefinitionSequence?.Price[0]
+          ? menu.DefinitionSequence.Price[0].replace(".0000", ".00")
+          : "0",
       },
-      "price": menu?.DefinitionSequence?.Price[0] ? menu.DefinitionSequence.Price[0] : '0',
-    }];
+    ];
     return {
       menu_id: menu.ObjectNumber[0],
       name: menu.Name[0].StringText[0],
       revenue_center: revenueCenter,
-      sequences: definitionSequence
+      sequences: definitionSequence,
     };
   });
 };
@@ -237,5 +243,5 @@ module.exports = {
   formatMenuItemsDetailedArray,
   parseRevenueCentersXmlResponse,
   formatRevenueCenterArray,
-  parseDefinitionXml
+  parseDefinitionXml,
 };
