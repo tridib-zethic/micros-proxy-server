@@ -6,10 +6,10 @@ const { authHeader } = require("../utils/auth");
 const { hotelDashboardURL } = require("../utils/constants");
 
 const hotelBaseUrl = hotelDashboardURL();
-let url = "https://demo.dashboard.chatbothotels.com/api";
+let url = "https://demo.dashboard.chatbothotels.com/api/v1";
 
 if (hotelBaseUrl) {
-  url = hotelBaseUrl + "/api";
+  url = hotelBaseUrl + "/api/v1";
 }
 
 const clientId = "1";
