@@ -2,7 +2,11 @@ const log = require("electron-log");
 const { authHeader, authRefreshToken } = require("../utils/auth");
 const Pusher = require("pusher-js");
 const { openCheck, getRevenueCentersRequest } = require("./SymphonyClient");
-const { hotelDashboardURL, pusherCluster, pusherAppId } = require("../utils/constants");
+const {
+  hotelDashboardURL,
+  pusherCluster,
+  pusherAppId,
+} = require("../utils/constants");
 const axios = require("axios");
 const https = require("https");
 
@@ -11,13 +15,13 @@ Pusher.logToConsole = true;
 let pusherClient = undefined;
 let channel = undefined;
 let token = authHeader();
-let hotel = "https://demo.dashboard.chatbothotels.com";
-let hotelSlug = "demo";
+let hotel = "https://fina.dashboard.guest-chat.com";
+let hotelSlug = "fina";
 let tempHotel = hotelDashboardURL();
-if(tempHotel) {
+if (tempHotel) {
   hotel = tempHotel;
-  if(typeof hotel == "string") {
-    hotelSlug = hotel.split('.')[0].split("//")[1];
+  if (typeof hotel == "string") {
+    hotelSlug = hotel.split(".")[0].split("//")[1];
   }
 }
 
@@ -82,14 +86,14 @@ const autoLoginWithRefreshToken = async () => {
 const pusher = async (win = undefined, event = undefined) => {
   token = await authHeader();
   hotel = await hotelDashboardURL();
-  hotelSlug = hotel.split('.')[0].split("//")[1];
+  hotelSlug = hotel.split(".")[0].split("//")[1];
 
-  if(hotel) {
+  if (hotel) {
     // do nothing
   } else {
-    hotel = 'https://demo.dashboard.chatbothotels.com';
+    hotel = "https://fina.dashboard.guest-chat.com.com";
   }
-  hotelSlug = hotel.split('.')[0].split("//")[1];
+  hotelSlug = hotel.split(".")[0].split("//")[1];
   // log.info(token);
 
   const replyEventHandler = (status, message) => {
@@ -106,8 +110,8 @@ const pusher = async (win = undefined, event = undefined) => {
     return {
       authorize: (socketId, callback) => {
         const data = new URLSearchParams();
-        data.append('socket_id', socketId);
-        data.append('channel_name', channel.name);
+        data.append("socket_id", socketId);
+        data.append("channel_name", channel.name);
 
         const apiUri = `${hotel}/api/auth/private-channel`;
 
@@ -117,33 +121,31 @@ const pusher = async (win = undefined, event = undefined) => {
           }),
         });
         instance
-          .post(
-            apiUri,
-            data,
-            {
-              headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-                "X-Requested-With": "XMLHttpRequest",
-                "Authorization": token,
-              },
+          .post(apiUri, data, {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+              "X-Requested-With": "XMLHttpRequest",
+              Authorization: token,
+            },
+          })
+          .then((res) => {
+            log.info("Pusher Client Success");
+            log.info("Success", res.data);
+            replyEventHandler("success", "Login Successful!");
+            callback(null, res.data);
+          })
+          .catch((err) => {
+            if (err.response.status == 401) {
+              autoLoginWithRefreshToken();
+            } else {
+              log.info("Error", err);
+              replyEventHandler("error", "User session ended!");
+              callback(new Error(`Error calling auth endpoint: ${err}`), {
+                auth: "",
+              });
             }
-          ).then(res => {
-          log.info('Pusher Client Success');
-          log.info('Success', res.data);
-          replyEventHandler("success", "Login Successful!");
-          callback(null, res.data);
-        }).catch(err => {
-          if (err.response.status == 401) {
-            autoLoginWithRefreshToken();
-          } else {
-            log.info("Error", err);
-            replyEventHandler("error", "User session ended!");
-            callback(new Error(`Error calling auth endpoint: ${err}`), {
-              auth: "",
-            });
-          }
-        });
-      }
+          });
+      },
     };
   };
 
