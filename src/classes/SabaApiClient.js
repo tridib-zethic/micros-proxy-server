@@ -5,7 +5,7 @@ const keytar = require("keytar");
 const { authHeader } = require("../utils/auth");
 const { hotelDashboardURL } = require("../utils/constants");
 
-const hotelBaseUrl = hotelDashboardURL;
+const hotelBaseUrl = hotelDashboardURL();
 let url = "https://demo.dashboard.chatbothotels.com/api";
 
 if (hotelBaseUrl) {
