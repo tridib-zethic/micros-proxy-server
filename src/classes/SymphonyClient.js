@@ -19,7 +19,7 @@ const {
 const { postRevenueCenters, postMenuItems } = require("./SabaApiClient");
 
 const simphonyEndpoint =
-  "http://127.0.0.1:8080/EGateway/SimphonyPosAPIWeb.asmx";
+  "http://172.40.104.8:8080/EGateway/SimphonyPosAPIWeb.asmx";
 
 // Send request to pos to get list of revenue centers
 const getRevenueCentersRequest = (data = {}) => {
