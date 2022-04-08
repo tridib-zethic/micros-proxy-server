@@ -215,60 +215,7 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
     const priceElement = priceDetailsArray.find(
       (el) => el["MenuItemDefID"] == menuDefinitionItem["MenuItemDefID"]
     );
-    // let defaultPriceElement = {
-    //   "MenuItemPriceID": [
-    //       "77805"
-    //   ],
-    //   "HierStrucID": [
-    //       "3390"
-    //   ],
-    //   "MenuItemDefID": [
-    //       "61380"
-    //   ],
-    //   "SequenceNum": [
-    //       "1"
-    //   ],
-    //   "MenuLvlIndex": [
-    //       "0"
-    //   ],
-    //   "OptionBits": [
-    //       "00000000"
-    //   ],
-    //   "Price": [
-    //       "0"
-    //   ],
-    //   "PrepCost": [
-    //       "0"
-    //   ],
-    //   "RecipeNameID": [
-    //       "0"
-    //   ],
-    //   "PriceGroupID": [
-    //       "0"
-    //   ],
-    //   "TaxClassObjNum": [
-    //       "0"
-    //   ],
-    //   "ChangeSetObjNum": [
-    //       "0"
-    //   ],
-    //   "PosRef": [
-    //       "0"
-    //   ],
-    //   "ServiceChargeGroupObjNum": [
-    //       "0"
-    //   ],
-    //   "ParentTaxClassOvrdObjNmbr": [
-    //       "0"
-    //   ]
-    // };
-    // if(priceDetailsArray[index]) {
-    //   priceElement = priceDetailsArray[index];
-    // } else {
-    //   priceElement = defaultPriceElement;
-    // }
     productItem.DefinitionSequence = priceElement;
-
     menuItems.push(productItem);
   });
   let formattedMenuItems = formatMenuItemsDetailedArray(
@@ -295,21 +242,10 @@ const openCheck = (items) => {
         headers,
       })
       .then((response) => {
-        log.info("success", response.data);
+        log.info("Open check creation success", response.data);
       })
       .catch((error) => {
-        if (error.response) {
-          // Request made and server responded
-          log.error(error.response.data);
-          log.error(error.response.status);
-          log.error(error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          log.error(error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          log.error("Error", error.message);
-        }
+        log.error("Open check creation error", error);
       });
   });
 };
