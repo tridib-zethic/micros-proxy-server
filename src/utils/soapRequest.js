@@ -1,4 +1,4 @@
-const employeeObjectNum = `2130`;
+const employeeObjectNum = `9001`;
 const { info } = require("electron-log");
 const log = require("electron-log");
 
@@ -262,7 +262,7 @@ const createGetRevenueCenterRequestBody = () => {
       <configurationInfoType>
         <int>11</int>
       </configurationInfoType>
-      <revenueCenter>11</revenueCenter>
+      <revenueCenter>402</revenueCenter>
       <configInfoResponse />
     </GetConfigurationInfo>
   </soap:Body>
