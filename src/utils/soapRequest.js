@@ -40,10 +40,6 @@ const createNewCheckRequestBody = (revenueCenterItems) => {
         )
       );
     }
-    // tempOrderItems.forEach(el => {
-    //   checks.push(createSoapRequestBody(items, el, orderInformations));
-    // });
-
     return checks;
   }
 };
@@ -173,7 +169,6 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
     <Condiments>`;
 
     let itemXml2 = ``;
-    // <MiOverridePrice>${unitPrice}</MiOverridePrice>
     let itemXml3 = `</Condiments>
     <MenuItem>
       <ItemDiscount>
@@ -195,7 +190,6 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
 
     productAdditions.forEach((elementTemporary) => {
       let elementTempOptions = elementTemporary.options;
-      // <MiOverridePrice>${elementTemp["price"]}</MiOverridePrice>
       elementTempOptions.forEach((elementTemp) => {
         if (elementTemp["posMenu"]) {
           if (elementTemp["posMenu"]["menu_id"]) {
@@ -219,7 +213,6 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
     });
 
     let itemXml = "";
-    // <MiOverridePrice>${elementTempOpt['unit_price']}</MiOverridePrice>
     additionalMainProducts.forEach((elementTempOpt) => {
       let tempItemXml = `<SimphonyPosApi_MenuItemEx>
         <Condiments/>
