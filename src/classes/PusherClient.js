@@ -66,20 +66,7 @@ const autoLoginWithRefreshToken = async () => {
       await pusher();
     })
     .catch(function (error) {
-      let errMsg = "Unable to login";
-      if (error.response) {
-        // Request made and server responded
-        log.error(error.response.data);
-        if (error?.response?.data?.message) {
-          errMsg = error.response.data.message;
-        }
-      } else if (error.request) {
-        // The request was made but no response was received
-        log.error(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        log.error("Error", error);
-      }
+      log.error("PusherClient.js - line:69", error);
     });
 };
 
@@ -135,10 +122,10 @@ const pusher = async (win = undefined, event = undefined) => {
             callback(null, res.data);
           })
           .catch((err) => {
+            log.error("PusherClient.js - line:125", error);
             if (err.response.status == 401) {
               autoLoginWithRefreshToken();
             } else {
-              log.info("Error", err);
               replyEventHandler("error", "User session ended!");
               callback(new Error(`Error calling auth endpoint: ${err}`), {
                 auth: "",

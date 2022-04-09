@@ -57,17 +57,8 @@ const login = (data, pusher, pusherClient, event, win) => {
         win.hide();
       }, 5000);
     })
-    .catch(function (error) {
-      if (error.response) {
-        // Request made and server responded
-        log.error(error.response.data);
-      } else if (error.request) {
-        // The request was made but no response was received
-        log.error(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        log.error("Error", error);
-      }
+    .catch((error) => {
+      log.error("SabaApiClient.js - line:61", error);
     });
 };
 
@@ -94,13 +85,7 @@ const postRevenueCenters = async (revenueCenters, hotel_id = 2) => {
       log.info(response.data);
     })
     .catch((error) => {
-      if (error.response) {
-        // Request made and server responded
-        log.error(error.response.data);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        log.error("Error", error.message);
-      }
+      log.error("SabaApiClient.js - line:97", error);
     });
 };
 
@@ -127,15 +112,7 @@ const postMenuItems = async (menuItems, revenueCenter = 11, hotel_id = 2) => {
       log.info(response.data);
     })
     .catch((error) => {
-      if (error.response) {
-        // Request made and server responded
-        log.error(error.response.data);
-        log.error(error.response.status);
-        log.error(error.response.headers);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        log.error("Error", error.message);
-      }
+      log.error("SabaApiClient.js - line:130", error);
     });
 };
 
