@@ -34,7 +34,7 @@ const autoLoginWithRefreshToken = async () => {
   let data = [];
 
   data["grant_type"] = "refresh_token";
-  data["refresh_token"] = authRefreshToken;
+  data["refresh_token"] = authRefreshToken();
   data["scope"] = "*";
   data["client_id"] = clientId;
   data["client_secret"] = clientSecret;
