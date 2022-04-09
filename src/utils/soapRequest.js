@@ -31,15 +31,18 @@ const createNewCheckRequestBody = (revenueCenterItems) => {
       }
       tempOrderItems[tempOrderRevenueCenter].push(items);
     });
-    // for(objectProperty in tempOrderItems) {
-    checks.push(
-      createSoapRequestBody(
-        tempOrderItems,
-        tempOrderItems[objectProperty],
-        orderInformations
-      )
-    );
-    // }
+    log.info("### Revenue center wise items ###");
+    log.info(tempOrderItems);
+    for (objectProperty in tempOrderItems) {
+      log.info(`*** Check creation for revenue center ${objectProperty} ***`);
+      checks.push(
+        createSoapRequestBody(
+          tempOrderItems,
+          tempOrderItems[objectProperty],
+          orderInformations
+        )
+      );
+    }
     // tempOrderItems.forEach(el => {
     //   checks.push(createSoapRequestBody(items, el, orderInformations));
     // });
