@@ -208,68 +208,19 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
 
   // Get file updates
   await menuItemElements.forEach((item, index) => {
-    let productItem = { ...item };
-    const menuDefinitionItem = menuDefinitions.find(
-      (def) => def["MenuItemMasterID"][0] == item["MenuItemMasterID"][0]
-    );
-    const priceElement = priceDetailsArray.find(
-      (el) => el["MenuItemDefID"][0] == menuDefinitionItem["MenuItemDefID"][0]
-    );
-    // let defaultPriceElement = {
-    //   "MenuItemPriceID": [
-    //       "77805"
-    //   ],
-    //   "HierStrucID": [
-    //       "3390"
-    //   ],
-    //   "MenuItemDefID": [
-    //       "61380"
-    //   ],
-    //   "SequenceNum": [
-    //       "1"
-    //   ],
-    //   "MenuLvlIndex": [
-    //       "0"
-    //   ],
-    //   "OptionBits": [
-    //       "00000000"
-    //   ],
-    //   "Price": [
-    //       "0"
-    //   ],
-    //   "PrepCost": [
-    //       "0"
-    //   ],
-    //   "RecipeNameID": [
-    //       "0"
-    //   ],
-    //   "PriceGroupID": [
-    //       "0"
-    //   ],
-    //   "TaxClassObjNum": [
-    //       "0"
-    //   ],
-    //   "ChangeSetObjNum": [
-    //       "0"
-    //   ],
-    //   "PosRef": [
-    //       "0"
-    //   ],
-    //   "ServiceChargeGroupObjNum": [
-    //       "0"
-    //   ],
-    //   "ParentTaxClassOvrdObjNmbr": [
-    //       "0"
-    //   ]
-    // };
-    // if(priceDetailsArray[index]) {
-    //   priceElement = priceDetailsArray[index];
-    // } else {
-    //   priceElement = defaultPriceElement;
-    // }
-    productItem.DefinitionSequence = priceElement;
-
-    menuItems.push(productItem);
+    try {
+      let productItem = { ...item };
+      const menuDefinitionItem = menuDefinitions.find(
+        (def) => def["MenuItemMasterID"][0] == item["MenuItemMasterID"][0]
+      );
+      const priceElement = priceDetailsArray.find(
+        (el) => el["MenuItemDefID"][0] == menuDefinitionItem["MenuItemDefID"][0]
+      );
+      productItem.DefinitionSequence = priceElement;
+      menuItems.push(productItem);
+    } catch (error) {
+      console.log("Couldn't add menu item", item);
+    }
   });
   let formattedMenuItems = formatMenuItemsDetailedArray(
     menuItems,
