@@ -259,7 +259,7 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
 const createGetRevenueCenterRequestBody = (simphonyBaseUrl) => {
   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
-    <GetConfigurationInfo xmlns=${simphonyBaseUrl}>
+    <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
       <vendorCode />
       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
       <configurationInfoType>
@@ -276,7 +276,7 @@ const createGetRevenueCenterRequestBody = (simphonyBaseUrl) => {
 const createGetMenuItemsRequestBody = (revenueCenter, simphonyBaseUrl) => {
   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
-    <GetConfigurationInfo xmlns="${simphonyBaseUrl}/EGateway/">
+    <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
       <vendorCode />
       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
       <configurationInfoType>
@@ -293,7 +293,7 @@ const createGetMenuItemsRequestBody = (revenueCenter, simphonyBaseUrl) => {
 const createGetDefinitionsRequestBody = (revenueCenter, simphonyBaseUrl) => {
   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
-    <GetConfigurationInfo xmlns="${simphonyBaseUrl}/EGateway/">
+    <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
       <vendorCode />
       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
       <configurationInfoType>
@@ -310,7 +310,7 @@ const createGetDefinitionsRequestBody = (revenueCenter, simphonyBaseUrl) => {
 const createGetPriceRequestBody = (revenueCenter, simphonyBaseUrl) => {
   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
-    <GetConfigurationInfo xmlns="${simphonyBaseUrl}/EGateway/">
+    <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
       <vendorCode />
       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
       <configurationInfoType>
@@ -327,7 +327,7 @@ const createGetPriceRequestBody = (revenueCenter, simphonyBaseUrl) => {
 const getSimphonyMenuItemsDefinition = (revenueCenter, simphonyBaseUrl) => {
   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
-    <GetConfigurationInfo xmlns="${simphonyBaseUrl}/EGateway/">
+    <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
       <vendorCode />
       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
       <configurationInfoType>
@@ -344,7 +344,7 @@ const getSimphonyMenuItemsDefinition = (revenueCenter, simphonyBaseUrl) => {
 const getSimphonyMenuItemCategory = (revenueCenter, simphonyBaseUrl) => {
   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
-    <GetConfigurationInfo xmlns="${simphonyBaseUrl}/EGateway/">
+    <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
       <vendorCode />
       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
       <configurationInfoType>
@@ -361,7 +361,7 @@ const getSimphonyMenuItemCategory = (revenueCenter, simphonyBaseUrl) => {
 const getSimphonyMenuItemConfigurations = (revenueCenter, simphonyBaseUrl) => {
   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
-    <GetConfigurationInfo xmlns="${simphonyBaseUrl}/EGateway/">
+    <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
       <vendorCode />
       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
       <configurationInfoType>
@@ -378,7 +378,7 @@ const getSimphonyMenuItemConfigurations = (revenueCenter, simphonyBaseUrl) => {
 const getSimphonyMenuItemClasses = (revenueCenter, simphonyBaseUrl) => {
   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
-    <GetConfigurationInfo xmlns="${simphonyBaseUrl}/EGateway/">
+    <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
       <vendorCode />
       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
       <configurationInfoType>
