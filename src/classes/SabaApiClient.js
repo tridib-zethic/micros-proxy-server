@@ -5,7 +5,7 @@ const keytar = require("keytar");
 const { authHeader } = require("../utils/auth");
 const { hotelDashboardURL } = require("../utils/constants");
 
-const { hotelBaseUrl, hotelBaseUrlError } = Promise.reselve(
+const { hotelBaseUrl, hotelBaseUrlError } = Promise.resolve(
   hotelDashboardURL
 ).then((result) => result.data);
 
