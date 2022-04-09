@@ -21,26 +21,31 @@ const createNewCheckRequestBody = (revenueCenterItems) => {
     schedule_day: revenueCenterItems.schedule_day,
     location_name: revenueCenterItems.location_name,
   };
-  if(orderItems) {
+  if (orderItems) {
     let tempOrderItems = {};
 
     orderItems.forEach((items) => {
       let tempOrderRevenueCenter = items.revenue_center;
-      if(!tempOrderItems[tempOrderRevenueCenter]) {
+      if (!tempOrderItems[tempOrderRevenueCenter]) {
         tempOrderItems[tempOrderRevenueCenter] = [];
       }
       tempOrderItems[tempOrderRevenueCenter].push(items);
     });
-    for(objectProperty in tempOrderItems) {
-      checks.push(createSoapRequestBody(tempOrderItems, tempOrderItems[objectProperty], orderInformations));
-    }
+    // for(objectProperty in tempOrderItems) {
+    checks.push(
+      createSoapRequestBody(
+        tempOrderItems,
+        tempOrderItems[objectProperty],
+        orderInformations
+      )
+    );
+    // }
     // tempOrderItems.forEach(el => {
     //   checks.push(createSoapRequestBody(items, el, orderInformations));
     // });
 
     return checks;
   }
-  
 };
 
 const createSoapRequestBody = (items, orderItems, orderInformations) => {
@@ -134,7 +139,7 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
         // for replace
         if (price_type == "replace") {
           let options = el.options;
-          if(options?.posMenu?.menu_id) {
+          if (options?.posMenu?.menu_id) {
             unique_item_object_number = options.posMenu.menu_id;
           }
           options.forEach((element) => {
@@ -145,13 +150,15 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
         } else {
           let options = el.options;
           options.forEach((element) => {
-            if(element?.posMenu?.is_condiment == false) {
+            if (element?.posMenu?.is_condiment == false) {
               let tempProduct = {
                 revenue_center: element?.posMenu?.revenue_center,
                 quantity: total_quantity,
                 item_object_number: element?.posMenu?.menu_id,
-                unit_price: (!isNaN(parseFloat(element?.price))) ? parseFloat(element?.price) : 0.0,
-              }
+                unit_price: !isNaN(parseFloat(element?.price))
+                  ? parseFloat(element?.price)
+                  : 0.0,
+              };
               additionalMainProducts.push(tempProduct);
             } else {
               // for additions
@@ -190,8 +197,8 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
       let elementTempOptions = elementTemporary.options;
       // <MiOverridePrice>${elementTemp["price"]}</MiOverridePrice>
       elementTempOptions.forEach((elementTemp) => {
-        if(elementTemp["posMenu"]) {
-          if(elementTemp["posMenu"]["menu_id"]) {
+        if (elementTemp["posMenu"]) {
+          if (elementTemp["posMenu"]["menu_id"]) {
             let currentTempElement = `<SimphonyPosApi_MenuItemDefinitionEx>
               <ItemDiscount />
               <MiObjectNum>${elementTemp["posMenu"]["menu_id"]}</MiObjectNum>
@@ -211,9 +218,9 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
       });
     });
 
-    let itemXml = '';
+    let itemXml = "";
     // <MiOverridePrice>${elementTempOpt['unit_price']}</MiOverridePrice>
-    additionalMainProducts.forEach(elementTempOpt => {
+    additionalMainProducts.forEach((elementTempOpt) => {
       let tempItemXml = `<SimphonyPosApi_MenuItemEx>
         <Condiments/>
         <MenuItem>
