@@ -1,5 +1,4 @@
 const employeeObjectNum = `9001`;
-const { info } = require("electron-log");
 const log = require("electron-log");
 
 // Create soap request strings for simphony post, return array of strings
@@ -31,7 +30,10 @@ const createNewCheckRequestBody = (revenueCenterItems) => {
       }
       tempOrderItems[tempOrderRevenueCenter].push(items);
     });
+    log.info("### Revenue center wise items ###");
+    log.info(tempOrderItems);
     for (objectProperty in tempOrderItems) {
+      log.info(`*** Check creation for revenue center ${objectProperty} ***`);
       checks.push(
         createSoapRequestBody(
           tempOrderItems,
