@@ -9,6 +9,7 @@ const {
   getSimphonyMenuItemsDefinition,
   getSimphonyMenuItemCategory,
   getSimphonyMenuItemConfigurations,
+  getSimphonyMenuItemClasses,
 } = require("../utils/soapRequest");
 const {
   parseXml,
@@ -92,7 +93,7 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
     revenueCenter,
     simphonyBaseUrl
   );
-  const soapRequestMenuRelations = getSimphonyMenuItemConfigurations(
+  const soapRequestMenuClass = getSimphonyMenuItemClasses(
     revenueCenter,
     simphonyBaseUrl
   );
@@ -216,17 +217,17 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
       log.error(err);
     });
 
-  // Get menu item configurations
+  // Get menu item class
   await axios
-    .post(simphonyEndpoint, soapRequestMenuRelations, {
+    .post(simphonyEndpoint, soapRequestMenuClass, {
       headers,
     })
     .then((res) => {
-      log.info("*** Menu Configurations ***");
+      log.info("*** Menu class ***");
       log.info(res.data);
     })
     .catch((err) => {
-      log.error("xxx Menu Item Configurations Error xxx");
+      log.error("xxx Menu Item class Error xxx");
       log.error(err);
     });
 
