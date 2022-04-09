@@ -256,10 +256,10 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
 };
 
 // Create XML Soap request for retrieving list of revenue centers
-const createGetRevenueCenterRequestBody = () => {
+const createGetRevenueCenterRequestBody = (simphonyBaseUrl) => {
   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
-    <GetConfigurationInfo xmlns="http://localhost:8080/EGateway/">
+    <GetConfigurationInfo xmlns=${simphonyBaseUrl}>
       <vendorCode />
       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
       <configurationInfoType>
@@ -374,6 +374,23 @@ const getSimphonyMenuItemConfigurations = (revenueCenter, simphonyBaseUrl) => {
 </soap:Envelope>`;
 };
 
+// Get Menu Item Class
+const getSimphonyMenuItemClasses = (revenueCenter, simphonyBaseUrl) => {
+  return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <GetConfigurationInfo xmlns="${simphonyBaseUrl}/EGateway/">
+      <vendorCode />
+      <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
+      <configurationInfoType>
+        <int>9</int>
+      </configurationInfoType>
+      <revenueCenter>${revenueCenter}</revenueCenter>
+      <configInfoResponse />
+    </GetConfigurationInfo>
+  </soap:Body>
+</soap:Envelope>`;
+};
+
 module.exports = {
   createNewCheckRequestBody,
   createGetRevenueCenterRequestBody,
@@ -383,4 +400,5 @@ module.exports = {
   getSimphonyMenuItemsDefinition,
   getSimphonyMenuItemCategory,
   getSimphonyMenuItemConfigurations,
+  getSimphonyMenuItemClasses,
 };

@@ -14,16 +14,15 @@ const {
   parseXml,
   parsePriceXml,
   parseDefinitionXml,
-  formatMenuItemsArray,
   formatMenuItemsDetailedArray,
   parseRevenueCentersXmlResponse,
   formatRevenueCenterArray,
 } = require("../utils/xml");
 const { postRevenueCenters, postMenuItems } = require("./SabaApiClient");
 
-const simphonyBaseUrl = "http://localhost:8080";
-const simphonyEndpoint =
-  "http://127.0.0.1:8080/EGateway/SimphonyPosAPIWeb.asmx";
+const simphonyBaseUrl = "http://localhost:8080/EGateway";
+const simphonyEndpoint = `${simphonyBaseUrl}/SimphonyPosAPIWeb.asmx`;
+const simphonyConfigUrl = `${simphonyBaseUrl}/GetConfigurationInfo`;
 
 // Send request to pos to get list of revenue centers
 const getRevenueCentersRequest = (data = {}) => {
@@ -31,10 +30,10 @@ const getRevenueCentersRequest = (data = {}) => {
   if (data?.hotel_id) {
     hotel_id = data.hotel_id;
   }
-  const soapRequestBody = createGetRevenueCenterRequestBody();
+  const soapRequestBody = createGetRevenueCenterRequestBody(simphonyBaseUrl);
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
-    SOAPAction: "http://localhost:8080/EGateway/GetConfigurationInfo",
+    SOAPAction: simphonyConfigUrl,
   };
   axios
     .post(simphonyEndpoint, soapRequestBody, {
@@ -58,13 +57,7 @@ const getRevenueCentersRequest = (data = {}) => {
         .catch((err) => log.error("XML Parse Error: ", err));
     })
     .catch((error) => {
-      if (error.response) {
-        log.error(error.response.data);
-        log.error(error.response.status);
-        log.error(error.response.headers);
-      } else {
-        log.error("Error", error.message);
-      }
+      log.error("SymphonyClient.js - Line:59", error);
     });
 };
 
@@ -74,47 +67,6 @@ const getAllMenuItems = (revenueCenters, hotel_id = 2) => {
     // getMenuItemRequest(revenueCenter, hotel_id);
     getMenuItemDetailsRequest(revenueCenter, hotel_id);
   });
-};
-
-// Send request to get menu item from revenue center no, then save it to backend server
-const getMenuItemRequest = (revenueCenter, hotel_id = 2) => {
-  const soapRequestBody = createGetMenuItemsRequestBody(revenueCenter);
-  const headers = {
-    "Content-Type": "text/xml;charset=UTF-8",
-    SOAPAction: "http://localhost:8080/EGateway/GetConfigurationInfo",
-  };
-
-  axios
-    .post(simphonyEndpoint, soapRequestBody, {
-      headers,
-    })
-    .then((response) => {
-      // parse xml response
-      parseXml(response.data)
-        .then((res) => {
-          const menuItems = res.ArrayOfDbMenuItemMaster.DbMenuItemMaster;
-
-          const menuItemsArray = formatMenuItemsArray(menuItems, revenueCenter);
-
-          // post menu items to saba api
-          postMenuItems(menuItemsArray, revenueCenter, hotel_id);
-        })
-        .catch((err) => log.error(err));
-    })
-    .catch((error) => {
-      if (error.response) {
-        // Request made and server responded
-        log.error(error.response.data);
-        log.error(error.response.status);
-        log.error(error.response.headers);
-      } else if (error.request) {
-        // The request was made but no response was received
-        log.error(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        log.error("Error", error.message);
-      }
-    });
 };
 
 // Send request to get menu item from revenue center no, then save it to backend server
@@ -147,7 +99,7 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
 
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
-    SOAPAction: "http://localhost:8080/EGateway/GetConfigurationInfo",
+    SOAPAction: simphonyConfigUrl,
   };
 
   let menuDefinitions = [];
@@ -199,14 +151,14 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
         })
         .catch((err) => {
           log.error(
-            "MICROS Menu Items XML Parse Error: (SymphonyClient.js - Line:162)",
+            "MICROS Menu Items XML Parse Error: (SymphonyClient.js - Line:153)",
             err
           );
         });
     })
     .catch((error) => {
       log.error(
-        "MICROS Menu Items Fetch Error: (SymphonyClient.js - Line:166)",
+        "MICROS Menu Items Fetch Error: (SymphonyClient.js - Line:160)",
         error
       );
     });
@@ -224,7 +176,7 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
         })
         .catch((err) => {
           log.error(
-            "MICROS Menu Price XML Parse Error: (SymphonyClient.js - Line:181)",
+            "MICROS Menu Price XML Parse Error: (SymphonyClient.js - Line:178)",
             err
           );
         });
@@ -307,8 +259,8 @@ const openCheck = (items) => {
   const checks = createNewCheckRequestBody(items);
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
-    // SOAPAction: "http://localhost:8080/EGateway/PostTransactionEx",
-    SOAPAction: "http://localhost:8080/EGateway/PostTransactionEx2",
+    // SOAPAction: `${simphonyBaseUrl}/PostTransactionEx`,
+    SOAPAction: `${simphonyBaseUrl}/PostTransactionEx2`,
   };
 
   checks.forEach((checkRequestBody) => {
@@ -321,18 +273,7 @@ const openCheck = (items) => {
         log.info("success", response.data);
       })
       .catch((error) => {
-        if (error.response) {
-          // Request made and server responded
-          log.error(error.response.data);
-          log.error(error.response.status);
-          log.error(error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          log.error(error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          log.error("Error", error.message);
-        }
+        log.error("SymphonyClient.js line:275", error);
       });
   });
 };
