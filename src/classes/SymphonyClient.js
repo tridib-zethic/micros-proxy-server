@@ -200,7 +200,7 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
     })
     .then((res) => {
       log.info("*** Menu Definitions ***");
-      log.info(res.data);
+      // log.info(res.data);
     })
     .catch((err) => {
       log.error("xxx Menu Item Definition Error xxx");
@@ -214,7 +214,7 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
     })
     .then((res) => {
       log.info("*** Menu Categories ***");
-      log.info(res.data);
+      // log.info(res.data);
     })
     .catch((err) => {
       log.error("xxx Menu Item Category Error xxx");
@@ -228,7 +228,7 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
     })
     .then((res) => {
       log.info("*** Menu class ***");
-      log.info(res.data);
+      // log.info(res.data);
     })
     .catch((err) => {
       log.error("xxx Menu Item class Error xxx");
