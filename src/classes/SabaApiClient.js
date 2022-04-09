@@ -5,11 +5,18 @@ const keytar = require("keytar");
 const { authHeader } = require("../utils/auth");
 const { hotelDashboardURL } = require("../utils/constants");
 
-const hotelBaseUrl = hotelDashboardURL();
-let url = "https://demo.dashboard.chatbothotels.com/api/v1";
+const { hotelBaseUrl, hotelBaseUrlError } = Promise.reselve(
+  hotelDashboardURL
+).then((result) => result.data);
+
+let defaultUrl = "https://demo.dashboard.chatbothotels.com/api/v1";
+
+let url = "";
 
 if (hotelBaseUrl) {
   url = hotelBaseUrl + "/api/v1";
+} else {
+  url = defaultUrl;
 }
 
 const clientId = "1";
@@ -58,7 +65,7 @@ const login = (data, pusher, pusherClient, event, win) => {
       }, 5000);
     })
     .catch((error) => {
-      log.error("SabaApiClient.js - line:61", error);
+      log.error("SabaApiClient.js - line:68", error);
     });
 };
 
@@ -85,7 +92,7 @@ const postRevenueCenters = async (revenueCenters, hotel_id = 2) => {
       log.info(response.data);
     })
     .catch((error) => {
-      log.error("SabaApiClient.js - line:88", error);
+      log.error("SabaApiClient.js - line:95", error);
     });
 };
 
@@ -112,7 +119,7 @@ const postMenuItems = async (menuItems, revenueCenter = 11, hotel_id = 2) => {
       log.info(response.data);
     })
     .catch((error) => {
-      log.error("SabaApiClient.js - line:115", error);
+      log.error("SabaApiClient.js - line:122", error);
     });
 };
 
