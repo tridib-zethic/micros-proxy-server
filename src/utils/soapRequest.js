@@ -323,10 +323,64 @@ const createGetPriceRequestBody = (revenueCenter) => {
 </soap:Envelope>`;
 };
 
+// Get Menu Items Definition
+const getSimphonyMenuItemsDefinition = (revenueCenter) => {
+  return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <GetConfigurationInfo xmlns="http://172.40.104.8:8080/EGateway/">
+      <vendorCode />
+      <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
+      <configurationInfoType>
+        <int>8</int>
+      </configurationInfoType>
+      <revenueCenter>${revenueCenter}</revenueCenter>
+      <configInfoResponse />
+    </GetConfigurationInfo>
+  </soap:Body>
+</soap:Envelope>`;
+};
+
+// Get Menu Item Category
+const getSimphonyMenuItemCategory = (revenueCenter) => {
+  return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <GetConfigurationInfo xmlns="http://172.40.104.8:8080/EGateway/">
+      <vendorCode />
+      <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
+      <configurationInfoType>
+        <int>9</int>
+      </configurationInfoType>
+      <revenueCenter>${revenueCenter}</revenueCenter>
+      <configInfoResponse />
+    </GetConfigurationInfo>
+  </soap:Body>
+</soap:Envelope>`;
+};
+
+// Get Menu Item Class
+const getSimphonyMenuItemConfigurations = (revenueCenter) => {
+  return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <GetConfigurationInfo xmlns="http://172.40.104.8:8080/EGateway/">
+      <vendorCode />
+      <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
+      <configurationInfoType>
+        <int>9</int>
+      </configurationInfoType>
+      <revenueCenter>${revenueCenter}</revenueCenter>
+      <configInfoResponse />
+    </GetConfigurationInfo>
+  </soap:Body>
+</soap:Envelope>`;
+};
+
 module.exports = {
   createNewCheckRequestBody,
   createGetRevenueCenterRequestBody,
   createGetMenuItemsRequestBody,
   createGetDefinitionsRequestBody,
   createGetPriceRequestBody,
+  getSimphonyMenuItemsDefinition,
+  getSimphonyMenuItemCategory,
+  getSimphonyMenuItemConfigurations,
 };

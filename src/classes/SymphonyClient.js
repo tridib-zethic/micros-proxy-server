@@ -6,6 +6,9 @@ const {
   createGetMenuItemsRequestBody,
   createGetDefinitionsRequestBody,
   createGetPriceRequestBody,
+  getSimphonyMenuItemsDefinition,
+  getSimphonyMenuItemCategory,
+  getSimphonyMenuItemConfigurations,
 } = require("../utils/soapRequest");
 const {
   parseXml,
@@ -119,6 +122,10 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
   const soapRequestBody2 = createGetMenuItemsRequestBody(revenueCenter);
   const soapRequestBody3 = createGetDefinitionsRequestBody(revenueCenter);
 
+  const soapRequestMenuDefinition = getSimphonyMenuItemsDefinition();
+  const soapRequestMenuCategory = getSimphonyMenuItemCategory();
+  const soapRequestMenuRelations = getSimphonyMenuItemConfigurations();
+
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
     SOAPAction: "http://localhost:8080/EGateway/GetConfigurationInfo",
@@ -127,6 +134,10 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
   let menuDefinitions = [];
   let menuItemElements = [];
   let priceDetailsArray = [];
+
+  let menuItemDefinitions = [];
+  let menuItemCategories = [];
+  let menuItemConfigurations = [];
 
   let menuItems = [];
 
@@ -204,6 +215,48 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
         "MICROS Menu Price Fetch Error: (SymphonyClient.js - Line:185)",
         error
       );
+    });
+
+  // Get menu item definitions
+  await axios
+    .post(simphonyEndpoint, soapRequestMenuDefinition, {
+      headers,
+    })
+    .then((res) => {
+      log.info("*** Menu Definitions ***");
+      log.info(res.data);
+    })
+    .catch((err) => {
+      log.error("xxx Menu Item Definition Error xxx");
+      log.error(err);
+    });
+
+  // Get menu item categories
+  await axios
+    .post(simphonyEndpoint, soapRequestMenuCategory, {
+      headers,
+    })
+    .then((res) => {
+      log.info("*** Menu Categories ***");
+      log.info(res.data);
+    })
+    .catch((err) => {
+      log.error("xxx Menu Item Category Error xxx");
+      log.error(err);
+    });
+
+  // Get menu item configurations
+  await axios
+    .post(simphonyEndpoint, soapRequestMenuRelations, {
+      headers,
+    })
+    .then((res) => {
+      log.info("*** Menu Configurations ***");
+      log.info(res.data);
+    })
+    .catch((err) => {
+      log.error("xxx Menu Item Configurations Error xxx");
+      log.error(err);
     });
 
   // Get file updates
