@@ -21,6 +21,7 @@ const {
 } = require("../utils/xml");
 const { postRevenueCenters, postMenuItems } = require("./SabaApiClient");
 
+const simphonyBaseUrl = "http://localhost:8080";
 const simphonyEndpoint =
   "http://127.0.0.1:8080/EGateway/SimphonyPosAPIWeb.asmx";
 
@@ -118,13 +119,31 @@ const getMenuItemRequest = (revenueCenter, hotel_id = 2) => {
 
 // Send request to get menu item from revenue center no, then save it to backend server
 const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
-  const soapRequestBody1 = createGetPriceRequestBody(revenueCenter);
-  const soapRequestBody2 = createGetMenuItemsRequestBody(revenueCenter);
-  const soapRequestBody3 = createGetDefinitionsRequestBody(revenueCenter);
+  const soapRequestBody1 = createGetPriceRequestBody(
+    revenueCenter,
+    simphonyBaseUrl
+  );
+  const soapRequestBody2 = createGetMenuItemsRequestBody(
+    revenueCenter,
+    simphonyBaseUrl
+  );
+  const soapRequestBody3 = createGetDefinitionsRequestBody(
+    revenueCenter,
+    simphonyBaseUrl
+  );
 
-  const soapRequestMenuDefinition = getSimphonyMenuItemsDefinition();
-  const soapRequestMenuCategory = getSimphonyMenuItemCategory();
-  const soapRequestMenuRelations = getSimphonyMenuItemConfigurations();
+  const soapRequestMenuDefinition = getSimphonyMenuItemsDefinition(
+    revenueCenter,
+    simphonyBaseUrl
+  );
+  const soapRequestMenuCategory = getSimphonyMenuItemCategory(
+    revenueCenter,
+    simphonyBaseUrl
+  );
+  const soapRequestMenuRelations = getSimphonyMenuItemConfigurations(
+    revenueCenter,
+    simphonyBaseUrl
+  );
 
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",

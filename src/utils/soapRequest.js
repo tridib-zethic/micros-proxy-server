@@ -273,10 +273,10 @@ const createGetRevenueCenterRequestBody = () => {
 };
 
 // Create XML Soap request for retrieving list of menu items
-const createGetMenuItemsRequestBody = (revenueCenter) => {
+const createGetMenuItemsRequestBody = (revenueCenter, simphonyBaseUrl) => {
   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
-    <GetConfigurationInfo xmlns="http://localhost:8080/EGateway/">
+    <GetConfigurationInfo xmlns="http://${simphonyBaseUrl}/EGateway/">
       <vendorCode />
       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
       <configurationInfoType>
@@ -290,10 +290,10 @@ const createGetMenuItemsRequestBody = (revenueCenter) => {
 };
 
 // Create XML Soap request for retrieving list of definitions
-const createGetDefinitionsRequestBody = (revenueCenter) => {
+const createGetDefinitionsRequestBody = (revenueCenter, simphonyBaseUrl) => {
   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
-    <GetConfigurationInfo xmlns="http://localhost:8080/EGateway/">
+    <GetConfigurationInfo xmlns="http://${simphonyBaseUrl}/EGateway/">
       <vendorCode />
       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
       <configurationInfoType>
@@ -307,10 +307,10 @@ const createGetDefinitionsRequestBody = (revenueCenter) => {
 };
 
 // Create XML Soap request for retrieving list of price details
-const createGetPriceRequestBody = (revenueCenter) => {
+const createGetPriceRequestBody = (revenueCenter, simphonyBaseUrl) => {
   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
-    <GetConfigurationInfo xmlns="http://localhost:8080/EGateway/">
+    <GetConfigurationInfo xmlns="http://${simphonyBaseUrl}/EGateway/">
       <vendorCode />
       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
       <configurationInfoType>
@@ -324,10 +324,10 @@ const createGetPriceRequestBody = (revenueCenter) => {
 };
 
 // Get Menu Items Definition
-const getSimphonyMenuItemsDefinition = (revenueCenter) => {
+const getSimphonyMenuItemsDefinition = (revenueCenter, simphonyBaseUrl) => {
   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
-    <GetConfigurationInfo xmlns="http://172.40.104.8:8080/EGateway/">
+    <GetConfigurationInfo xmlns="http://${simphonyBaseUrl}/EGateway/">
       <vendorCode />
       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
       <configurationInfoType>
@@ -341,10 +341,10 @@ const getSimphonyMenuItemsDefinition = (revenueCenter) => {
 };
 
 // Get Menu Item Category
-const getSimphonyMenuItemCategory = (revenueCenter) => {
+const getSimphonyMenuItemCategory = (revenueCenter, simphonyBaseUrl) => {
   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
-    <GetConfigurationInfo xmlns="http://172.40.104.8:8080/EGateway/">
+    <GetConfigurationInfo xmlns="http://${simphonyBaseUrl}/EGateway/">
       <vendorCode />
       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
       <configurationInfoType>
@@ -358,10 +358,10 @@ const getSimphonyMenuItemCategory = (revenueCenter) => {
 };
 
 // Get Menu Item Class
-const getSimphonyMenuItemConfigurations = (revenueCenter) => {
+const getSimphonyMenuItemConfigurations = (revenueCenter, simphonyBaseUrl) => {
   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
-    <GetConfigurationInfo xmlns="http://172.40.104.8:8080/EGateway/">
+    <GetConfigurationInfo xmlns="http://${simphonyBaseUrl}/EGateway/">
       <vendorCode />
       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
       <configurationInfoType>
