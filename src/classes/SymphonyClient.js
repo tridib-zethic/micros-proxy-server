@@ -24,6 +24,7 @@ const { postRevenueCenters, postMenuItems } = require("./SabaApiClient");
 const simphonyBaseUrl = "http://localhost:8080/EGateway";
 const simphonyEndpoint = `${simphonyBaseUrl}/SimphonyPosAPIWeb.asmx`;
 const simphonyConfigUrl = `${simphonyBaseUrl}/GetConfigurationInfo`;
+const revenueCenterId = "11";
 
 // Send request to pos to get list of revenue centers
 const getRevenueCentersRequest = (data = {}) => {
@@ -31,7 +32,10 @@ const getRevenueCentersRequest = (data = {}) => {
   if (data?.hotel_id) {
     hotel_id = data.hotel_id;
   }
-  const soapRequestBody = createGetRevenueCenterRequestBody(simphonyBaseUrl);
+  const soapRequestBody = createGetRevenueCenterRequestBody(
+    simphonyBaseUrl,
+    revenueCenterId
+  );
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
     SOAPAction: simphonyConfigUrl,

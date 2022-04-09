@@ -256,7 +256,10 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
 };
 
 // Create XML Soap request for retrieving list of revenue centers
-const createGetRevenueCenterRequestBody = (simphonyBaseUrl) => {
+const createGetRevenueCenterRequestBody = (
+  simphonyBaseUrl,
+  revenueCenterId
+) => {
   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
     <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
@@ -265,7 +268,7 @@ const createGetRevenueCenterRequestBody = (simphonyBaseUrl) => {
       <configurationInfoType>
         <int>11</int>
       </configurationInfoType>
-      <revenueCenter>11</revenueCenter>
+      <revenueCenter>${revenueCenterId}</revenueCenter>
       <configInfoResponse />
     </GetConfigurationInfo>
   </soap:Body>
