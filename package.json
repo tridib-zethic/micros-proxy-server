@@ -19,16 +19,12 @@
   "license": "MIT",
   "config": {
     "forge": {
-      "packagerConfig": {
-        "icon": "./src/assets/avatar.ico"
-      },
+      "packagerConfig": {},
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "saba_proxy_app",
-            "loadingGif": "./src/assets/loader.gif",
-            "setupIcon": "./src/assets/avatar.ico"
+            "name": "saba_proxy_app"
           }
         },
         {
@@ -44,18 +40,6 @@
         {
           "name": "@electron-forge/maker-rpm",
           "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-wix",
-          "config": {
-            "ui": {
-              "chooseDirectory": true,
-              "images": {
-                "background": "./src/assets/saba-background.png",
-                "banner": "./src/assets/saba-banner.png"
-              }
-            }
-          }
         }
       ]
     }
