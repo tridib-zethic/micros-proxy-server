@@ -54,7 +54,6 @@ app.whenReady().then(() => {
       label: "Exit",
       accelerator: "CmdOrCtrl+Q",
       click: function (e) {
-        e.preventDefault();
         force_quit = true;
         app.quit();
       },
