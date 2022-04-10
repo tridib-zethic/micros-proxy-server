@@ -1,6 +1,6 @@
 {
   "name": "saba-micros-proxy",
-  "productName": "SABA MICROS Proxy",
+  "productName": "SABA Micros Proxy",
   "version": "1.0.0",
   "description": "SABA Micros Proxy Middleman",
   "main": "src/index.js",
