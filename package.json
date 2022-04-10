@@ -67,6 +67,7 @@
     "electron-log": "^4.4.1",
     "electron-squirrel-startup": "^1.0.0",
     "electron-unhandled": "^3.0.2",
+    "electron-wix-msi": "^4.0.0",
     "keytar": "^7.7.0",
     "path": "^0.12.7",
     "psl": "^1.8.0",
