@@ -13,13 +13,24 @@
   },
   "keywords": [],
   "author": {
-    "name": "Himanshu",
-    "email": "himanshu@zethic.com"
+    "name": "SABA Hospitality",
+    "email": "info@sabahospitality.com"
   },
   "license": "MIT",
   "config": {
+    "loadingGif": "[...]/src/assets/loader.gif",
+    "setupIcon": "[...]/src/assets/avatar.png",
+    "ui": {
+      "chooseDirectory": true,
+      "images": {
+        "background": "[...]/src/assets/saba-background.png",
+        "banner": "[...]/src/assets/saba-banner.png"
+      }
+    },
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "icon": "[...]/src/assets/avatar.png"
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
