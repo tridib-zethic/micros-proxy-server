@@ -18,18 +18,18 @@
   },
   "license": "MIT",
   "config": {
-    "loadingGif": "[...]/src/assets/loader.gif",
-    "setupIcon": "[...]/src/assets/avatar.png",
+    "loadingGif": "./src/assets/loader.gif",
+    "setupIcon": "./src/assets/avatar.ico",
     "ui": {
       "chooseDirectory": true,
       "images": {
-        "background": "[...]/src/assets/saba-background.png",
-        "banner": "[...]/src/assets/saba-banner.png"
+        "background": "./src/assets/saba-background.png",
+        "banner": "./src/assets/saba-banner.png"
       }
     },
     "forge": {
       "packagerConfig": {
-        "icon": "[...]/src/assets/avatar.png"
+        "icon": "./src/assets/avatar.ico"
       },
       "makers": [
         {
