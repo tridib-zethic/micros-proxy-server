@@ -21,11 +21,11 @@ const {
 } = require("../utils/xml");
 const { postRevenueCenters, postMenuItems } = require("./SabaApiClient");
 
-const simphonyBaseUrl = "http://localhost:8080/EGateway";
-const simphonyEndpoint = `${simphonyBaseUrl}/SimphonyPosAPIWeb.asmx`;
-const simphonyConfigUrl = `${simphonyBaseUrl}/GetConfigurationInfo`;
-const revenueCenterId = "11";
-const employeeObjectNumber = "2130";
+let simphonyBaseUrl = "http://localhost:8080/EGateway";
+let simphonyEndpoint = `${simphonyBaseUrl}/SimphonyPosAPIWeb.asmx`;
+let simphonyConfigUrl = `${simphonyBaseUrl}/GetConfigurationInfo`;
+let revenueCenterId = "11";
+let employeeObjectNumber = "2130";
 
 // Send request to pos to get list of revenue centers
 const getRevenueCentersRequest = (data = {}) => {
