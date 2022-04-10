@@ -18,15 +18,6 @@
   },
   "license": "MIT",
   "config": {
-    "loadingGif": "./src/assets/loader.gif",
-    "setupIcon": "./src/assets/avatar.ico",
-    "ui": {
-      "chooseDirectory": true,
-      "images": {
-        "background": "./src/assets/saba-background.png",
-        "banner": "./src/assets/saba-banner.png"
-      }
-    },
     "forge": {
       "packagerConfig": {
         "icon": "./src/assets/avatar.ico"
@@ -35,7 +26,9 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "saba_proxy_app"
+            "name": "saba_proxy_app",
+            "loadingGif": "./src/assets/loader.gif",
+            "setupIcon": "./src/assets/avatar.ico"
           }
         },
         {
@@ -51,6 +44,18 @@
         {
           "name": "@electron-forge/maker-rpm",
           "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-wix",
+          "config": {
+            "ui": {
+              "chooseDirectory": true,
+              "images": {
+                "background": "./src/assets/saba-background.png",
+                "banner": "./src/assets/saba-banner.png"
+              }
+            }
+          }
         }
       ]
     }
@@ -73,6 +78,7 @@
     "@electron-forge/maker-deb": "^6.0.0-beta.60",
     "@electron-forge/maker-rpm": "^6.0.0-beta.60",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.60",
+    "@electron-forge/maker-wix": "^6.0.0-beta.63",
     "@electron-forge/maker-zip": "^6.0.0-beta.60",
     "electron": "14.0.0",
     "electron-builder": "^22.11.7"
