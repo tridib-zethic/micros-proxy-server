@@ -1,5 +1,5 @@
-const employeeObjectNum = `2130`;
-const { info } = require("electron-log");
+const { employeeObjectNumber } = require("../classes/SymphonyClient.js");
+const employeeObjectNum = employeeObjectNumber;
 const log = require("electron-log");
 
 // Create soap request strings for simphony post, return array of strings

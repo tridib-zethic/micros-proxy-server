@@ -25,6 +25,7 @@ const simphonyBaseUrl = "http://localhost:8080/EGateway";
 const simphonyEndpoint = `${simphonyBaseUrl}/SimphonyPosAPIWeb.asmx`;
 const simphonyConfigUrl = `${simphonyBaseUrl}/GetConfigurationInfo`;
 const revenueCenterId = "11";
+const employeeObjectNumber = "2130";
 
 // Send request to pos to get list of revenue centers
 const getRevenueCentersRequest = (data = {}) => {
@@ -283,4 +284,4 @@ const openCheck = (items) => {
   });
 };
 
-module.exports = { openCheck, getRevenueCentersRequest };
+module.exports = { openCheck, getRevenueCentersRequest, employeeObjectNumber };
