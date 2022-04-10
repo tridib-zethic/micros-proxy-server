@@ -53,7 +53,9 @@ app.whenReady().then(() => {
     {
       label: "Exit",
       accelerator: "CmdOrCtrl+Q",
-      click: function () {
+      click: function (e) {
+        e.preventDefault();
+        force_quit = true;
         app.quit();
       },
     },
@@ -64,11 +66,15 @@ app.whenReady().then(() => {
 
 app.on("ready", function () {
   app.on("before-quit", function (e) {
-    e.preventDefault();
-    win.on("close", function (e) {
+    if (!force_quit) {
       e.preventDefault();
-      win.hide();
-    });
+      win.on("close", function (e) {
+        if (!force_quit) {
+          e.preventDefault();
+          win.hide();
+        }
+      });
+    }
   });
 });
 
