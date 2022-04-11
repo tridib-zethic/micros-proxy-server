@@ -66,10 +66,10 @@ const getRevenueCentersRequest = (data = {}) => {
           );
 
           // send revenue centers name and ids to api server
-          postRevenueCenters(revenueCenters, hotel_id);
+          postRevenueCenters(revenueCenters, hotel_id, employeeObjectNumber);
 
           // fetch and save menu items from all revenue center to api server
-          getAllMenuItems(revenueCenters, hotel_id);
+          getAllMenuItems(revenueCenters, hotel_id, employeeObjectNumber);
         })
         .catch((err) => log.error("XML Parse Error: ", err));
     })
@@ -79,26 +79,37 @@ const getRevenueCentersRequest = (data = {}) => {
 };
 
 // Send request to get menu items from array of revenue center
-const getAllMenuItems = (revenueCenters, hotel_id = 2) => {
+const getAllMenuItems = (
+  revenueCenters,
+  hotel_id = 2,
+  employeeObjectNumber
+) => {
   revenueCenters.forEach((revenueCenter) => {
     // getMenuItemRequest(revenueCenter, hotel_id);
-    getMenuItemDetailsRequest(revenueCenter, hotel_id);
+    getMenuItemDetailsRequest(revenueCenter, hotel_id, employeeObjectNumber);
   });
 };
 
 // Send request to get menu item from revenue center no, then save it to backend server
-const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
+const getMenuItemDetailsRequest = async (
+  revenueCenter,
+  hotel_id = 2,
+  employeeObjectNumber
+) => {
   const soapRequestBody1 = createGetPriceRequestBody(
     revenueCenter,
-    simphonyBaseUrl
+    simphonyBaseUrl,
+    employeeObjectNumber
   );
   const soapRequestBody2 = createGetMenuItemsRequestBody(
     revenueCenter,
-    simphonyBaseUrl
+    simphonyBaseUrl,
+    employeeObjectNumber
   );
   const soapRequestBody3 = createGetDefinitionsRequestBody(
     revenueCenter,
-    simphonyBaseUrl
+    simphonyBaseUrl,
+    employeeObjectNumber
   );
 
   // const soapRequestMenuDefinition = getSimphonyMenuItemsDefinition(

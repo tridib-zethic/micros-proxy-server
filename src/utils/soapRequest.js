@@ -283,7 +283,11 @@ const createGetRevenueCenterRequestBody = (
 };
 
 // Create XML Soap request for retrieving list of menu items
-const createGetMenuItemsRequestBody = (revenueCenter, simphonyBaseUrl) => {
+const createGetMenuItemsRequestBody = (
+  revenueCenter,
+  simphonyBaseUrl,
+  employeeObjectNum
+) => {
   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
     <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
@@ -300,7 +304,11 @@ const createGetMenuItemsRequestBody = (revenueCenter, simphonyBaseUrl) => {
 };
 
 // Create XML Soap request for retrieving list of definitions
-const createGetDefinitionsRequestBody = (revenueCenter, simphonyBaseUrl) => {
+const createGetDefinitionsRequestBody = (
+  revenueCenter,
+  simphonyBaseUrl,
+  employeeObjectNum
+) => {
   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
     <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
@@ -317,7 +325,11 @@ const createGetDefinitionsRequestBody = (revenueCenter, simphonyBaseUrl) => {
 };
 
 // Create XML Soap request for retrieving list of price details
-const createGetPriceRequestBody = (revenueCenter, simphonyBaseUrl) => {
+const createGetPriceRequestBody = (
+  revenueCenter,
+  simphonyBaseUrl,
+  employeeObjectNum
+) => {
   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
     <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
@@ -333,73 +345,89 @@ const createGetPriceRequestBody = (revenueCenter, simphonyBaseUrl) => {
 </soap:Envelope>`;
 };
 
-// Get Menu Items Definition
-const getSimphonyMenuItemsDefinition = (revenueCenter, simphonyBaseUrl) => {
-  return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Body>
-    <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
-      <vendorCode />
-      <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
-      <configurationInfoType>
-        <int>8</int>
-      </configurationInfoType>
-      <revenueCenter>${revenueCenter}</revenueCenter>
-      <configInfoResponse />
-    </GetConfigurationInfo>
-  </soap:Body>
-</soap:Envelope>`;
-};
+// // Get Menu Items Definition
+// const getSimphonyMenuItemsDefinition = (
+//   revenueCenter,
+//   simphonyBaseUrl,
+//   employeeObjectNum
+// ) => {
+//   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+//   <soap:Body>
+//     <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
+//       <vendorCode />
+//       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
+//       <configurationInfoType>
+//         <int>8</int>
+//       </configurationInfoType>
+//       <revenueCenter>${revenueCenter}</revenueCenter>
+//       <configInfoResponse />
+//     </GetConfigurationInfo>
+//   </soap:Body>
+// </soap:Envelope>`;
+// };
 
-// Get Menu Item Category
-const getSimphonyMenuItemCategory = (revenueCenter, simphonyBaseUrl) => {
-  return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Body>
-    <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
-      <vendorCode />
-      <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
-      <configurationInfoType>
-        <int>9</int>
-      </configurationInfoType>
-      <revenueCenter>${revenueCenter}</revenueCenter>
-      <configInfoResponse />
-    </GetConfigurationInfo>
-  </soap:Body>
-</soap:Envelope>`;
-};
+// // Get Menu Item Category
+// const getSimphonyMenuItemCategory = (
+//   revenueCenter,
+//   simphonyBaseUrl,
+//   employeeObjectNum
+// ) => {
+//   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+//   <soap:Body>
+//     <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
+//       <vendorCode />
+//       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
+//       <configurationInfoType>
+//         <int>9</int>
+//       </configurationInfoType>
+//       <revenueCenter>${revenueCenter}</revenueCenter>
+//       <configInfoResponse />
+//     </GetConfigurationInfo>
+//   </soap:Body>
+// </soap:Envelope>`;
+// };
 
-// Get Menu Item Class
-const getSimphonyMenuItemConfigurations = (revenueCenter, simphonyBaseUrl) => {
-  return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Body>
-    <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
-      <vendorCode />
-      <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
-      <configurationInfoType>
-        <int>9</int>
-      </configurationInfoType>
-      <revenueCenter>${revenueCenter}</revenueCenter>
-      <configInfoResponse />
-    </GetConfigurationInfo>
-  </soap:Body>
-</soap:Envelope>`;
-};
+// // Get Menu Item Class
+// const getSimphonyMenuItemConfigurations = (
+//   revenueCenter,
+//   simphonyBaseUrl,
+//   employeeObjectNum
+// ) => {
+//   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+//   <soap:Body>
+//     <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
+//       <vendorCode />
+//       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
+//       <configurationInfoType>
+//         <int>9</int>
+//       </configurationInfoType>
+//       <revenueCenter>${revenueCenter}</revenueCenter>
+//       <configInfoResponse />
+//     </GetConfigurationInfo>
+//   </soap:Body>
+// </soap:Envelope>`;
+// };
 
-// Get Menu Item Class
-const getSimphonyMenuItemClasses = (revenueCenter, simphonyBaseUrl) => {
-  return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Body>
-    <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
-      <vendorCode />
-      <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
-      <configurationInfoType>
-        <int>9</int>
-      </configurationInfoType>
-      <revenueCenter>${revenueCenter}</revenueCenter>
-      <configInfoResponse />
-    </GetConfigurationInfo>
-  </soap:Body>
-</soap:Envelope>`;
-};
+// // Get Menu Item Class
+// const getSimphonyMenuItemClasses = (
+//   revenueCenter,
+//   simphonyBaseUrl,
+//   employeeObjectNum
+// ) => {
+//   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+//   <soap:Body>
+//     <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
+//       <vendorCode />
+//       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
+//       <configurationInfoType>
+//         <int>9</int>
+//       </configurationInfoType>
+//       <revenueCenter>${revenueCenter}</revenueCenter>
+//       <configInfoResponse />
+//     </GetConfigurationInfo>
+//   </soap:Body>
+// </soap:Envelope>`;
+// };
 
 module.exports = {
   createNewCheckRequestBody,
@@ -407,8 +435,8 @@ module.exports = {
   createGetMenuItemsRequestBody,
   createGetDefinitionsRequestBody,
   createGetPriceRequestBody,
-  getSimphonyMenuItemsDefinition,
-  getSimphonyMenuItemCategory,
-  getSimphonyMenuItemConfigurations,
-  getSimphonyMenuItemClasses,
+  // getSimphonyMenuItemsDefinition,
+  // getSimphonyMenuItemCategory,
+  // getSimphonyMenuItemConfigurations,
+  // getSimphonyMenuItemClasses,
 };
