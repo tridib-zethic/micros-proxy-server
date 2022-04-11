@@ -45,7 +45,8 @@ const getRevenueCentersRequest = (data = {}) => {
   }
   const soapRequestBody = createGetRevenueCenterRequestBody(
     simphonyBaseUrl,
-    revenueCenterId
+    revenueCenterId,
+    employeeObjectNumber
   );
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
