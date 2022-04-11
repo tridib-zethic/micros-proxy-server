@@ -74,6 +74,7 @@ const pusher = async (win = undefined, event = undefined) => {
   token = await authHeader();
   hotel = await hotelDashboardURL();
   hotelSlug = hotel.split(".")[0].split("//")[1];
+  let requestIds = [];
 
   if (hotel) {
     // do nothing
@@ -144,7 +145,7 @@ const pusher = async (win = undefined, event = undefined) => {
   channel = pusherClient.subscribe(`private-${hotelSlug}-pos`);
 
   channel.bind("pusher:subscription_succeeded", function (status) {
-    log.info("Hello");
+    log.info(`Subscribed to pusher channel: private-${hotelSlug}-pos`);
   });
 
   channel.bind("pusher:subscription_error", function (status) {
@@ -152,8 +153,11 @@ const pusher = async (win = undefined, event = undefined) => {
   });
 
   channel.bind("request.created", function (data) {
-    log.info("request.created", data);
-    openCheck(data);
+    if (requestIds.indexOf(data.check_id) == -1) {
+      log.info("request.created", data);
+      openCheck(data);
+      requestIds.push(data.check_id);
+    }
   });
 
   channel.bind("update.menu", function (data) {
