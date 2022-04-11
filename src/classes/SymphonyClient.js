@@ -9,7 +9,7 @@ const {
   // getSimphonyMenuItemsDefinition,
   // getSimphonyMenuItemCategory,
   // getSimphonyMenuItemConfigurations,
-  // getSimphonyMenuItemClasses,
+  getSimphonyMenuItemClasses,
 } = require("../utils/soapRequest");
 const {
   parseXml,
@@ -125,10 +125,10 @@ const getMenuItemDetailsRequest = async (
   //   revenueCenter,
   //   simphonyBaseUrl
   // );
-  // const soapRequestMenuClass = getSimphonyMenuItemClasses(
-  //   revenueCenter,
-  //   simphonyBaseUrl
-  // );
+  const soapRequestMenuClass = getSimphonyMenuItemClasses(
+    revenueCenter,
+    simphonyBaseUrl
+  );
 
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
@@ -250,18 +250,18 @@ const getMenuItemDetailsRequest = async (
   //   });
 
   // // Get menu item class
-  // await axios
-  //   .post(simphonyEndpoint, soapRequestMenuClass, {
-  //     headers,
-  //   })
-  //   .then((res) => {
-  //     log.info("*** Menu class ***");
-  //     // log.info(res.data);
-  //   })
-  //   .catch((err) => {
-  //     log.error("xxx Menu Item class Error xxx");
-  //     log.error(err);
-  //   });
+  await axios
+    .post(simphonyEndpoint, soapRequestMenuClass, {
+      headers,
+    })
+    .then((res) => {
+      log.info("*** Menu class ***");
+      log.info(res.data);
+    })
+    .catch((err) => {
+      log.error("xxx Menu Item class Error xxx");
+      log.error(err);
+    });
 
   // Get file updates
   await menuItemElements.forEach((item, index) => {

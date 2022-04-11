@@ -409,25 +409,25 @@ const createGetPriceRequestBody = (
 // };
 
 // // Get Menu Item Class
-// const getSimphonyMenuItemClasses = (
-//   revenueCenter,
-//   simphonyBaseUrl,
-//   employeeObjectNum
-// ) => {
-//   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-//   <soap:Body>
-//     <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
-//       <vendorCode />
-//       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
-//       <configurationInfoType>
-//         <int>9</int>
-//       </configurationInfoType>
-//       <revenueCenter>${revenueCenter}</revenueCenter>
-//       <configInfoResponse />
-//     </GetConfigurationInfo>
-//   </soap:Body>
-// </soap:Envelope>`;
-// };
+const getSimphonyMenuItemClasses = (
+  revenueCenter,
+  simphonyBaseUrl,
+  employeeObjectNum
+) => {
+  return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
+      <vendorCode />
+      <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
+      <configurationInfoType>
+        <int>3</int>
+      </configurationInfoType>
+      <revenueCenter>${revenueCenter}</revenueCenter>
+      <configInfoResponse />
+    </GetConfigurationInfo>
+  </soap:Body>
+</soap:Envelope>`;
+};
 
 module.exports = {
   createNewCheckRequestBody,
@@ -438,5 +438,5 @@ module.exports = {
   // getSimphonyMenuItemsDefinition,
   // getSimphonyMenuItemCategory,
   // getSimphonyMenuItemConfigurations,
-  // getSimphonyMenuItemClasses,
+  getSimphonyMenuItemClasses,
 };
