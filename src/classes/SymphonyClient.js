@@ -271,26 +271,31 @@ const openCheck = (items) => {
   revenueCenterId = items.micros_revenue_center;
   employeeObjectNumber = items.micros_employee_id;
   // array of check request body strings
-  const checks = createNewCheckRequestBody(items);
-  const headers = {
+  let checks = [];
+  if (items.orders) {
+    checks = createNewCheckRequestBody(items);
+  }
+  let headers = {
     "Content-Type": "text/xml;charset=UTF-8",
     // SOAPAction: `${simphonyBaseUrl}/PostTransactionEx`,
     SOAPAction: `${simphonyBaseUrl}/PostTransactionEx2`,
   };
 
-  checks.forEach((checkRequestBody) => {
-    // send post request to open check
-    axios
-      .post(simphonyEndpoint, checkRequestBody, {
-        headers,
-      })
-      .then((response) => {
-        log.info("success", response.data);
-      })
-      .catch((error) => {
-        log.error("SymphonyClient.js line:275", error);
-      });
-  });
+  if (checks.length > 0) {
+    checks.forEach((checkRequestBody) => {
+      // send post request to open check
+      axios
+        .post(simphonyEndpoint, checkRequestBody, {
+          headers,
+        })
+        .then((response) => {
+          log.info("success", response.data);
+        })
+        .catch((error) => {
+          log.error("SymphonyClient.js line:275", error);
+        });
+    });
+  }
 };
 
 module.exports = { openCheck, getRevenueCentersRequest, employeeObjectNumber };
