@@ -92,7 +92,7 @@ const postRevenueCenters = async (revenueCenters, hotel_id = 2) => {
       log.info(response.data);
     })
     .catch((error) => {
-      log.error("SabaApiClient.js - line:95", error);
+      log.error("SabaApiClient.js - line:95", error?.response?.data);
     });
 };
 
@@ -119,7 +119,7 @@ const postMenuItems = async (menuItems, revenueCenter = 11, hotel_id = 2) => {
       log.info(response.data);
     })
     .catch((error) => {
-      log.error("SabaApiClient.js - line:122", error);
+      log.error("SabaApiClient.js - line:122", error?.response?.data);
     });
 };
 
