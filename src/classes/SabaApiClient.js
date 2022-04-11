@@ -65,7 +65,8 @@ const login = (data, pusher, pusherClient, event, win) => {
       }, 5000);
     })
     .catch((error) => {
-      log.error("SabaApiClient.js - line:68", error);
+      log.info("login payload", data);
+      log.error("SabaApiClient.js - line:69", error?.response?.data);
     });
 };
 
@@ -92,7 +93,8 @@ const postRevenueCenters = async (revenueCenters, hotel_id = 2) => {
       log.info(response.data);
     })
     .catch((error) => {
-      log.error("SabaApiClient.js - line:95", error?.response?.data);
+      log.info("revenue centers payload", data);
+      log.error("SabaApiClient.js - line:97", error?.response?.data);
     });
 };
 
@@ -119,7 +121,11 @@ const postMenuItems = async (menuItems, revenueCenter = 11, hotel_id = 2) => {
       log.info(response.data);
     })
     .catch((error) => {
-      log.error("SabaApiClient.js - line:122", error?.response?.data);
+      log.info("menu items payload", {
+        hotel_id: hotel_id,
+        items: menuItems,
+      });
+      log.error("SabaApiClient.js - line:128", error?.response?.data);
     });
 };
 
