@@ -157,6 +157,7 @@ const pusher = async (win = undefined, event = undefined) => {
   });
 
   channel.bind("update.menu", function (data) {
+    log.info("update.menu");
     getRevenueCentersRequest(data);
   });
 };
