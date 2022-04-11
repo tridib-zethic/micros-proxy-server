@@ -93,7 +93,10 @@ const postRevenueCenters = async (revenueCenters, hotel_id = 2) => {
       log.info(response.data);
     })
     .catch((error) => {
-      log.info("revenue centers payload", data);
+      log.info("revenue centers payload", {
+        hotel_id: hotel_id,
+        items: revenueCenters,
+      });
       log.error("SabaApiClient.js - line:97", error?.response?.data);
     });
 };
