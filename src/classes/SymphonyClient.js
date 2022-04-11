@@ -65,8 +65,14 @@ const getRevenueCentersRequest = (data = {}) => {
             res.ArrayOfDbRvcConfiguration.DbRvcConfiguration
           );
 
+          const formattedRevenueCenters = formatRevenueCenterArrayElements(
+            res.ArrayOfDbRvcConfiguration.DbRvcConfiguration
+          );
+
+          log.info("Formatted revenue centers", formattedRevenueCenters);
+
           // send revenue centers name and ids to api server
-          postRevenueCenters(revenueCenters, hotel_id);
+          postRevenueCenters(formattedRevenueCenters, hotel_id);
 
           // fetch and save menu items from all revenue center to api server
           getAllMenuItems(revenueCenters, hotel_id, employeeObjectNumber);

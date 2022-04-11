@@ -232,6 +232,13 @@ const formatMenuItemsDetailedArray = (data, revenueCenter) => {
 // Extract Revenue centers from response data
 const formatRevenueCenterArray = (data) => {
   return data.map((menu) => {
+    return menu.ObjectNumber[0];
+  });
+};
+
+// Extract Revenue centers from response data
+const formatRevenueCenterArrayElements = (data) => {
+  return data.map((menu) => {
     return {
       name: menu.Name[0].StringText[0],
       revenue_center_id: menu.ObjectNumber[0],
@@ -247,4 +254,5 @@ module.exports = {
   parseRevenueCentersXmlResponse,
   formatRevenueCenterArray,
   parseDefinitionXml,
+  formatRevenueCenterArrayElements,
 };
