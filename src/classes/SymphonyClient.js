@@ -267,9 +267,9 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
 // Send Request to open multiple checks
 const openCheck = (items) => {
   // Micros Settings data
-  simphonyBaseUrl = data.micros_base_url;
-  revenueCenterId = data.micros_revenue_center;
-  employeeObjectNumber = data.micros_employee_id;
+  simphonyBaseUrl = items.micros_base_url;
+  revenueCenterId = items.micros_revenue_center;
+  employeeObjectNumber = items.micros_employee_id;
   // array of check request body strings
   const checks = createNewCheckRequestBody(items);
   const headers = {
