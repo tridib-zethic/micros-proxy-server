@@ -66,7 +66,7 @@ const getRevenueCentersRequest = (data = {}) => {
           );
 
           // send revenue centers name and ids to api server
-          postRevenueCenters(revenueCenters, hotel_id, employeeObjectNumber);
+          postRevenueCenters(revenueCenters, hotel_id);
 
           // fetch and save menu items from all revenue center to api server
           getAllMenuItems(revenueCenters, hotel_id, employeeObjectNumber);

@@ -66,7 +66,7 @@ const login = (data, pusher, pusherClient, event, win) => {
     })
     .catch((error) => {
       log.info("Status Code: ", error?.response?.status);
-      log.info("login payload", JSON.stringify(data));
+      // log.info("login payload", JSON.stringify(data));
       log.error("SabaApiClient.js - line:70", error?.response?.data);
     });
 };
@@ -95,13 +95,13 @@ const postRevenueCenters = async (revenueCenters, hotel_id = 2) => {
     })
     .catch((error) => {
       log.info("Status Code: ", error?.response?.status);
-      log.info(
-        "revenue centers payload",
-        JSON.stringify({
-          hotel_id: hotel_id,
-          items: revenueCenters,
-        })
-      );
+      // log.info(
+      //   "revenue centers payload",
+      //   JSON.stringify({
+      //     hotel_id: hotel_id,
+      //     items: revenueCenters,
+      //   })
+      // );
       log.error("SabaApiClient.js - line:105", error?.response?.data);
     });
 };
@@ -130,13 +130,13 @@ const postMenuItems = async (menuItems, revenueCenter = 11, hotel_id = 2) => {
     })
     .catch((error) => {
       log.info("Status Code: ", error?.response?.status);
-      log.info(
-        "menu items payload",
-        JSON.stringify({
-          hotel_id: hotel_id,
-          items: menuItems,
-        })
-      );
+      // log.info(
+      //   "menu items payload",
+      //   JSON.stringify({
+      //     hotel_id: hotel_id,
+      //     items: menuItems,
+      //   })
+      // );
       log.error("SabaApiClient.js - line:140", error?.response?.data);
     });
 };
