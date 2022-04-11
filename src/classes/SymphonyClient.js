@@ -29,6 +29,11 @@ let employeeObjectNumber = "2130";
 
 // Send request to pos to get list of revenue centers
 const getRevenueCentersRequest = (data = {}) => {
+  // Micros Settings data
+  simphonyBaseUrl = data.micros_base_url;
+  revenueCenterId = data.micros_revenue_center;
+  employeeObjectNumber = data.micros_employee_id;
+
   let hotel_id = 2;
   if (data?.hotel_id) {
     hotel_id = data.hotel_id;
@@ -261,6 +266,10 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
 
 // Send Request to open multiple checks
 const openCheck = (items) => {
+  // Micros Settings data
+  simphonyBaseUrl = data.micros_base_url;
+  revenueCenterId = data.micros_revenue_center;
+  employeeObjectNumber = data.micros_employee_id;
   // array of check request body strings
   const checks = createNewCheckRequestBody(items);
   const headers = {
