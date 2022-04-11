@@ -71,18 +71,17 @@ const autoLoginWithRefreshToken = async () => {
 };
 
 const pusher = async (win = undefined, event = undefined) => {
+  console.log("Pusher initialization");
+
   token = await authHeader();
   hotel = await hotelDashboardURL();
   hotelSlug = hotel.split(".")[0].split("//")[1];
   let requestIds = [];
 
-  if (hotel) {
-    // do nothing
-  } else {
+  if (!hotel) {
     hotel = "https://demo.dashboard.chatbothotels.com";
   }
   hotelSlug = hotel.split(".")[0].split("//")[1];
-  // log.info(token);
 
   const replyEventHandler = (status, message) => {
     if (win != undefined && event != undefined) {
@@ -155,8 +154,8 @@ const pusher = async (win = undefined, event = undefined) => {
   channel.bind("request.created", function (data) {
     if (requestIds.indexOf(data.check_id) == -1) {
       log.info("request.created", data);
-      openCheck(data);
       requestIds.push(data.check_id);
+      openCheck(data);
     }
   });
 
