@@ -18,6 +18,7 @@ const {
   formatMenuItemsDetailedArray,
   parseRevenueCentersXmlResponse,
   formatRevenueCenterArray,
+  formatRevenueCenterArrayElements,
 } = require("../utils/xml");
 const { postRevenueCenters, postMenuItems } = require("./SabaApiClient");
 
