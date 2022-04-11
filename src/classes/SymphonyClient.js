@@ -119,15 +119,18 @@ const getMenuItemDetailsRequest = async (
 
   // const soapRequestMenuDefinition = getSimphonyMenuItemsDefinition(
   //   revenueCenter,
-  //   simphonyBaseUrl
+  //   simphonyBaseUrl,
+  // employeeObjectNumber
   // );
   // const soapRequestMenuCategory = getSimphonyMenuItemCategory(
   //   revenueCenter,
-  //   simphonyBaseUrl
+  //   simphonyBaseUrl,
+  // employeeObjectNumber
   // );
   const soapRequestMenuClass = getSimphonyMenuItemClasses(
     revenueCenter,
-    simphonyBaseUrl
+    simphonyBaseUrl,
+    employeeObjectNumber
   );
 
   const headers = {
