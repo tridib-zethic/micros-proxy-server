@@ -161,7 +161,7 @@ const getMenuItemDetailsRequest = async (
         .then((res) => {
           menuDefinitions =
             res.ArrayOfDbMenuItemDefinition.DbMenuItemDefinition;
-          log.info("*** Menu Item Definition ***", menuDefinitions);
+          // log.info("*** Menu Item Definition ***", menuDefinitions);
         })
         .catch((err) => {
           log.error(
@@ -264,7 +264,7 @@ const getMenuItemDetailsRequest = async (
       parseItemClassXml(res.data)
         .then((response) => {
           menuItemClass = response.ArrayOfDbMenuItemClass.DbMenuItemClass;
-          log.info("*** Menu class ***", menuItemClass);
+          // log.info("*** Menu class ***", menuItemClass);
         })
         .catch((error) => {
           log.error("Menu Item Class Parse Error", error);
