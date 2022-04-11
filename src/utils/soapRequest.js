@@ -20,6 +20,7 @@ const createNewCheckRequestBody = (revenueCenterItems, employeeObjectNum) => {
     schedule_time: revenueCenterItems.schedule_time,
     schedule_day: revenueCenterItems.schedule_day,
     location_name: revenueCenterItems.location_name,
+    check_id: revenueCenterItems.check_id,
   };
   if (orderItems) {
     let tempOrderItems = {};
@@ -69,7 +70,7 @@ const createSoapRequestBody = (
       <CheckDateToFire>${date.toISOString()}</CheckDateToFire>
       <CheckEmployeeObjectNum>${employeeObjectNum}</CheckEmployeeObjectNum>
       <CheckGuestCount>0</CheckGuestCount>
-      <CheckID />
+      <CheckID>${orderInformations["check_id"]}</CheckID>
       <CheckNum>0</CheckNum>
       <CheckOrderType>1</CheckOrderType>
       <CheckRevenueCenterID>${
