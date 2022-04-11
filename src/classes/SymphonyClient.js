@@ -80,7 +80,7 @@ const getRevenueCentersRequest = (data = {}) => {
         .catch((err) => log.error("XML Parse Error: ", err));
     })
     .catch((error) => {
-      log.error("SymphonyClient.js - Line:82", error?.response?.data);
+      log.error("SymphonyClient.js - Line:82", error);
     });
 };
 
