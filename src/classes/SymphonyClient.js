@@ -6,10 +6,10 @@ const {
   createGetMenuItemsRequestBody,
   createGetDefinitionsRequestBody,
   createGetPriceRequestBody,
-  getSimphonyMenuItemsDefinition,
-  getSimphonyMenuItemCategory,
-  getSimphonyMenuItemConfigurations,
-  getSimphonyMenuItemClasses,
+  // getSimphonyMenuItemsDefinition,
+  // getSimphonyMenuItemCategory,
+  // getSimphonyMenuItemConfigurations,
+  // getSimphonyMenuItemClasses,
 } = require("../utils/soapRequest");
 const {
   parseXml,
@@ -33,6 +33,11 @@ const getRevenueCentersRequest = (data = {}) => {
   simphonyBaseUrl = data.micros_base_url;
   revenueCenterId = data.micros_revenue_center;
   employeeObjectNumber = data.micros_employee_id;
+  // const symphonyConfig = {
+  //   simphonyBaseUrl: data.micros_base_url,
+  //   revenueCenterId: data.micros_revenue_center,
+  //   employeeObjectNumber: data.micros_employee_id,
+  // };
 
   let hotel_id = 2;
   if (data?.hotel_id) {
@@ -95,18 +100,18 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
     simphonyBaseUrl
   );
 
-  const soapRequestMenuDefinition = getSimphonyMenuItemsDefinition(
-    revenueCenter,
-    simphonyBaseUrl
-  );
-  const soapRequestMenuCategory = getSimphonyMenuItemCategory(
-    revenueCenter,
-    simphonyBaseUrl
-  );
-  const soapRequestMenuClass = getSimphonyMenuItemClasses(
-    revenueCenter,
-    simphonyBaseUrl
-  );
+  // const soapRequestMenuDefinition = getSimphonyMenuItemsDefinition(
+  //   revenueCenter,
+  //   simphonyBaseUrl
+  // );
+  // const soapRequestMenuCategory = getSimphonyMenuItemCategory(
+  //   revenueCenter,
+  //   simphonyBaseUrl
+  // );
+  // const soapRequestMenuClass = getSimphonyMenuItemClasses(
+  //   revenueCenter,
+  //   simphonyBaseUrl
+  // );
 
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
@@ -117,9 +122,9 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
   let menuItemElements = [];
   let priceDetailsArray = [];
 
-  let menuItemDefinitions = [];
-  let menuItemCategories = [];
-  let menuItemConfigurations = [];
+  // let menuItemDefinitions = [];
+  // let menuItemCategories = [];
+  // let menuItemConfigurations = [];
 
   let menuItems = [];
 
@@ -199,47 +204,47 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
       );
     });
 
-  // Get menu item definitions
-  await axios
-    .post(simphonyEndpoint, soapRequestMenuDefinition, {
-      headers,
-    })
-    .then((res) => {
-      log.info("*** Menu Definitions ***");
-      // log.info(res.data);
-    })
-    .catch((err) => {
-      log.error("xxx Menu Item Definition Error xxx");
-      log.error(err);
-    });
+  // // Get menu item definitions
+  // await axios
+  //   .post(simphonyEndpoint, soapRequestMenuDefinition, {
+  //     headers,
+  //   })
+  //   .then((res) => {
+  //     log.info("*** Menu Definitions ***");
+  //     // log.info(res.data);
+  //   })
+  //   .catch((err) => {
+  //     log.error("xxx Menu Item Definition Error xxx");
+  //     log.error(err);
+  //   });
 
-  // Get menu item categories
-  await axios
-    .post(simphonyEndpoint, soapRequestMenuCategory, {
-      headers,
-    })
-    .then((res) => {
-      log.info("*** Menu Categories ***");
-      // log.info(res.data);
-    })
-    .catch((err) => {
-      log.error("xxx Menu Item Category Error xxx");
-      log.error(err);
-    });
+  // // Get menu item categories
+  // await axios
+  //   .post(simphonyEndpoint, soapRequestMenuCategory, {
+  //     headers,
+  //   })
+  //   .then((res) => {
+  //     log.info("*** Menu Categories ***");
+  //     // log.info(res.data);
+  //   })
+  //   .catch((err) => {
+  //     log.error("xxx Menu Item Category Error xxx");
+  //     log.error(err);
+  //   });
 
-  // Get menu item class
-  await axios
-    .post(simphonyEndpoint, soapRequestMenuClass, {
-      headers,
-    })
-    .then((res) => {
-      log.info("*** Menu class ***");
-      // log.info(res.data);
-    })
-    .catch((err) => {
-      log.error("xxx Menu Item class Error xxx");
-      log.error(err);
-    });
+  // // Get menu item class
+  // await axios
+  //   .post(simphonyEndpoint, soapRequestMenuClass, {
+  //     headers,
+  //   })
+  //   .then((res) => {
+  //     log.info("*** Menu class ***");
+  //     // log.info(res.data);
+  //   })
+  //   .catch((err) => {
+  //     log.error("xxx Menu Item class Error xxx");
+  //     log.error(err);
+  //   });
 
   // Get file updates
   await menuItemElements.forEach((item, index) => {
@@ -270,10 +275,11 @@ const openCheck = (items) => {
   simphonyBaseUrl = items.micros_base_url;
   revenueCenterId = items.micros_revenue_center;
   employeeObjectNumber = items.micros_employee_id;
+
   // array of check request body strings
   let checks = [];
   if (items.orders) {
-    checks = createNewCheckRequestBody(items);
+    checks = createNewCheckRequestBody(items, employeeObjectNumber);
   }
   let headers = {
     "Content-Type": "text/xml;charset=UTF-8",
@@ -298,4 +304,5 @@ const openCheck = (items) => {
   }
 };
 
-module.exports = { openCheck, getRevenueCentersRequest, employeeObjectNumber };
+// module.exports = { openCheck, getRevenueCentersRequest, employeeObjectNumber };
+module.exports = { openCheck, getRevenueCentersRequest };

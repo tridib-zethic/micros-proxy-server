@@ -1,9 +1,9 @@
-const { employeeObjectNumber } = require("../classes/SymphonyClient.js");
-const employeeObjectNum = employeeObjectNumber;
+// const { employeeObjectNumber } = require("../classes/SymphonyClient.js");
+// const employeeObjectNum = employeeObjectNumber;
 const log = require("electron-log");
 
 // Create soap request strings for simphony post, return array of strings
-const createNewCheckRequestBody = (revenueCenterItems) => {
+const createNewCheckRequestBody = (revenueCenterItems, employeeObjectNum) => {
   let checks = [];
   const orderItems = revenueCenterItems.orders;
   const orderInformations = {
@@ -39,7 +39,8 @@ const createNewCheckRequestBody = (revenueCenterItems) => {
         createSoapRequestBody(
           tempOrderItems,
           tempOrderItems[objectProperty],
-          orderInformations
+          orderInformations,
+          employeeObjectNum
         )
       );
     }
@@ -51,7 +52,12 @@ const createNewCheckRequestBody = (revenueCenterItems) => {
   }
 };
 
-const createSoapRequestBody = (items, orderItems, orderInformations) => {
+const createSoapRequestBody = (
+  items,
+  orderItems,
+  orderInformations,
+  employeeObjectNum
+) => {
   const date = new Date();
 
   const additionalMainProducts = [];
