@@ -19,6 +19,7 @@ const {
   parseRevenueCentersXmlResponse,
   formatRevenueCenterArray,
   formatRevenueCenterArrayElements,
+  parseItemClassXml,
 } = require("../utils/xml");
 const { postRevenueCenters, postMenuItems } = require("./SabaApiClient");
 
@@ -145,6 +146,7 @@ const getMenuItemDetailsRequest = async (
   // let menuItemDefinitions = [];
   // let menuItemCategories = [];
   // let menuItemConfigurations = [];
+  let menuItemClass = [];
 
   let menuItems = [];
 
@@ -159,6 +161,7 @@ const getMenuItemDetailsRequest = async (
         .then((res) => {
           menuDefinitions =
             res.ArrayOfDbMenuItemDefinition.DbMenuItemDefinition;
+          log.info("*** Menu Item Definition ***", menuDefinitions);
         })
         .catch((err) => {
           log.error(
@@ -258,8 +261,16 @@ const getMenuItemDetailsRequest = async (
       headers,
     })
     .then((res) => {
-      log.info("*** Menu class ***");
-      log.info(res.data);
+      parseItemClassXml(res.data)
+        .then((response) => {
+          menuItemClass = response.ArrayOfDbMenuItemClass.DbMenuItemClass;
+          log.info("*** Menu class ***", menuItemClass);
+        })
+        .catch((error) => {
+          log.error("Menu Item Class Parse Error", error);
+        });
+      // log.info("*** Menu class ***");
+      // log.info(res.data);
     })
     .catch((err) => {
       log.error("xxx Menu Item class Error xxx");
