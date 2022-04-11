@@ -70,8 +70,6 @@ const getRevenueCentersRequest = (data = {}) => {
             res.ArrayOfDbRvcConfiguration.DbRvcConfiguration
           );
 
-          log.info("Formatted revenue centers", formattedRevenueCenters);
-
           // send revenue centers name and ids to api server
           postRevenueCenters(formattedRevenueCenters, hotel_id);
 
@@ -81,7 +79,7 @@ const getRevenueCentersRequest = (data = {}) => {
         .catch((err) => log.error("XML Parse Error: ", err));
     })
     .catch((error) => {
-      log.error("SymphonyClient.js - Line:59", error);
+      log.error("SymphonyClient.js - Line:82", error?.response?.data);
     });
 };
 
@@ -161,14 +159,14 @@ const getMenuItemDetailsRequest = async (
         })
         .catch((err) => {
           log.error(
-            "MICROS Menu Definitions XML Parse Error: (SymphonyClient.js - Line:144)",
+            "MICROS Menu Definitions XML Parse Error: (SymphonyClient.js - Line:162)",
             err
           );
         });
     })
     .catch((error) => {
       log.error(
-        "MICROS Menu Definitions Fetch Error: (SymphonyClient.js - Line:147)",
+        "MICROS Menu Definitions Fetch Error: (SymphonyClient.js - Line:169)",
         error
       );
     });
@@ -186,14 +184,14 @@ const getMenuItemDetailsRequest = async (
         })
         .catch((err) => {
           log.error(
-            "MICROS Menu Items XML Parse Error: (SymphonyClient.js - Line:153)",
+            "MICROS Menu Items XML Parse Error: (SymphonyClient.js - Line:187)",
             err
           );
         });
     })
     .catch((error) => {
       log.error(
-        "MICROS Menu Items Fetch Error: (SymphonyClient.js - Line:160)",
+        "MICROS Menu Items Fetch Error: (SymphonyClient.js - Line:194)",
         error
       );
     });
@@ -211,14 +209,14 @@ const getMenuItemDetailsRequest = async (
         })
         .catch((err) => {
           log.error(
-            "MICROS Menu Price XML Parse Error: (SymphonyClient.js - Line:178)",
+            "MICROS Menu Price XML Parse Error: (SymphonyClient.js - Line:212)",
             err
           );
         });
     })
     .catch((error) => {
       log.error(
-        "MICROS Menu Price Fetch Error: (SymphonyClient.js - Line:185)",
+        "MICROS Menu Price Fetch Error: (SymphonyClient.js - Line:219)",
         error
       );
     });
@@ -317,7 +315,7 @@ const openCheck = (items) => {
           log.info("success", response.data);
         })
         .catch((error) => {
-          log.error("SymphonyClient.js line:275", error);
+          log.error("SymphonyClient.js line:318", error);
         });
     });
   }
