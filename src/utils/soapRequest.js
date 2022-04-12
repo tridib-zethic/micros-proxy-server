@@ -78,13 +78,8 @@ const createSoapRequestBody = (
         <string>Name: ${orderInformations["customer_name"]}</string>
         <string>Payment: ${orderInformations["payment_method"]}</string>
         <string>Number #: ${orderInformations["room_number"]}</string>
-        <string>Schedule: ${orderInformations["schedule_time"]} ${
-    orderInformations["schedule_day"]
-  }</string>
+        <string>Menu #: ${orderInformations["location_name"]}</string>
         <string>Deliver To: ${orderInformations["delivery_location"]}</string>
-        <string>Taxes: ${orderInformations["taxes"]}</string>
-        <string>Service Charge: ${orderInformations["svc"]}</string>
-        <string>Tray Charges: ${orderInformations["tray_charges"]}</string>
         <string>Special Instructions: ${
           orderInformations["order_instruction"]
         }</string>
