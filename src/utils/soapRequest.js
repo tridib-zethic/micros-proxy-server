@@ -71,7 +71,7 @@ const createSoapRequestBody = (
       <CheckEmployeeObjectNum>${employeeObjectNum}</CheckEmployeeObjectNum>
       <CheckGuestCount>0</CheckGuestCount>
       <CheckID>${orderInformations["check_id"]}</CheckID>
-      <CheckNum>${orderInformations["check_id"]}</CheckNum>
+      <CheckNum>0</CheckNum>
       <CheckOrderType>1</CheckOrderType>
       <CheckRevenueCenterID>${
         orderItems[0]["revenue_center"]

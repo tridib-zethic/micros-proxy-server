@@ -1,8 +1,8 @@
 {
   "name": "saba-micros-proxy",
-  "productName": "SABA Micros Proxy",
-  "version": "1.0.17",
-  "description": "SABA Micros Proxy Middleman",
+  "productName": "SABA MICROS Proxy",
+  "version": "1.0.20",
+  "description": "SABA MICROS Proxy Middleman",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
