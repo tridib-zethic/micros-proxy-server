@@ -1,8 +1,8 @@
 {
-  "name": "saba-proxy-app",
-  "productName": "SABA Micros Proxy",
-  "version": "1.0.14",
-  "description": "SABA Micros Application",
+  "name": "saba-micros-proxy",
+  "productName": "SABA MICROS Proxy",
+  "version": "1.0.20",
+  "description": "SABA MICROS Proxy Middleman",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
@@ -51,6 +51,7 @@
     "electron-log": "^4.4.1",
     "electron-squirrel-startup": "^1.0.0",
     "electron-unhandled": "^3.0.2",
+    "electron-wix-msi": "^4.0.0",
     "keytar": "^7.7.0",
     "path": "^0.12.7",
     "psl": "^1.8.0",

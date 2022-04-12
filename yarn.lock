@@ -7,6 +7,11 @@
   resolved "https://registry.npmjs.org/7zip-bin/-/7zip-bin-5.1.1.tgz"
   integrity sha512-sAP4LldeWNz0lNzmTird3uWfFDWWTeg6V/MsmyyLR9X1idwKBWIgt/ZvinqQldJm3LecKEs1emkbquO6PCiLVQ==
 
+"@bitdisaster/exe-icon-extractor@^1.0.10":
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/@bitdisaster/exe-icon-extractor/-/exe-icon-extractor-1.0.10.tgz#3f5107864254c351db1db5c5922452d9d4154e8f"
+  integrity sha512-iTZ8cVGZ5dglNRyFdSj8U60mHIrC8XNIuOHN/NkM5/dQP4nsmpyqeQTAADLLQgoFCNJD+DiwQCv8dR2cCeWP4g==
+
 "@deepstream/client@^5.2.4":
   version "5.2.5"
   resolved "https://registry.npmjs.org/@deepstream/client/-/client-5.2.5.tgz"
@@ -1374,6 +1379,13 @@ debug@^4.1.1:
   dependencies:
     ms "2.1.2"
 
+debug@^4.3.4:
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.4.tgz#1319f6579357f2338d3337d2cdd4914bb5dcc865"
+  integrity sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==
+  dependencies:
+    ms "2.1.2"
+
 decamelize@^1.1.2, decamelize@^1.2.0:
   version "1.2.0"
   resolved "https://registry.npmjs.org/decamelize/-/decamelize-1.2.0.tgz"
@@ -1710,6 +1722,22 @@ electron-winstaller@^5.0.0:
     lodash.template "^4.2.2"
     temp "^0.9.0"
 
+electron-wix-msi@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/electron-wix-msi/-/electron-wix-msi-4.0.0.tgz#31bd82c2d717e40f63a5c22ef20f410224e0fab3"
+  integrity sha512-LEQr5IQc8w7efIVt5tIQA0efew4slffW6tfDmbfpWDSR74HnfTkkfwBAwj9vMLT4q62cO4NnkVTEuMe7FxWMTw==
+  dependencies:
+    debug "^4.3.4"
+    fs-extra "^10.0.1"
+    klaw "^4.0.1"
+    lodash "^4.17.21"
+    rcedit "^3.0.1"
+    rcinfo "^0.1.3"
+    semver "^7.3.5"
+    uuid "^8.3.2"
+  optionalDependencies:
+    "@bitdisaster/exe-icon-extractor" "^1.0.10"
+
 electron@14.0.0:
   version "14.0.0"
   resolved "https://registry.npmjs.org/electron/-/electron-14.0.0.tgz"
@@ -1997,6 +2025,15 @@ fs-extra@^10.0.0:
   version "10.0.0"
   resolved "https://registry.npmjs.org/fs-extra/-/fs-extra-10.0.0.tgz"
   integrity sha512-C5owb14u9eJwizKGdchcDUQeFtlSHHthBk8pbX9Vc1PFZrLombudjDnNns88aYslCyF6IY5SUw3Roz6xShcEIQ==
+  dependencies:
+    graceful-fs "^4.2.0"
+    jsonfile "^6.0.1"
+    universalify "^2.0.0"
+
+fs-extra@^10.0.1:
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-10.0.1.tgz#27de43b4320e833f6867cc044bfce29fdf0ef3b8"
+  integrity sha512-NbdoVMZso2Lsrn/QwLXOy6rm0ufY2zEOKCDzJR/0kBsb0E6qed0P3iYK+Ath3BfvXEeu4JhEtXLgILx5psUfag==
   dependencies:
     graceful-fs "^4.2.0"
     jsonfile "^6.0.1"
@@ -2755,6 +2792,11 @@ keyv@^4.0.0:
   integrity sha512-zdGa2TOpSZPq5mU6iowDARnMBZgtCqJ11dJROFi6tg6kTn4nuUdU09lFyLFSaHrWqpIJ+EBq4E8/Dc0Vx5vLdA==
   dependencies:
     json-buffer "3.0.1"
+
+klaw@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/klaw/-/klaw-4.0.1.tgz#8dc6f5723f05894e8e931b516a8ff15c2976d368"
+  integrity sha512-pgsE40/SvC7st04AHiISNewaIMUbY5V/K8b21ekiPiFoYs/EYSdsGa+FJArB1d441uq4Q8zZyIxvAzkGNlBdRw==
 
 latest-version@^5.1.0:
   version "5.1.0"
@@ -3641,12 +3683,7 @@ protobufjs@^6.10.2, protobufjs@^6.9.0:
     "@types/node" ">=13.7.0"
     long "^4.0.0"
 
-psl@^1.1.28:
-  version "1.8.0"
-  resolved "https://registry.npmjs.org/psl/-/psl-1.8.0.tgz"
-  integrity sha512-RIdOzyoavK+hA18OGGWDqUTsCLhtA7IcZ/6NCs4fFJaHBDab+pDDmDIByWFRQJq2Cd7r1OoQxBGKOaztq+hjIQ==
-
-psl@^1.8.0:
+psl@^1.1.28, psl@^1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/psl/-/psl-1.8.0.tgz#9326f8bcfb013adcc005fdff056acce020e51c24"
   integrity sha512-RIdOzyoavK+hA18OGGWDqUTsCLhtA7IcZ/6NCs4fFJaHBDab+pDDmDIByWFRQJq2Cd7r1OoQxBGKOaztq+hjIQ==
@@ -3709,6 +3746,11 @@ rcedit@^3.0.1:
   integrity sha512-XM0Jv40/y4hVAqj/MO70o/IWs4uOsaSoo2mLyk3klFDW+SStLnCtzuQu+1OBTIMGlM8CvaK9ftlYCp6DJ+cMsw==
   dependencies:
     cross-spawn-windows-exe "^1.1.0"
+
+rcinfo@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/rcinfo/-/rcinfo-0.1.3.tgz#ac36832d1f1e5970c6379e571480ea5826511fc6"
+  integrity sha1-rDaDLR8eWXDGN55XFIDqWCZRH8Y=
 
 read-config-file@6.2.0:
   version "6.2.0"
@@ -4618,6 +4660,11 @@ uuid@^3.3.2:
   version "3.4.0"
   resolved "https://registry.npmjs.org/uuid/-/uuid-3.4.0.tgz"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
+
+uuid@^8.3.2:
+  version "8.3.2"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
+  integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
 
 validate-npm-package-license@^3.0.1:
   version "3.0.4"

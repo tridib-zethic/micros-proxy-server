@@ -1,8 +1,9 @@
-const employeeObjectNum = `9001`;
+// const { employeeObjectNumber } = require("../classes/SymphonyClient.js");
+// const employeeObjectNum = employeeObjectNumber;
 const log = require("electron-log");
 
 // Create soap request strings for simphony post, return array of strings
-const createNewCheckRequestBody = (revenueCenterItems) => {
+const createNewCheckRequestBody = (revenueCenterItems, employeeObjectNum) => {
   let checks = [];
   const orderItems = revenueCenterItems.orders;
   const orderInformations = {
@@ -19,6 +20,7 @@ const createNewCheckRequestBody = (revenueCenterItems) => {
     schedule_time: revenueCenterItems.schedule_time,
     schedule_day: revenueCenterItems.schedule_day,
     location_name: revenueCenterItems.location_name,
+    check_id: revenueCenterItems.check_id,
   };
   if (orderItems) {
     let tempOrderItems = {};
@@ -38,7 +40,8 @@ const createNewCheckRequestBody = (revenueCenterItems) => {
         createSoapRequestBody(
           tempOrderItems,
           tempOrderItems[objectProperty],
-          orderInformations
+          orderInformations,
+          employeeObjectNum
         )
       );
     }
@@ -46,7 +49,12 @@ const createNewCheckRequestBody = (revenueCenterItems) => {
   }
 };
 
-const createSoapRequestBody = (items, orderItems, orderInformations) => {
+const createSoapRequestBody = (
+  items,
+  orderItems,
+  orderInformations,
+  employeeObjectNum
+) => {
   const date = new Date();
 
   const additionalMainProducts = [];
@@ -58,7 +66,7 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
       <CheckDateToFire>${date.toISOString()}</CheckDateToFire>
       <CheckEmployeeObjectNum>${employeeObjectNum}</CheckEmployeeObjectNum>
       <CheckGuestCount>0</CheckGuestCount>
-      <CheckID />
+      <CheckID>${orderInformations["check_id"]}</CheckID>
       <CheckNum>0</CheckNum>
       <CheckOrderType>1</CheckOrderType>
       <CheckRevenueCenterID>${
@@ -215,6 +223,7 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
     });
 
     let itemXml = "";
+    // <MiOverridePrice>${elementTempOpt['unit_price']}</MiOverridePrice>
     additionalMainProducts.forEach((elementTempOpt) => {
       let tempItemXml = `<SimphonyPosApi_MenuItemEx>
         <Condiments/>
@@ -248,16 +257,20 @@ const createSoapRequestBody = (items, orderItems, orderInformations) => {
 };
 
 // Create XML Soap request for retrieving list of revenue centers
-const createGetRevenueCenterRequestBody = () => {
+const createGetRevenueCenterRequestBody = (
+  simphonyBaseUrl,
+  revenueCenterId,
+  employeeObjectNum
+) => {
   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
-    <GetConfigurationInfo xmlns="http://172.40.104.8:8080/EGateway/">
+    <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
       <vendorCode />
       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
       <configurationInfoType>
         <int>11</int>
       </configurationInfoType>
-      <revenueCenter>402</revenueCenter>
+      <revenueCenter>${revenueCenterId}</revenueCenter>
       <configInfoResponse />
     </GetConfigurationInfo>
   </soap:Body>
@@ -265,10 +278,14 @@ const createGetRevenueCenterRequestBody = () => {
 };
 
 // Create XML Soap request for retrieving list of menu items
-const createGetMenuItemsRequestBody = (revenueCenter) => {
+const createGetMenuItemsRequestBody = (
+  revenueCenter,
+  simphonyBaseUrl,
+  employeeObjectNum
+) => {
   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
-    <GetConfigurationInfo xmlns="http://172.40.104.8:8080/EGateway/">
+    <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
       <vendorCode />
       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
       <configurationInfoType>
@@ -282,10 +299,14 @@ const createGetMenuItemsRequestBody = (revenueCenter) => {
 };
 
 // Create XML Soap request for retrieving list of definitions
-const createGetDefinitionsRequestBody = (revenueCenter) => {
+const createGetDefinitionsRequestBody = (
+  revenueCenter,
+  simphonyBaseUrl,
+  employeeObjectNum
+) => {
   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
-    <GetConfigurationInfo xmlns="http://172.40.104.8:8080/EGateway/">
+    <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
       <vendorCode />
       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
       <configurationInfoType>
@@ -299,14 +320,102 @@ const createGetDefinitionsRequestBody = (revenueCenter) => {
 };
 
 // Create XML Soap request for retrieving list of price details
-const createGetPriceRequestBody = (revenueCenter) => {
+const createGetPriceRequestBody = (
+  revenueCenter,
+  simphonyBaseUrl,
+  employeeObjectNum
+) => {
   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
-    <GetConfigurationInfo xmlns="http://172.40.104.8:8080/EGateway/">
+    <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
       <vendorCode />
       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
       <configurationInfoType>
         <int>2</int>
+      </configurationInfoType>
+      <revenueCenter>${revenueCenter}</revenueCenter>
+      <configInfoResponse />
+    </GetConfigurationInfo>
+  </soap:Body>
+</soap:Envelope>`;
+};
+
+// // Get Menu Items Definition
+// const getSimphonyMenuItemsDefinition = (
+//   revenueCenter,
+//   simphonyBaseUrl,
+//   employeeObjectNum
+// ) => {
+//   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+//   <soap:Body>
+//     <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
+//       <vendorCode />
+//       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
+//       <configurationInfoType>
+//         <int>8</int>
+//       </configurationInfoType>
+//       <revenueCenter>${revenueCenter}</revenueCenter>
+//       <configInfoResponse />
+//     </GetConfigurationInfo>
+//   </soap:Body>
+// </soap:Envelope>`;
+// };
+
+// // Get Menu Item Category
+// const getSimphonyMenuItemCategory = (
+//   revenueCenter,
+//   simphonyBaseUrl,
+//   employeeObjectNum
+// ) => {
+//   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+//   <soap:Body>
+//     <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
+//       <vendorCode />
+//       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
+//       <configurationInfoType>
+//         <int>9</int>
+//       </configurationInfoType>
+//       <revenueCenter>${revenueCenter}</revenueCenter>
+//       <configInfoResponse />
+//     </GetConfigurationInfo>
+//   </soap:Body>
+// </soap:Envelope>`;
+// };
+
+// // Get Menu Item Class
+// const getSimphonyMenuItemConfigurations = (
+//   revenueCenter,
+//   simphonyBaseUrl,
+//   employeeObjectNum
+// ) => {
+//   return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+//   <soap:Body>
+//     <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
+//       <vendorCode />
+//       <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
+//       <configurationInfoType>
+//         <int>9</int>
+//       </configurationInfoType>
+//       <revenueCenter>${revenueCenter}</revenueCenter>
+//       <configInfoResponse />
+//     </GetConfigurationInfo>
+//   </soap:Body>
+// </soap:Envelope>`;
+// };
+
+// // Get Menu Item Class
+const getSimphonyMenuItemClasses = (
+  revenueCenter,
+  simphonyBaseUrl,
+  employeeObjectNum
+) => {
+  return `<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <GetConfigurationInfo xmlns="${simphonyBaseUrl}">
+      <vendorCode />
+      <employeeObjectNum>${employeeObjectNum}</employeeObjectNum>
+      <configurationInfoType>
+        <int>3</int>
       </configurationInfoType>
       <revenueCenter>${revenueCenter}</revenueCenter>
       <configInfoResponse />
@@ -321,4 +430,8 @@ module.exports = {
   createGetMenuItemsRequestBody,
   createGetDefinitionsRequestBody,
   createGetPriceRequestBody,
+  // getSimphonyMenuItemsDefinition,
+  // getSimphonyMenuItemCategory,
+  // getSimphonyMenuItemConfigurations,
+  getSimphonyMenuItemClasses,
 };

@@ -5,11 +5,18 @@ const keytar = require("keytar");
 const { authHeader } = require("../utils/auth");
 const { hotelDashboardURL } = require("../utils/constants");
 
-const hotelBaseUrl = hotelDashboardURL();
-let url = "https://demo.dashboard.chatbothotels.com/api/v1";
+const { hotelBaseUrl, hotelBaseUrlError } = Promise.resolve(
+  hotelDashboardURL
+).then((result) => result.data);
+
+let defaultUrl = "https://demo.dashboard.chatbothotels.com/api/v1";
+
+let url = "";
 
 if (hotelBaseUrl) {
   url = hotelBaseUrl + "/api/v1";
+} else {
+  url = defaultUrl;
 }
 
 const clientId = "1";
@@ -26,7 +33,7 @@ const login = (data, pusher, pusherClient, event, win) => {
       },
     },
   });
-  url = `${data.hotel}/api`;
+  url = `${data.hotel}/api/v1`;
   keytar.setPassword("login", "hotel", data.hotel);
   data["grant_type"] = "password";
   data["scope"] = "*";
@@ -57,8 +64,10 @@ const login = (data, pusher, pusherClient, event, win) => {
         win.hide();
       }, 5000);
     })
-    .catch(function (error) {
-      log.error("Login error in saba backend", error);
+    .catch((error) => {
+      log.info("Status Code: ", error?.response?.status);
+      // log.info("login payload", JSON.stringify(data));
+      log.error("SabaApiClient.js - line:70", error?.response?.data);
     });
 };
 
@@ -88,7 +97,15 @@ const postRevenueCenters = async (revenueCenters, hotel_id = 2) => {
       );
     })
     .catch((error) => {
-      log.error("Error storing revenue centers in saba backend", error);
+      log.info("Status Code: ", error?.response?.status);
+      // log.info(
+      //   "revenue centers payload",
+      //   JSON.stringify({
+      //     hotel_id: hotel_id,
+      //     items: revenueCenters,
+      //   })
+      // );
+      log.error("SabaApiClient.js - line:105", error?.response?.data);
     });
 };
 
@@ -115,7 +132,15 @@ const postMenuItems = async (menuItems, revenueCenter = 11, hotel_id = 2) => {
       log.info("Success for menu items store in saba backend", response.data);
     })
     .catch((error) => {
-      log.error("error storing menu items to saba backend", error);
+      log.info("Status Code: ", error?.response?.status);
+      // log.info(
+      //   "menu items payload",
+      //   JSON.stringify({
+      //     hotel_id: hotel_id,
+      //     items: menuItems,
+      //   })
+      // );
+      log.error("SabaApiClient.js - line:140", error?.response?.data);
     });
 };
 

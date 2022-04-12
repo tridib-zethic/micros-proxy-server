@@ -79,16 +79,19 @@ body {
   padding: 2em;
 }
 .log-form h2 {
-  color: #5d5d5d;
+  /* color: #5d5d5d; */
+  color: #ffffff;
   font-family: "open sans condensed";
   font-size: 1.35em;
   display: block;
-  background: #2a2a2a;
+  /* background: #2a2a2a; */
+  background: #ed1566;
   width: 100%;
   text-transform: uppercase;
   padding: 0.75em 1em 0.75em 1.5em;
   box-shadow: inset 0px 1px 1px rgba(255, 255, 255, 0.05);
-  border: 1px solid #1d1d1d;
+  /* border: 1px solid #1d1d1d; */
+  border: 1px solid #aa134a;
   margin: 0;
   font-weight: 200;
 }
@@ -107,19 +110,25 @@ body {
   outline: none;
 }
 .log-form .btn {
+  width: 100%;
+  border-radius: 4px;
   display: inline-block;
-  background: #1fb5bf;
-  border: 1px solid #1ba0a9;
+  /* background: #1fb5bf; */
+  background: #ed1566;
+  /* border: 1px solid #1ba0a9; */
+  border: 1px solid #ca1457;
   padding: 0.5em 2em;
   color: white;
   margin-right: 0.5em;
   box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.2);
 }
 .log-form .btn:hover {
-  background: #23cad5;
+  /* background: #23cad5; */
+  background: #ca1457;
 }
 .log-form .btn:active {
-  background: #1fb5bf;
+  /* background: #1fb5bf; */
+  background: #ca1457;
   box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.1);
 }
 .log-form .btn:focus {

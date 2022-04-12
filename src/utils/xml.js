@@ -139,6 +139,52 @@ const parsePriceXml = (xmlData) => {
  * @param string xmlData
  * @returns obj
  */
+const parseItemClassXml = (xmlData) => {
+  // pass options to remove soap prefixes
+  var options = {
+    explicitArray: false,
+    tagNameProcessors: [xml2js.processors.stripPrefix],
+  };
+  let resp = new Promise((resolve, reject) => {
+    xml2js.parseString(xmlData, options, (err, result) => {
+      // catch error
+      if (err) {
+        reject(err);
+      }
+
+      // check if keys exists
+      if (
+        !checkNestedParameter(
+          result,
+          "Envelope",
+          "Body",
+          "GetConfigurationInfoResponse",
+          "configInfoResponse",
+          "MenuItemClass"
+        )
+      ) {
+        reject("Unexpected Response");
+      }
+
+      // parse again to retrieve menu items
+      xml2js
+        .parseStringPromise(
+          result.Envelope.Body.GetConfigurationInfoResponse.configInfoResponse
+            .MenuItemClass
+        )
+        .then((res) => resolve(res))
+        .catch((err) => reject(err));
+    });
+  });
+
+  return resp;
+};
+
+/**
+ * Parse XML response
+ * @param string xmlData
+ * @returns obj
+ */
 const parseDefinitionXml = (xmlData) => {
   // pass options to remove soap prefixes
   var options = {
@@ -236,6 +282,16 @@ const formatRevenueCenterArray = (data) => {
   });
 };
 
+// Extract Revenue centers from response data
+const formatRevenueCenterArrayElements = (data) => {
+  return data.map((menu) => {
+    return {
+      name: menu.Name[0].StringText[0],
+      revenue_center_id: menu.ObjectNumber[0],
+    };
+  });
+};
+
 module.exports = {
   parseXml,
   parsePriceXml,
@@ -244,4 +300,6 @@ module.exports = {
   parseRevenueCentersXmlResponse,
   formatRevenueCenterArray,
   parseDefinitionXml,
+  formatRevenueCenterArrayElements,
+  parseItemClassXml,
 };

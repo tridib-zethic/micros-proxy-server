@@ -27,14 +27,14 @@ if (tempHotel) {
 
 const autoLoginWithRefreshToken = async () => {
   const hotel = await hotelDashboardURL();
-  const url = `${hotel}/api`;
+  const url = `${hotel}/api/v1`;
   const clientId = "1";
   const clientSecret = "MBr4dqsss0Qn4UcXLW3tTWYA5qk2IkevqhEwvDDj";
 
   let data = [];
 
   data["grant_type"] = "refresh_token";
-  data["refresh_token"] = authRefreshToken;
+  data["refresh_token"] = authRefreshToken();
   data["scope"] = "*";
   data["client_id"] = clientId;
   data["client_secret"] = clientSecret;
@@ -66,27 +66,16 @@ const autoLoginWithRefreshToken = async () => {
       await pusher();
     })
     .catch(function (error) {
-      let errMsg = "Unable to login";
-      if (error.response) {
-        // Request made and server responded
-        log.error(error.response.data);
-        if (error?.response?.data?.message) {
-          errMsg = error.response.data.message;
-        }
-      } else if (error.request) {
-        // The request was made but no response was received
-        log.error(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        log.error("Error", error);
-      }
+      log.error("PusherClient.js - line:69", error);
     });
 };
 
 const pusher = async (win = undefined, event = undefined) => {
+  console.log("Pusher initialization");
+
   token = await authHeader();
-  hotel = 'https://fina.dashboard.guest-chat.com';
-  hotelSlug = 'fina';
+  hotel = "https://fina.dashboard.guest-chat.com";
+  hotelSlug = "fina";
 
   if (hotel) {
     // do nothing
@@ -135,10 +124,10 @@ const pusher = async (win = undefined, event = undefined) => {
             callback(null, res.data);
           })
           .catch((err) => {
+            log.error("PusherClient.js - line:125", error);
             if (err.response.status == 401) {
               autoLoginWithRefreshToken();
             } else {
-              log.info("Error", err);
               replyEventHandler("error", "User session ended!");
               callback(new Error(`Error calling auth endpoint: ${err}`), {
                 auth: "",
@@ -157,7 +146,7 @@ const pusher = async (win = undefined, event = undefined) => {
   channel = pusherClient.subscribe(`private-${hotelSlug}-pos`);
 
   channel.bind("pusher:subscription_succeeded", function (status) {
-    log.info("Hello");
+    log.info(`Subscribed to pusher channel: private-${hotelSlug}-pos`);
   });
 
   channel.bind("pusher:subscription_error", function (status) {
@@ -165,11 +154,15 @@ const pusher = async (win = undefined, event = undefined) => {
   });
 
   channel.bind("request.created", function (data) {
-    log.info("request.created", data);
-    openCheck(data);
+    if (requestIds.indexOf(data.check_id) == -1) {
+      log.info("request.created", data);
+      requestIds.push(data.check_id);
+      openCheck(data);
+    }
   });
 
   channel.bind("update.menu", function (data) {
+    log.info("update.menu");
     getRevenueCentersRequest(data);
   });
 };

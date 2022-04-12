@@ -2,13 +2,8 @@ const { app, Menu, Tray, BrowserWindow } = require("electron");
 const AutoLaunch = require("auto-launch");
 const unhandled = require("electron-unhandled");
 const path = require("path");
-const {
-  getRevenueCentersRequest,
-} = require("./classes/SymphonyClient");
 const { login } = require("./classes/SabaApiClient");
 const { ipcMain } = require("electron");
-const log = require("electron-log");
-const keytar = require("keytar");
 const { pusher } = require("./classes/PusherClient");
 
 unhandled();
@@ -16,6 +11,8 @@ unhandled();
 const autoLauncher = new AutoLaunch({
   name: "Saba Micros Integration",
 });
+
+let force_quit = false;
 
 autoLauncher
   .isEnabled()
@@ -38,65 +35,26 @@ app.whenReady().then(() => {
   tray = new Tray(path.join(__dirname, "assets/avatar.png"));
   const contextMenu = Menu.buildFromTemplate([
     {
-      label: "Item Store Request",
-      click: function () {
-        getRevenueCentersRequest();
-      },
-    },
-    {
-      label: "Open Cheque Request",
-      click: function () {
-        openCheck([
-          { item_object_number: 101000001, revenue_center: 10 },
-          { item_object_number: 101000002, revenue_center: 10 },
-          { item_object_number: 101000003, revenue_center: 10 },
-        ]);
-      },
-    },
-    {
       label: "Saba Login Api",
       click: function () {
         win = new BrowserWindow({
           webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
+            nativeWindowOpen: true,
+            nodeIntegrationInWorker: true,
           },
+          icon: __dirname + "/assets/avatar.png",
         });
 
         win.loadFile(path.join(__dirname, "pages/login.html"));
       },
     },
     {
-      label: "Pusher Test",
-      click: async function () {
-        pusher().then((push) => {
-          const channel = push.subscribe("pos");
-          // log.error(push);
-          channel.bind("pusher:subscription_succeeded", function (status) {
-            // Yipee!!
-            // log.info("Hello");
-          });
-
-          channel.bind("pusher:subscription_error", function (status) {
-            log.error(status);
-          });
-
-          channel.bind("request_created", (data) => {
-            log.info(data);
-          });
-        });
-      },
-    },
-    {
-      label: "Test",
-      click: async function () {
-        const pass = await keytar.getPassword("login", "access_token");
-        log.error(pass);
-      },
-    },
-    {
       label: "Exit",
-      click: function () {
+      accelerator: "CmdOrCtrl+Q",
+      click: function (e) {
+        force_quit = true;
         app.quit();
       },
     },
@@ -105,8 +63,20 @@ app.whenReady().then(() => {
   tray.setContextMenu(contextMenu);
 });
 
+app.on("ready", function () {
+  app.on("before-quit", function (e) {
+    if (!force_quit) {
+      e.preventDefault();
+      win.on("close", function (e) {
+        if (!force_quit) {
+          e.preventDefault();
+          win.hide();
+        }
+      });
+    }
+  });
+});
+
 ipcMain.on("login_submit", async (event, arg) => {
-  // login(arg);
   await login(arg, pusher, pusherClient, event, win);
-  // event.returnValue = true;
 });

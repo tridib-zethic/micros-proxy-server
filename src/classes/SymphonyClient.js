@@ -6,31 +6,53 @@ const {
   createGetMenuItemsRequestBody,
   createGetDefinitionsRequestBody,
   createGetPriceRequestBody,
+  // getSimphonyMenuItemsDefinition,
+  // getSimphonyMenuItemCategory,
+  // getSimphonyMenuItemConfigurations,
+  getSimphonyMenuItemClasses,
 } = require("../utils/soapRequest");
 const {
   parseXml,
   parsePriceXml,
   parseDefinitionXml,
-  formatMenuItemsArray,
   formatMenuItemsDetailedArray,
   parseRevenueCentersXmlResponse,
   formatRevenueCenterArray,
+  formatRevenueCenterArrayElements,
+  parseItemClassXml,
 } = require("../utils/xml");
 const { postRevenueCenters, postMenuItems } = require("./SabaApiClient");
 
-const simphonyEndpoint =
-  "http://172.40.104.8:8080/EGateway/SimphonyPosAPIWeb.asmx";
+let simphonyBaseUrl = "http://localhost:8080/EGateway";
+let simphonyEndpoint = `${simphonyBaseUrl}/SimphonyPosAPIWeb.asmx`;
+let simphonyConfigUrl = `${simphonyBaseUrl}/GetConfigurationInfo`;
+let revenueCenterId = "11";
+let employeeObjectNumber = "2130";
 
 // Send request to pos to get list of revenue centers
 const getRevenueCentersRequest = (data = {}) => {
+  // Micros Settings data
+  simphonyBaseUrl = data.micros_base_url;
+  revenueCenterId = data.micros_revenue_center;
+  employeeObjectNumber = data.micros_employee_id;
+  // const symphonyConfig = {
+  //   simphonyBaseUrl: data.micros_base_url,
+  //   revenueCenterId: data.micros_revenue_center,
+  //   employeeObjectNumber: data.micros_employee_id,
+  // };
+
   let hotel_id = 2;
   if (data?.hotel_id) {
     hotel_id = data.hotel_id;
   }
-  const soapRequestBody = createGetRevenueCenterRequestBody();
+  const soapRequestBody = createGetRevenueCenterRequestBody(
+    simphonyBaseUrl,
+    revenueCenterId,
+    employeeObjectNumber
+  );
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
-    SOAPAction: "http://172.40.104.8:8080/EGateway/GetConfigurationInfo",
+    SOAPAction: simphonyConfigUrl,
   };
   axios
     .post(simphonyEndpoint, soapRequestBody, {
@@ -46,71 +68,86 @@ const getRevenueCentersRequest = (data = {}) => {
             res.ArrayOfDbRvcConfiguration.DbRvcConfiguration
           );
 
+          const formattedRevenueCenters = formatRevenueCenterArrayElements(
+            res.ArrayOfDbRvcConfiguration.DbRvcConfiguration
+          );
+
           // send revenue centers name and ids to api server
-          postRevenueCenters(revenueCenters, hotel_id);
+          postRevenueCenters(formattedRevenueCenters, hotel_id);
 
           // fetch and save menu items from all revenue center to api server
-          getAllMenuItems(revenueCenters, hotel_id);
+          getAllMenuItems(revenueCenters, hotel_id, employeeObjectNumber);
         })
         .catch((err) => log.error("XML Parse Error: ", err));
     })
     .catch((error) => {
-      log.error("Revenue center micros fetch error", error);
+      log.error("SymphonyClient.js - Line:82", error);
     });
 };
 
 // Send request to get menu items from array of revenue center
-const getAllMenuItems = (revenueCenters, hotel_id = 2) => {
+const getAllMenuItems = (
+  revenueCenters,
+  hotel_id = 2,
+  employeeObjectNumber
+) => {
   revenueCenters.forEach((revenueCenter) => {
     // getMenuItemRequest(revenueCenter, hotel_id);
-    getMenuItemDetailsRequest(revenueCenter, hotel_id);
+    getMenuItemDetailsRequest(revenueCenter, hotel_id, employeeObjectNumber);
   });
 };
 
 // Send request to get menu item from revenue center no, then save it to backend server
-const getMenuItemRequest = (revenueCenter, hotel_id = 2) => {
-  const soapRequestBody = createGetMenuItemsRequestBody(revenueCenter);
+const getMenuItemDetailsRequest = async (
+  revenueCenter,
+  hotel_id = 2,
+  employeeObjectNumber
+) => {
+  const soapRequestBody1 = createGetPriceRequestBody(
+    revenueCenter,
+    simphonyBaseUrl,
+    employeeObjectNumber
+  );
+  const soapRequestBody2 = createGetMenuItemsRequestBody(
+    revenueCenter,
+    simphonyBaseUrl,
+    employeeObjectNumber
+  );
+  const soapRequestBody3 = createGetDefinitionsRequestBody(
+    revenueCenter,
+    simphonyBaseUrl,
+    employeeObjectNumber
+  );
+
+  // const soapRequestMenuDefinition = getSimphonyMenuItemsDefinition(
+  //   revenueCenter,
+  //   simphonyBaseUrl,
+  // employeeObjectNumber
+  // );
+  // const soapRequestMenuCategory = getSimphonyMenuItemCategory(
+  //   revenueCenter,
+  //   simphonyBaseUrl,
+  // employeeObjectNumber
+  // );
+  const soapRequestMenuClass = getSimphonyMenuItemClasses(
+    revenueCenter,
+    simphonyBaseUrl,
+    employeeObjectNumber
+  );
+
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
-    SOAPAction: "http://172.40.104.8:8080/EGateway/GetConfigurationInfo",
-  };
-
-  axios
-    .post(simphonyEndpoint, soapRequestBody, {
-      headers,
-    })
-    .then((response) => {
-      // parse xml response
-      parseXml(response.data)
-        .then((res) => {
-          const menuItems = res.ArrayOfDbMenuItemMaster.DbMenuItemMaster;
-
-          const menuItemsArray = formatMenuItemsArray(menuItems, revenueCenter);
-
-          // post menu items to saba api
-          postMenuItems(menuItemsArray, revenueCenter, hotel_id);
-        })
-        .catch((err) => log.error("Menu items xml parse error", err));
-    })
-    .catch((error) => {
-      log.error("Menu items micros fetch error", error);
-    });
-};
-
-// Send request to get menu item from revenue center no, then save it to backend server
-const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
-  const soapRequestBody1 = createGetPriceRequestBody(revenueCenter);
-  const soapRequestBody2 = createGetMenuItemsRequestBody(revenueCenter);
-  const soapRequestBody3 = createGetDefinitionsRequestBody(revenueCenter);
-
-  const headers = {
-    "Content-Type": "text/xml;charset=UTF-8",
-    SOAPAction: "http://172.40.104.8:8080/EGateway/GetConfigurationInfo",
+    SOAPAction: simphonyConfigUrl,
   };
 
   let menuDefinitions = [];
   let menuItemElements = [];
   let priceDetailsArray = [];
+
+  // let menuItemDefinitions = [];
+  // let menuItemCategories = [];
+  // let menuItemConfigurations = [];
+  let menuItemClass = [];
 
   let menuItems = [];
 
@@ -126,17 +163,18 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
         .then((res) => {
           menuDefinitions =
             res.ArrayOfDbMenuItemDefinition.DbMenuItemDefinition;
+          // log.info("*** Menu Item Definition ***", menuDefinitions);
         })
         .catch((err) => {
           log.error(
-            "MICROS Menu Definitions XML Parse Error: (SymphonyClient.js - Line:144)",
+            "MICROS Menu Definitions XML Parse Error: (SymphonyClient.js - Line:162)",
             err
           );
         });
     })
     .catch((error) => {
       log.error(
-        "MICROS Menu Definitions Fetch Error: (SymphonyClient.js - Line:147)",
+        "MICROS Menu Definitions Fetch Error: (SymphonyClient.js - Line:169)",
         error
       );
     });
@@ -155,14 +193,14 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
         })
         .catch((err) => {
           log.error(
-            "MICROS Menu Items XML Parse Error: (SymphonyClient.js - Line:162)",
+            "MICROS Menu Items XML Parse Error: (SymphonyClient.js - Line:187)",
             err
           );
         });
     })
     .catch((error) => {
       log.error(
-        "MICROS Menu Items Fetch Error: (SymphonyClient.js - Line:166)",
+        "MICROS Menu Items Fetch Error: (SymphonyClient.js - Line:194)",
         error
       );
     });
@@ -181,16 +219,66 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
         })
         .catch((err) => {
           log.error(
-            "MICROS Menu Price XML Parse Error: (SymphonyClient.js - Line:181)",
+            "MICROS Menu Price XML Parse Error: (SymphonyClient.js - Line:212)",
             err
           );
         });
     })
     .catch((error) => {
       log.error(
-        "MICROS Menu Price Fetch Error: (SymphonyClient.js - Line:185)",
+        "MICROS Menu Price Fetch Error: (SymphonyClient.js - Line:219)",
         error
       );
+    });
+
+  // // Get menu item definitions
+  // await axios
+  //   .post(simphonyEndpoint, soapRequestMenuDefinition, {
+  //     headers,
+  //   })
+  //   .then((res) => {
+  //     log.info("*** Menu Definitions ***");
+  //     // log.info(res.data);
+  //   })
+  //   .catch((err) => {
+  //     log.error("xxx Menu Item Definition Error xxx");
+  //     log.error(err);
+  //   });
+
+  // // Get menu item categories
+  // await axios
+  //   .post(simphonyEndpoint, soapRequestMenuCategory, {
+  //     headers,
+  //   })
+  //   .then((res) => {
+  //     log.info("*** Menu Categories ***");
+  //     // log.info(res.data);
+  //   })
+  //   .catch((err) => {
+  //     log.error("xxx Menu Item Category Error xxx");
+  //     log.error(err);
+  //   });
+
+  // // Get menu item class
+  await axios
+    .post(simphonyEndpoint, soapRequestMenuClass, {
+      headers,
+    })
+    .then((res) => {
+      parseItemClassXml(res.data)
+        .then((response) => {
+          menuItemClass = response.ArrayOfDbMenuItemClass.DbMenuItemClass;
+          // log.info("*** Menu class ***", menuItemClass);
+        })
+        .catch((error) => {
+          log.error("Menu Item Class Parse Error", error);
+        });
+      // log.info("*** Menu class ***");
+      // log.info(res.data);
+    })
+    .catch((err) => {
+      log.error("xxx Menu Item class Error xxx");
+      log.error(err);
     });
 
   // Get file updates
@@ -218,27 +306,38 @@ const getMenuItemDetailsRequest = async (revenueCenter, hotel_id = 2) => {
 
 // Send Request to open multiple checks
 const openCheck = (items) => {
+  // Micros Settings data
+  simphonyBaseUrl = items.micros_base_url;
+  revenueCenterId = items.micros_revenue_center;
+  employeeObjectNumber = items.micros_employee_id;
+
   // array of check request body strings
-  const checks = createNewCheckRequestBody(items);
-  const headers = {
+  let checks = [];
+  if (items.orders) {
+    checks = createNewCheckRequestBody(items, employeeObjectNumber);
+  }
+  let headers = {
     "Content-Type": "text/xml;charset=UTF-8",
-    // SOAPAction: "http://172.40.104.8:8080/EGateway/PostTransactionEx",
-    SOAPAction: "http://172.40.104.8:8080/EGateway/PostTransactionEx2",
+    // SOAPAction: `${simphonyBaseUrl}/PostTransactionEx`,
+    SOAPAction: `${simphonyBaseUrl}/PostTransactionEx2`,
   };
 
-  checks.forEach((checkRequestBody) => {
-    // send post request to open check
-    axios
-      .post(simphonyEndpoint, checkRequestBody, {
-        headers,
-      })
-      .then((response) => {
-        log.info("Open check creation success", response.data);
-      })
-      .catch((error) => {
-        log.error("Open check creation error", error);
-      });
-  });
+  if (checks.length > 0) {
+    checks.forEach((checkRequestBody) => {
+      // send post request to open check
+      axios
+        .post(simphonyEndpoint, checkRequestBody, {
+          headers,
+        })
+        .then((response) => {
+          log.info("success", response.data);
+        })
+        .catch((error) => {
+          log.error("SymphonyClient.js line:318", error);
+        });
+    });
+  }
 };
 
+// module.exports = { openCheck, getRevenueCentersRequest, employeeObjectNumber };
 module.exports = { openCheck, getRevenueCentersRequest };

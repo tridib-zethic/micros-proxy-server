@@ -1,39 +1,27 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self'" />
-    <meta http-equiv="X-Content-Security-Policy" content="script-src 'self'" />
-    <title>Authentication</title>
-    <link rel="stylesheet" href="../assets/css/login.css" />
-  </head>
-  <body>
-    <div class="log-form">
-      <h2>Login to SABA Hospitality</h2>
-      <div id="response-block" class="response-block"></div>
-      <form id="loginForm">
-        <input
-          type="text"
-          title="hotel"
-          id="hotel"
-          placeholder="hotel"
-        />
-        <input
-          type="text"
-          title="username"
-          id="username"
-          placeholder="username"
-        />
-        <input
-          type="password"
-          title="username"
-          id="password"
-          placeholder="password"
-        />
-        <button type="submit" class="btn" id="submit">Login</button>
-      </form>
-    </div>
-    <script type="text/javascript" src="../assets/js/login.js"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self'" />
+  <meta http-equiv="X-Content-Security-Policy" content="script-src 'self'" />
+  <title>SABA MICROS Proxy</title>
+  <link rel="stylesheet" href="../assets/css/login.css" />
+</head>
+
+<body>
+  <div class="log-form">
+    <h2>Login to SABA Hospitality</h2>
+    <div id="response-block" class="response-block"></div>
+    <form id="loginForm">
+      <input type="text" title="hotel" id="hotel" placeholder="hotel" />
+      <input type="text" title="username" id="username" placeholder="username" />
+      <input type="password" title="password" id="password" placeholder="password" />
+      <button type="submit" class="btn" id="submit">Login</button>
+    </form>
+  </div>
+  <script type="text/javascript" src="../assets/js/login.js"></script>
+</body>
+
 </html>
