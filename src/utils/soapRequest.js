@@ -66,7 +66,7 @@ const createSoapRequestBody = (
       <CheckDateToFire>${date.toISOString()}</CheckDateToFire>
       <CheckEmployeeObjectNum>${employeeObjectNum}</CheckEmployeeObjectNum>
       <CheckGuestCount>0</CheckGuestCount>
-      <CheckID>${orderInformations["check_id"]}</CheckID>
+      <CheckID>${orderInformations["delivery_location"]}</CheckID>
       <CheckNum>0</CheckNum>
       <CheckOrderType>1</CheckOrderType>
       <CheckRevenueCenterID>${
