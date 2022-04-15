@@ -15,8 +15,8 @@ Pusher.logToConsole = true;
 let pusherClient = undefined;
 let channel = undefined;
 let token = authHeader();
-let hotel = "https://fina.dashboard.guest-chat.com";
-let hotelSlug = "fina";
+let hotel = "https://il-primo.dashboard.guest-chat.com";
+let hotelSlug = "il-primo";
 let tempHotel = hotelDashboardURL();
 if (tempHotel) {
   hotel = tempHotel;
@@ -74,14 +74,14 @@ const pusher = async (win = undefined, event = undefined) => {
   console.log("Pusher initialization");
 
   token = await authHeader();
-  hotel = "https://fina.dashboard.guest-chat.com";
-  hotelSlug = "fina";
+  hotel = "https://il-primo.dashboard.guest-chat.com";
+  hotelSlug = "il-primo";
   let requestIds = [];
 
   if (hotel) {
     // do nothing
   } else {
-    hotel = "https://fina.dashboard.guest-chat.com";
+    hotel = "https://il-primo.dashboard.guest-chat.com";
   }
   hotelSlug = hotel.split(".")[0].split("//")[1];
   // log.info(token);
