@@ -76,6 +76,7 @@ const pusher = async (win = undefined, event = undefined) => {
   token = await authHeader();
   hotel = "https://fina.dashboard.guest-chat.com";
   hotelSlug = "fina";
+  let requestIds = [];
 
   if (hotel) {
     // do nothing
