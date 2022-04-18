@@ -75,6 +75,7 @@ const pusher = async (win = undefined, event = undefined) => {
   hotel = await hotelDashboardURL();
   hotelSlug = hotel.split(".")[0].split("//")[1];
   let requestIds = [];
+  let currentTime = "";
 
   if (hotel) {
     // do nothing
@@ -160,9 +161,18 @@ const pusher = async (win = undefined, event = undefined) => {
     }
   });
 
-  channel.bind("update.menu", function (data) {
-    log.info("update.menu");
-    getRevenueCentersRequest(data);
+  channel.bind("update.menu", async (data) => {
+    if (currentTime == "") {
+      currentTime == (await Date.now());
+    } else {
+      let tempTime = await Date.now();
+      let diff = tempTime - currentTime;
+      if (diff >= 300000) {
+        await log.info("update.menu");
+        await getRevenueCentersRequest(data);
+        currentTime = tempTime;
+      }
+    }
   });
 };
 
