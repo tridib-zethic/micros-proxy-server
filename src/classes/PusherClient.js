@@ -164,6 +164,8 @@ const pusher = async (win = undefined, event = undefined) => {
   channel.bind("update.menu", async (data) => {
     if (currentTime == "") {
       currentTime == (await Date.now());
+      await log.info("update.menu");
+      await getRevenueCentersRequest(data);
     } else {
       let tempTime = await Date.now();
       let diff = tempTime - currentTime;
