@@ -69,7 +69,7 @@ const createSoapRequestBody = (
       <CheckDateToFire>${date.toISOString()}</CheckDateToFire>
       <CheckEmployeeObjectNum>${employeeObjectNum}</CheckEmployeeObjectNum>
       <CheckGuestCount>0</CheckGuestCount>
-      <CheckID />
+      <CheckID>${orderInformations["delivery_location"]}</CheckID>
       <CheckNum>0</CheckNum>
       <CheckOrderType>1</CheckOrderType>
       <CheckRevenueCenterID>${
@@ -81,6 +81,7 @@ const createSoapRequestBody = (
         <string>Name: ${orderInformations["customer_name"]}</string>
         <string>Payment: ${orderInformations["payment_method"]}</string>
         <string>Number #: ${orderInformations["room_number"]}</string>
+        <string>Menu: ${orderInformations["location_name"]}</string>
         <string>Schedule: ${orderInformations["schedule_time"]} ${
     orderInformations["schedule_day"]
   }</string>
