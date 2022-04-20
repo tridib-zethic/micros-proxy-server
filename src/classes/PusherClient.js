@@ -143,41 +143,30 @@ const pusher = async (win = undefined, event = undefined) => {
     authorizer: authorizer,
   });
 
-  channel = pusherClient.subscribe(`private-${hotelSlug}-pos`);
+  if (channel == undefined) {
+    channel = pusherClient.subscribe(`private-${hotelSlug}-pos`);
 
-  channel.bind("pusher:subscription_succeeded", function (status) {
-    log.info(`Subscribed to pusher channel: private-${hotelSlug}-pos`);
-  });
+    channel.bind("pusher:subscription_succeeded", function (status) {
+      log.info(`Subscribed to pusher channel: private-${hotelSlug}-pos`);
+    });
 
-  channel.bind("pusher:subscription_error", function (status) {
-    log.error(status);
-  });
+    channel.bind("pusher:subscription_error", function (status) {
+      log.error(status);
+    });
 
-  channel.bind("request.created", function (data) {
-    if (requestIds.indexOf(data.check_id) == -1) {
-      log.info("request.created", data);
-      openCheck(data);
-      requestIds.push(data.check_id);
-    }
-  });
+    channel.bind("request.created", function (data) {
+      if (requestIds.indexOf(data.check_id) == -1) {
+        log.info("request.created", data);
+        openCheck(data);
+        requestIds.push(data.check_id);
+      }
+    });
 
-  channel.bind("update.menu", function (data) {
-    // if (currentTime == "") {
-    //   currentTime == (await Date.now());
-    //   await log.info("update.menu");
-    //   await getRevenueCentersRequest(data);
-    // } else {
-    //   let tempTime = await Date.now();
-    //   let diff = tempTime - currentTime;
-    //   if (diff >= 300000) {
-    //     await log.info("update.menu");
-    //     await getRevenueCentersRequest(data);
-    //     currentTime = tempTime;
-    //   }
-    // }
-    log.info("update.menu");
-    getRevenueCentersRequest(data);
-  });
+    channel.bind("update.menu", function (data) {
+      log.info("update.menu");
+      getRevenueCentersRequest(data);
+    });
+  }
 };
 
 module.exports = { pusher };
