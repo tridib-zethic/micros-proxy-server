@@ -270,7 +270,7 @@ const getMenuItemDetailsRequest = async (
       headers,
     })
     .then((res) => {
-      log.info("Menu class response from MICROS", response.data);
+      log.info("Menu class response from MICROS", res.data);
       parseItemClassXml(res.data)
         .then((response) => {
           menuItemClass = response.ArrayOfDbMenuItemClass.DbMenuItemClass;
