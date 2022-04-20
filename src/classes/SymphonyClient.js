@@ -50,6 +50,7 @@ const getRevenueCentersRequest = (data = {}) => {
     revenueCenterId,
     employeeObjectNumber
   );
+  log.info("Revenue centers xml body", soapRequestBody);
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
     SOAPAction: simphonyConfigUrl,
@@ -59,6 +60,7 @@ const getRevenueCentersRequest = (data = {}) => {
       headers,
     })
     .then((response) => {
+      log.info("Revenue center xml response from MICROS", response.data);
       // parse xml response
       parseRevenueCentersXmlResponse(response.data)
         .then((res) => {
@@ -80,7 +82,7 @@ const getRevenueCentersRequest = (data = {}) => {
         .catch((err) => log.error("XML Parse Error: ", err));
     })
     .catch((error) => {
-      log.error("SymphonyClient.js - Line:82", error);
+      log.error("SymphonyClient.js - Line:83", error);
     });
 };
 
@@ -107,16 +109,19 @@ const getMenuItemDetailsRequest = async (
     simphonyBaseUrl,
     employeeObjectNumber
   );
+  log.info("Menu price xml body", soapRequestBody1);
   const soapRequestBody2 = createGetMenuItemsRequestBody(
     revenueCenter,
     simphonyBaseUrl,
     employeeObjectNumber
   );
+  log.info("Menu items body xml", soapRequestBody1);
   const soapRequestBody3 = createGetDefinitionsRequestBody(
     revenueCenter,
     simphonyBaseUrl,
     employeeObjectNumber
   );
+  log.info("Menu definitions xml body", soapRequestBody1);
 
   // const soapRequestMenuDefinition = getSimphonyMenuItemsDefinition(
   //   revenueCenter,
@@ -133,6 +138,7 @@ const getMenuItemDetailsRequest = async (
     simphonyBaseUrl,
     employeeObjectNumber
   );
+  log.info("Menu class xml body", soapRequestMenuClass);
 
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
@@ -156,6 +162,7 @@ const getMenuItemDetailsRequest = async (
       headers,
     })
     .then((response) => {
+      log.info("Menu definition response from MICROS", response.data);
       // parse definition xml
       parseDefinitionXml(response.data)
         .then((res) => {
@@ -183,6 +190,7 @@ const getMenuItemDetailsRequest = async (
       headers,
     })
     .then((response) => {
+      log.info("Menu items response from MICROS", response.data);
       // parse xml response
       parseXml(response.data)
         .then((res) => {
@@ -190,14 +198,14 @@ const getMenuItemDetailsRequest = async (
         })
         .catch((err) => {
           log.error(
-            "MICROS Menu Items XML Parse Error: (SymphonyClient.js - Line:187)",
+            "MICROS Menu Items XML Parse Error: (SymphonyClient.js - Line:201)",
             err
           );
         });
     })
     .catch((error) => {
       log.error(
-        "MICROS Menu Items Fetch Error: (SymphonyClient.js - Line:194)",
+        "MICROS Menu Items Fetch Error: (SymphonyClient.js - Line:208)",
         error
       );
     });
@@ -208,6 +216,7 @@ const getMenuItemDetailsRequest = async (
       headers,
     })
     .then((response) => {
+      log.info("Menu price response from MICROS", response.data);
       // parse xml response
       parsePriceXml(response.data)
         .then((res) => {
@@ -215,14 +224,14 @@ const getMenuItemDetailsRequest = async (
         })
         .catch((err) => {
           log.error(
-            "MICROS Menu Price XML Parse Error: (SymphonyClient.js - Line:212)",
+            "MICROS Menu Price XML Parse Error: (SymphonyClient.js - Line:227)",
             err
           );
         });
     })
     .catch((error) => {
       log.error(
-        "MICROS Menu Price Fetch Error: (SymphonyClient.js - Line:219)",
+        "MICROS Menu Price Fetch Error: (SymphonyClient.js - Line:234)",
         error
       );
     });
@@ -261,19 +270,23 @@ const getMenuItemDetailsRequest = async (
       headers,
     })
     .then((res) => {
+      log.info("Menu class response from MICROS", response.data);
       parseItemClassXml(res.data)
         .then((response) => {
           menuItemClass = response.ArrayOfDbMenuItemClass.DbMenuItemClass;
           // log.info("*** Menu class ***", menuItemClass);
         })
         .catch((error) => {
-          log.error("Menu Item Class Parse Error", error);
+          log.error(
+            "Menu Item Class Parse Error at SymphonyClient.js line 281",
+            error
+          );
         });
       // log.info("*** Menu class ***");
       // log.info(res.data);
     })
     .catch((err) => {
-      log.error("xxx Menu Item class Error xxx");
+      log.error("*** Menu Item class Error ***");
       log.error(err);
     });
 
@@ -320,6 +333,7 @@ const openCheck = (items) => {
 
   if (checks.length > 0) {
     checks.forEach((checkRequestBody) => {
+      log.info("Check creation request body", checkRequestBody);
       // send post request to open check
       axios
         .post(simphonyEndpoint, checkRequestBody, {
@@ -329,7 +343,7 @@ const openCheck = (items) => {
           log.info("success", response.data);
         })
         .catch((error) => {
-          log.error("SymphonyClient.js line:318", error);
+          log.error("SymphonyClient.js line:346", error);
         });
     });
   }
