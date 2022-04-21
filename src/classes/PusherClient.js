@@ -143,29 +143,30 @@ const pusher = async (win = undefined, event = undefined) => {
     cluster: pusherCluster,
     authorizer: authorizer,
   });
+  if (channel == undefined) {
+    channel = pusherClient.subscribe(`private-${hotelSlug}-pos`);
 
-  channel = pusherClient.subscribe(`private-${hotelSlug}-pos`);
+    channel.bind("pusher:subscription_succeeded", function (status) {
+      log.info(`Subscribed to pusher channel: private-${hotelSlug}-pos`);
+    });
 
-  channel.bind("pusher:subscription_succeeded", function (status) {
-    log.info(`Subscribed to pusher channel: private-${hotelSlug}-pos`);
-  });
+    channel.bind("pusher:subscription_error", function (status) {
+      log.error(status);
+    });
 
-  channel.bind("pusher:subscription_error", function (status) {
-    log.error(status);
-  });
+    channel.bind("request.created", function (data) {
+      if (requestIds.indexOf(data.check_id) == -1) {
+        log.info("request.created", data);
+        requestIds.push(data.check_id);
+        openCheck(data);
+      }
+    });
 
-  channel.bind("request.created", function (data) {
-    if (requestIds.indexOf(data.check_id) == -1) {
-      log.info("request.created", data);
-      requestIds.push(data.check_id);
-      openCheck(data);
-    }
-  });
-
-  channel.bind("update.menu", function (data) {
-    log.info("update.menu");
-    getRevenueCentersRequest(data);
-  });
+    channel.bind("update.menu", function (data) {
+      log.info("update.menu");
+      getRevenueCentersRequest(data);
+    });
+  }
 };
 
 module.exports = { pusher };

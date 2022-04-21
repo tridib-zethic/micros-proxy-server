@@ -50,6 +50,7 @@ const getRevenueCentersRequest = (data = {}) => {
     revenueCenterId,
     employeeObjectNumber
   );
+  log.info("Revenue centers xml body", soapRequestBody);
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
     SOAPAction: simphonyConfigUrl,
@@ -108,16 +109,19 @@ const getMenuItemDetailsRequest = async (
     simphonyBaseUrl,
     employeeObjectNumber
   );
+  log.info("Menu price xml body", soapRequestBody1);
   const soapRequestBody2 = createGetMenuItemsRequestBody(
     revenueCenter,
     simphonyBaseUrl,
     employeeObjectNumber
   );
+  log.info("Menu items body xml", soapRequestBody1);
   const soapRequestBody3 = createGetDefinitionsRequestBody(
     revenueCenter,
     simphonyBaseUrl,
     employeeObjectNumber
   );
+  log.info("Menu definitions xml body", soapRequestBody3);
 
   // const soapRequestMenuDefinition = getSimphonyMenuItemsDefinition(
   //   revenueCenter,
@@ -134,6 +138,7 @@ const getMenuItemDetailsRequest = async (
     simphonyBaseUrl,
     employeeObjectNumber
   );
+  log.info("Menu class xml body", soapRequestMenuClass);
 
   const headers = {
     "Content-Type": "text/xml;charset=UTF-8",
