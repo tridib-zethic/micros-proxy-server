@@ -125,7 +125,7 @@ const pusher = async (win = undefined, event = undefined) => {
             callback(null, res.data);
           })
           .catch((err) => {
-            log.error("PusherClient.js - line:125", error);
+            log.error("PusherClient.js - line:125", err);
             if (err.response.status == 401) {
               autoLoginWithRefreshToken();
             } else {
